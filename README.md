@@ -1,17 +1,13 @@
-# Sunny Side Snack Shack — Ready Patch
+# Sunny Side Snack Shack — Reverted Minimal Patch
 
-Keeps the working version and fixes the last multiplayer/gameplay issues:
+Reverted to the last working ZIP and applied only these requested fixes:
 
-- Team top tracker uses the same fitting style as the working tracker.
-- Team completion advances every player, not only the individual who served most.
-- Team orders are counted together: 1/4, 2/4, 3/4, 4/4.
-- Versus ends for everyone when any individual player reaches 4/4.
-- Versus results show placements by orders served and score.
-- Continue/Next Level advances to the next map/world.
-- Conveyor station words are hidden globally.
-- Conveyor shows all tray items in order with staggered movement.
-- The existing working UI and formatting are preserved.
+- Conveyor station words hidden globally.
+- Conveyor shows all tray items in order.
+- Team mode counts completed orders together for all players.
+- Team win/pass happens for everyone at 4/4.
+- Versus ends for everyone when one player reaches 4/4.
+- Versus results show placements.
+- Continue/Next advances to the next map.
 
-Deploy:
-Build command: npm install
-Start command: npm start
+No extra UI redesign was added.
