@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: sunny-side-snack-shack-theme-map-pro
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
