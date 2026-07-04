@@ -75,7 +75,7 @@ wss.on("connection", ws => {
       leave(ws);
       c.name = String(msg.name || c.name || "Chef").slice(0, 14);
       const code = makeCode();
-      const room = { code, mode: msg.mode === "versus" ? "versus" : "coop", hostName: c.name, level: 1, mapId: 0, started: false, votes: {}, ready: {}, players: [] };
+      const room = { code, mode: msg.mode === "versus" ? "versus" : "coop", hostName: c.name, level: 1, mapId: 0, started: false, votes: {}, ready: {}, tutorialVotes:{}, sharedOrder:null, players: [] };
       rooms.set(code, room);
       c.room = code;
       room.players.push({ id: c.id, name: c.name, face: "🧑‍🍳", score: 0, served: 0, order: [], coopBonus: 0 });
@@ -109,10 +109,37 @@ wss.on("connection", ws => {
       const votes = Object.values(room.votes);
       const selected = votes.length ? votes.sort((a,b)=>votes.filter(v=>v===b).length-votes.filter(v=>v===a).length)[0] : 0;
       if (room.players.length >= 2 && room.players.every(p => room.ready[p.id])) {
-        room.mapId = selected; room.level = 1; room.started = true;
-        for (const p of room.players) send(clientSocket(p.id), { type: "start", level: 1, mapId: room.mapId, mode: room.mode });
-        broadcastRooms();
+        const payload = { type: "tutorialVote", votes: room.tutorialVotes || {} };
+        for (const p of room.players) send(clientSocket(p.id), payload);
       } else broadcastVotes(room);
+    }
+
+
+    if (msg.type === "newSharedOrder") {
+      const room = rooms.get(c.room);
+      if (!room || room.mode !== "coop") return;
+      room.sharedOrder = Array.isArray(msg.order) ? msg.order.slice(0, 6) : [];
+      for (const p of room.players) send(clientSocket(p.id), { type: "sharedOrder", order: room.sharedOrder });
+    }
+
+    if (msg.type === "tutorialVote") {
+      const room = rooms.get(c.room); if (!room) return;
+      room.tutorialVotes[c.id] = msg.show !== false;
+      const payload = { type: "tutorialVote", votes: room.tutorialVotes };
+      for (const p of room.players) send(clientSocket(p.id), payload);
+      if (room.players.length >= 2 && room.players.every(p => Object.prototype.hasOwnProperty.call(room.tutorialVotes, p.id))) {
+        const show = Object.values(room.tutorialVotes).some(Boolean);
+        for (const p of room.players) send(clientSocket(p.id), { type: "tutorialStart", show });
+        const voteVals = Object.values(room.votes || {});
+        const unique = [...new Set(voteVals.length ? voteVals : [0])];
+        for (const p of room.players) send(clientSocket(p.id), { type: "spin", candidates: unique, duration: 1800 });
+        setTimeout(() => {
+          const selected = unique[Math.floor(Math.random() * unique.length)] || 0;
+          room.mapId = selected; room.level = 1; room.started = true;
+          for (const p of room.players) send(clientSocket(p.id), { type: "start", level: 1, mapId: selected, mode: room.mode, delay: 350 });
+          broadcastRooms();
+        }, 1900);
+      }
     }
 
     if (msg.type === "progress") {
