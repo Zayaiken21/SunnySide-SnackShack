@@ -1,25 +1,24 @@
-# Sunny Side Snack Shack — Fixed Multiplayer + Progress Build
+# Sunny Side Snack Shack — Production Fix Build
 
-## Fixes in this version
+## Fixed in this build
 
-- Screen no longer pushes below the bottom on iPhone; play area scrolls safely.
-- Multiplayer rooms allow up to 4 real players.
-- Scoreboard is compact and can show up to 4 players.
-- Vote Map has a proper Back to Room button.
-- Players can pick maps, then every match still starts at Level 1.
-- Progress was reset with a new save version.
-- Players start with only 3 themes unlocked.
-- Completing levels unlocks 3 new themes every 3 completed levels.
-- Themes are uniquely generated with different style/event names.
-- Themes are not simply all handed to the player.
-- Result menu has Next, Retry, and Back Home.
-- Pause menu has Resume, Restart, Map Select, and Home.
-- Solo stays solo.
-- Conveyor belts only show real tray or saved-build foods.
-- Customers can order multiple combo items.
-- Food layout and player layout are more compact for phones.
+- Conveyor belts visibly move and only show real foods from your tray or saved build.
+- Vote Map button now actually opens the vote screen immediately.
+- Vote screen has Back Room, Ready, and Leave Room.
+- Room screen has Match Center, Vote Map, and Leave Room.
+- Pause button is smaller and better styled.
+- Music starts on after the first tap/click, which iPhone requires.
+- Music changes by theme using 100+ generated music patterns.
+- Volume slider controls music/SFX level.
+- Safe iPhone screen sizing and scroll behavior.
+- Max 4 real players per room.
+- Multiplayer starts at Level 1 after map voting.
+- Progress reset version remains active.
+- Unlocks are earned: 3 themes every 3 completed levels.
 
-## Deploy
+## Render
+
+Upload these files to GitHub, then Render redeploys.
 
 Build command:
 npm install

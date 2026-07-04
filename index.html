@@ -35,7 +35,82 @@ input[type=range]{width:100%;accent-color:#ff7ebc}
 .modal{position:absolute;inset:0;display:none;align-items:center;justify-content:center;padding:14px;z-index:40;background:rgba(84,157,181,.25);backdrop-filter:blur(4px)}.modal.active{display:flex}.panel{width:100%;max-height:94vh;overflow:auto;background:var(--card);border:4px solid #fff;border-radius:30px;padding:15px;box-shadow:var(--shadow);text-align:center}.panel h2{margin:2px 0 8px;font-size:25px}.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:9px 0}.choice{min-height:56px;border-radius:19px;background:linear-gradient(#fff,#ffe7b4);border:3px solid #fff;box-shadow:0 5px 0 #e3a043;font-weight:1000;font-size:13px;padding:7px}.choice.selected{outline:4px solid #5aa7ff;background:linear-gradient(#eff8ff,#bde0ff)}.preview{background:#fff;border-radius:20px;padding:10px;border:2px dashed #ffce63;font-size:42px;margin:8px 0}.field-title{text-align:left;font-size:13px;font-weight:1000;margin:10px 0 4px}.build-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.code{font-size:24px;letter-spacing:3px;background:#fff;border:3px dashed #ffcc63;border-radius:18px;padding:10px;font-weight:1000}.toast{position:absolute;left:50%;top:78px;transform:translateX(-50%);background:#fff;border:3px solid #ffdc70;border-radius:999px;padding:10px 15px;font-size:13px;font-weight:1000;box-shadow:var(--shadow);z-index:80;opacity:0;pointer-events:none;transition:.25s;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(6px)}.confetti{position:absolute;pointer-events:none;z-index:90;font-size:20px;animation:conf 1s ease forwards}@keyframes conf{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-90px) scale(.2) rotate(160deg)}}
 @media(max-height:780px){.dual-stage{min-height:112px}.kitchen{min-height:64px}.foods{min-height:110px}.foodbtn{min-height:62px}.sign{font-size:28px}.btn{min-height:48px;font-size:16px}.cloud,.awning{display:none}}
 @media(max-width:430px){.foods{grid-template-columns:repeat(3,1fr)}.dual-stage{grid-template-columns:1fr}.lane:nth-child(2){display:none}.scoreboard{grid-template-columns:1fr}.mapCard{width:96%;margin-left:auto!important;margin-right:auto!important}.game{max-width:100vw}}
-.voteGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-height:48dvh;overflow:auto;padding:4px}.voteActions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.homeActions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.progressNote{background:#fff;border:3px solid #fff0bd;border-radius:18px;padding:9px;font-weight:1000;margin:8px 0}.lockedMsg{opacity:.62;filter:grayscale(.5)}@media(max-width:430px){.voteGrid{grid-template-columns:1fr}.scoreboard{grid-template-columns:1fr 1fr;max-height:92px}.score-card .face{font-size:21px}.score-card strong{font-size:10.5px}.score-card span{font-size:9px}.dual-stage{min-height:96px}.kitchen{grid-template-columns:repeat(3,1fr);min-height:54px}.machine{font-size:8px}.machine b{font-size:18px}.station-box{min-height:245px}.foods{max-height:30dvh}.service button{min-height:40px}.ticket{max-height:86px}.ticket-item{font-size:8.6px}}</style>
+.voteGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-height:48dvh;overflow:auto;padding:4px}.voteActions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.homeActions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.progressNote{background:#fff;border:3px solid #fff0bd;border-radius:18px;padding:9px;font-weight:1000;margin:8px 0}.lockedMsg{opacity:.62;filter:grayscale(.5)}@media(max-width:430px){.voteGrid{grid-template-columns:1fr}.scoreboard{grid-template-columns:1fr 1fr;max-height:92px}.score-card .face{font-size:21px}.score-card strong{font-size:10.5px}.score-card span{font-size:9px}.dual-stage{min-height:96px}.kitchen{grid-template-columns:repeat(3,1fr);min-height:54px}.machine{font-size:8px}.machine b{font-size:18px}.station-box{min-height:245px}.foods{max-height:30dvh}.service button{min-height:40px}.ticket{max-height:86px}.ticket-item{font-size:8.6px}}
+/* Production polish fixes */
+.pauseBtn{
+  min-width:46px!important;
+  min-height:46px!important;
+  width:46px!important;
+  height:46px!important;
+  border-radius:18px!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:20px!important;
+  box-shadow:0 5px 0 #db5b99,0 8px 16px rgba(98,20,65,.14)!important;
+}
+.kitchen{overflow:visible!important}
+.machine{overflow:hidden!important;padding-bottom:17px!important}
+.beltTrack{
+  position:absolute!important;
+  left:8px!important;
+  right:8px!important;
+  bottom:4px!important;
+  height:22px!important;
+  border-radius:0 0 14px 14px!important;
+  background:
+    repeating-linear-gradient(90deg,#7b4a24 0 18px,#5f3518 18px 22px,#9a6431 22px 40px)!important;
+  border-top:3px solid rgba(255,255,255,.65)!important;
+  overflow:hidden!important;
+  z-index:6!important;
+}
+.beltTrack:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.2) 0 8px,transparent 8px 18px);
+  animation:beltSlide .7s linear infinite;
+}
+@keyframes beltSlide{to{transform:translateX(-40px)}}
+.beltFood{
+  position:absolute!important;
+  bottom:1px!important;
+  font-size:20px!important;
+  line-height:20px!important;
+  z-index:8!important;
+  animation:moveFood 2.6s linear infinite!important;
+  filter:drop-shadow(0 2px 1px rgba(0,0,0,.22));
+}
+@keyframes moveFood{from{left:-32px}to{left:105%}}
+.modal .panel{max-height:calc(100dvh - 34px)!important}
+#voteModal .panel{display:flex;flex-direction:column}
+#voteMaps{flex:1;min-height:0}
+.voteGrid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;overflow:auto!important;max-height:48dvh!important;padding:4px!important}
+.voteGrid .mapCard{width:100%!important;margin:0!important;min-height:118px!important}
+.voteActions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important}
+.roomActions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.roomActions .btn{margin:6px 0}
+.musicCard{
+  background:#fff;
+  border:3px solid #fff0bd;
+  border-radius:18px;
+  padding:10px;
+  box-shadow:var(--soft);
+  margin-top:8px;
+}
+.nameHelp{font-size:11px;font-weight:900;opacity:.75;margin:4px 0 8px}
+@media(max-width:430px){
+  .pauseBtn{min-width:42px!important;width:42px!important;height:42px!important;border-radius:16px!important}
+  .voteGrid{grid-template-columns:1fr!important;max-height:50dvh!important}
+  .roomActions{grid-template-columns:1fr}
+  .machine{font-size:7.5px!important;padding-bottom:18px!important}
+  .beltTrack{height:20px!important;left:5px!important;right:5px!important}
+  .beltFood{font-size:18px!important}
+  .kitchen{gap:5px!important;padding:6px!important}
+}
+
+</style>
 </head>
 <body>
 <main class="game" id="game">
@@ -62,7 +137,7 @@ input[type=range]{width:100%;accent-color:#ff7ebc}
   <div class="topbar"><button class="btn small blue" onclick="show('menu')">← Menu</button><div class="pill"><span class="status-dot" id="netDot"></span><span id="netText">Not Connected</span></div><button class="btn small pink" onclick="connectOnline()">Connect</button></div>
   <div class="card scroll" style="margin-top:10px;text-align:left">
     <h2 style="text-align:center;margin:4px">Real Match Center 🎮</h2>
-    <label class="tiny">Chef name required</label><input id="playerName" maxlength="14" placeholder="Chef Sunny">
+    <label class="tiny">Chef name required</label><input id="playerName" maxlength="14" placeholder="Chef Sunny"><div class="nameHelp">This name shows in rooms, scoreboards, and versus orders.</div>
     <div class="split"><button class="btn green" onclick="createRoom('coop')">Create Co‑op</button><button class="btn pink" onclick="createRoom('versus')">Create Versus</button></div>
     <label class="tiny">Join by game code</label><div class="split"><input id="joinCode" maxlength="6" placeholder="ABC123"><button class="btn blue" onclick="joinByCode()">Join</button></div>
     <p class="tiny">No bots. Only real connected players show. Max 4 chefs per game. Max 4 chefs per game.</p>
@@ -71,7 +146,7 @@ input[type=range]{width:100%;accent-color:#ff7ebc}
 </section>
 
 <section class="screen play" id="play">
-  <div class="topbar"><div class="pill" id="mapName">Map</div><div class="pill">🪙 <span id="uiCoins">0</span></div><div class="pill">✅ <span id="uiServed">0</span>/<span id="uiGoal">3</span></div><button class="btn small pink" onclick="pauseGame()">⏸</button></div>
+  <div class="topbar"><div class="pill" id="mapName">Map</div><div class="pill">🪙 <span id="uiCoins">0</span></div><div class="pill">✅ <span id="uiServed">0</span>/<span id="uiGoal">3</span></div><button class="btn small pink pauseBtn" onclick="pauseGame()" aria-label="Pause">⏸</button></div>
   <div class="area">
     <div class="scoreboard" id="scoreboard"></div>
     <div class="dual-stage">
@@ -91,15 +166,26 @@ input[type=range]{width:100%;accent-color:#ff7ebc}
 
 <section class="screen" id="pause"><div class="card menu-card"><h1>Paused ☀️</h1><button class="btn green" onclick="resumeGame()">Resume</button><button class="btn blue" onclick="restartLevel()">Restart</button><button class="btn purple" onclick="show('levels')">Map Select</button><button class="btn pink" onclick="goHome()">🏠 Home</button></div></section>
 
-<div class="modal" id="voteModal"><div class="panel"><h2>Vote For A Map 🌍</h2><p class="sub">Chef names and votes show in the room. Match starts at Level 1.</p><div class="voteGrid" id="voteMaps"></div><div class="voteActions"><button class="btn blue" onclick="backToRoom()">← Room</button><button class="btn green" onclick="readyVote()">Ready</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
+<div class="modal" id="voteModal"><div class="panel"><h2>Vote For A Map 🌍</h2><p class="sub">Pick a theme together. When everyone is ready, the match starts at Level 1.</p><div class="voteGrid" id="voteMaps"></div><div class="voteActions"><button class="btn blue" onclick="backToRoom()">← Back Room</button><button class="btn green" onclick="readyVote()">Ready ✓</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
 <div class="modal" id="builder"><div class="panel"><h2 id="builderTitle">Build Food</h2><div class="preview" id="preview">🍽️</div><div id="builderBody"></div><div class="build-actions"><button class="btn blue" onclick="viewOrder()">📋 View Order</button><button class="btn pink" onclick="saveBuildAndClose()">Save & Back</button></div><button class="btn green" onclick="addBuilt()">Add to Tray</button><button class="btn pink" onclick="discardBuild()">Discard Build</button></div></div>
 <div class="modal" id="orderModal"><div class="panel"><h2>Customer Ticket 📋</h2><div id="orderFull"></div><button class="btn blue" onclick="closeOrder()">Back to Cooking</button></div></div>
-<div class="modal" id="roomModal"><div class="panel"><h2 id="roomTitle">Room Created</h2><div class="code" id="roomCode">ABC123</div><p id="roomInfo" class="sub"></p><div id="roomPlayers"></div><button class="btn green" onclick="openVoting()">Vote Map</button><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
+<div class="modal" id="roomModal"><div class="panel"><h2 id="roomTitle">Room Created</h2><div class="code" id="roomCode">ABC123</div><p id="roomInfo" class="sub"></p><div id="roomPlayers"></div><div class="roomActions"><button class="btn blue" onclick="show('multi');closeRoom()">← Match Center</button><button class="btn green" onclick="openVoting()">Vote Map</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
 <div class="modal" id="result"><div class="panel"><h2 id="resultTitle">Round Complete!</h2><p id="resultText"></p><div class="progressNote" id="unlockText">Progress saved.</div><div class="homeActions"><button class="btn green" onclick="nextEarnedLevel()">Next</button><button class="btn blue" onclick="restartLevel()">Retry</button></div><button class="btn pink" onclick="goHome()">🏠 Back Home</button></div></div>
 <div class="toast" id="toast">Nice!</div>
 </main>
 
 <script>
+
+const THEME_MUSIC_PATTERNS=Array.from({length:120},(_,i)=>{
+  let base=[392,440,494,523,587,659,698,784,880,988];
+  let shift=(i%12)*8;
+  return base.map((n,j)=>Math.round(n+shift+(j%3)*4));
+});
+function unlockAudio(){
+  if(!muted)startMusic();
+}
+["touchstart","click"].forEach(ev=>document.addEventListener(ev,unlockAudio,{once:true,passive:true}));
+
 const BASE_FOODS=[
 ["lemonade","🍋","Drink"],["pink lemonade","🌸","Drink"],["limeade","🟢","Drink"],["orange juice","🍊","Drink"],["apple juice","🍎","Drink"],["berry punch","🫐","Drink"],["mango smoothie","🥭","Drink"],["strawberry smoothie","🍓","Drink"],["banana smoothie","🍌","Drink"],["blueberry smoothie","🫐","Drink"],["coconut shake","🥥","Drink"],["vanilla milkshake","🥛","Drink"],["hot cocoa","☕","Drink"],["mint cocoa","🌿","Drink"],["rainforest juice","🍍","Drink"],
 ["classic burger","🍔","Grill"],["cheese burger","🧀","Grill"],["double burger","🍔","Grill"],["veggie burger","🥕","Grill"],["mushroom burger","🍄","Grill"],["avocado burger","🥑","Grill"],["classic hot dog","🌭","Grill"],["mustard hot dog","🌭","Grill"],["grilled cheese","🧀","Grill"],["toastie sandwich","🥪","Grill"],["sunny taco","🌮","Grill"],["mini pizza","🍕","Grill"],["fish sandwich","🐟","Grill"],["campfire melt","🥪","Grill"],
@@ -129,21 +215,21 @@ const MAPS=Array.from({length:100},(_,i)=>{
 const CAT_ICON={Drink:"🥤",Grill:"🔥",Fry:"🍟",Dessert:"🍪",Fresh:"🥗",Snack:"🍿"};
 const CUSTOMERS=["😎","😊","🤠","🥰","😄","🙂","🤩","🧒","👧","👦","🧑","👩","👨","🧔","👱"];
 const NAMES=["Mango Max","Lemon Lily","Sunny Sam","Cookie Coco","Berry Ben","Picnic Pip","Happy Harper","Fries Finn","Soda Skye","Burger Bea","Taco Tia","Peach Poe","Melon Mia","Snack Nico"];
-const SAVE_VERSION="theme-map-pro-v6-reset";
+const SAVE_VERSION="theme-map-pro-v7-production-fix";
 if(localStorage.ssss_save_version!==SAVE_VERSION){
   localStorage.clear();
   localStorage.ssss_save_version=SAVE_VERSION;
 }
 let completedLevels=Number(localStorage.ssss_completed_levels||0);
 let unlockedThemeCount=Math.min(100,3+Math.floor(completedLevels/3)*3);
-let muted=localStorage.ssss_muted==="1", volume=Number(localStorage.ssss_volume||70)/100;
+let muted=localStorage.ssss_muted==="1"?true:false, volume=Number(localStorage.ssss_volume||85)/100;
 let state={level:1,mapId:0,mode:"solo",multiplayer:false,coins:0,served:0,goal:4,tray:[],order:null,patience:100,timer:null,category:"Drink",coopBonus:0,paused:false};
 let builder={type:null,selections:{}}, savedBuild=null, net={ws:null,id:null,room:null,connected:false,rooms:[],players:[],votes:{}}, audio={ctx:null,beat:null,master:null};
 const $=id=>document.getElementById(id), slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"");
 const FOODS=BASE_FOODS.map((x,i)=>({id:slug(x[0]),name:x[0],emoji:x[1],station:x[2],unlock:1+Math.floor(i/2.2),fields:fieldsFor(x[2])}));
 function fieldsFor(st){if(st==="Drink")return [["size",["small","medium","large"]],["ice",["no ice","light ice","extra ice"]],["sweetness",["low sweet","medium sweet","super sweet"]]];if(st==="Grill")return [["toast",["soft","toasty","extra toasty"]],["main",["single","double","veggie"]],["topping",["plain","cheese","lettuce","tomato","sauce"]]];if(st==="Fry")return [["size",["small","medium","large"]],["crisp",["soft","crispy","extra crispy"]],["season",["no salt","light salt","sunny spice"]]];if(st==="Dessert")return [["pack",["single","two-pack","party pack"]],["style",["plain","sprinkles","chocolate drizzle"]]];if(st==="Fresh")return [["size",["snack cup","regular cup","big bowl"]],["chill",["room temp","cool","icy fresh"]],["extra",["plain","honey","lemon squeeze"]]];return [["size",["mini","regular","jumbo"]],["style",["plain","cheesy","rainbow"]],["side",["napkin","dip cup","fruit side"]]]}
 function cfg(level,mapId){let m=MAPS[mapId||0], foods=FOODS.filter(f=>m.cats.includes(f.station)&&f.unlock<=Math.max(18,level*4));return{map:m,foods,goal:Math.min(18,4+Math.floor(level/6)),combo:Math.min(5,2+Math.floor(level/18)),patience:Math.max(18,44-Math.floor(level/5)),target:120+level*20}}
-function init(){ $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
+function init(){ $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
 function applyWorld(mapId){let m=MAPS[mapId];document.documentElement.style.setProperty("--mapBg",m.bg);$("worldDecor").innerHTML=m.decor.map((d,i)=>`<span class="decor d${i+1}" style="left:${[8,78,18,70][i]}%;top:${[22,18,72,68][i]}%">${d}</span>`).join("")}
 function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");if(id!=="play")stopTimer();startMusic()}
 function renderMapJourney(){
@@ -162,7 +248,7 @@ function markLevelComplete(){
   unlockedThemeCount=Math.min(100,3+Math.floor(completedLevels/3)*3);
   return unlockedThemeCount>before;
 }
-function startLevel(level=1,multi=false,mode="solo",mapId=0){let c=cfg(level,mapId);state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:c.goal,tray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false};savedBuild=null;applyWorld(mapId);$("mapName").textContent=`${c.map.emoji} ${c.map.name} · L${level}`;$("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=c.goal;renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();show("play");newCustomer();sendNet("progress",progressPayload())}
+function startLevel(level=1,multi=false,mode="solo",mapId=0){let c=cfg(level,mapId);state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:c.goal,tray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false};savedBuild=null;applyWorld(mapId); if(audio.ctx){stopMusic();startMusic();}$("mapName").textContent=`${c.map.emoji} ${c.map.name} · L${level}`;$("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=c.goal;renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();show("play");newCustomer();sendNet("progress",progressPayload())}
 function renderScoreboard(){let me={id:net.id||"me",name:$("playerName").value||"Solo Chef",score:state.coins,served:state.served,order:state.order,me:true,coopBonus:state.coopBonus};let players=state.multiplayer?net.players.map(p=>p.id===net.id?{...p,score:state.coins,served:state.served,order:state.order,me:true,coopBonus:state.coopBonus}:p):[me];if(!players.some(p=>p.me))players.unshift(me);$("scoreboard").innerHTML=players.slice(0,4).map(p=>`<div class="score-card ${state.mode==="coop"?"coop-bonus":""}"><div class="face">${p.face||"🧑‍🍳"}</div><div><strong>${p.name||"Chef"} ${p.me?"(You)":""}</strong><span>🪙 ${p.score||0} · ✅ ${p.served||0}</span>${state.mode==="coop"?`<span>🤝 Bonus +${p.coopBonus||0}</span>`:`<span class="versus-order">${p.order?shortOrder(p.order):"Waiting for order..."}</span>`}</div></div>`).join("")}
 function shortOrder(order){return order.map(item=>food(item.id).emoji+" "+cap(food(item.id).name)).join(" · ")}
 function renderCategories(){let c=cfg(state.level,state.mapId),cats=[...new Set(c.foods.map(f=>f.station))];$("categoryTabs").innerHTML=cats.map(cat=>`<button class="tab ${state.category===cat?"active":""}" onclick="pickCategory('${cat}')">${CAT_ICON[cat]} ${cat}</button>`).join("")}
@@ -182,7 +268,22 @@ function addBuilt(){let f=food(builder.type),miss=f.fields.find(([x])=>!builder.
 function saveBuildAndClose(){if(builder.type){savedBuild=JSON.parse(JSON.stringify(builder));toast("Build saved ✅");renderTray();renderBelts()}closeBuilder()}
 function discardBuild(){savedBuild=null;closeBuilder();renderTray();renderBelts()}function closeBuilder(){$("builder").classList.remove("active");clearMachines()}
 function renderTray(){let t=$("tray");t.innerHTML='<span class="tray-title">Your Tray ➜</span>';state.tray.forEach((it,i)=>{let f=food(it.id),d=document.createElement("div");d.className="made";d.innerHTML=`${f.emoji}<small>${cap(f.name)}</small>`;d.onclick=()=>{state.tray.splice(i,1);renderTray();renderBelts()};t.appendChild(d)});if(savedBuild){let f=food(savedBuild.type),d=document.createElement("div");d.className="made";d.style.outline="3px dashed #62c0ff";d.innerHTML=`${f.emoji}<small>Saved</small>`;d.onclick=()=>startBuild(savedBuild.type);t.appendChild(d)}}
-function renderBelts(){["beltDrink","beltCook","beltPack"].forEach(id=>$(id).innerHTML="");let items=[...state.tray];if(savedBuild)items.push({id:savedBuild.type});items.forEach((it,i)=>{let f=food(it.id);let target=f.station==="Drink"?"beltDrink":(f.station==="Grill"||f.station==="Fry"?"beltCook":"beltPack");let e=document.createElement("span");e.className="beltFood";e.textContent=f.emoji;e.style.animationDelay=-(i*.55)+"s";$(target).appendChild(e)})}
+function renderBelts(){
+  ["beltDrink","beltCook","beltPack"].forEach(id=>{ if($(id)) $(id).innerHTML=""; });
+  let items=[...state.tray];
+  if(savedBuild)items.push({id:savedBuild.type});
+  items.forEach((it,i)=>{
+    let f=food(it.id);
+    let target=f.station==="Drink"?"beltDrink":((f.station==="Grill"||f.station==="Fry")?"beltCook":"beltPack");
+    if(!$(target))return;
+    let e=document.createElement("span");
+    e.className="beltFood";
+    e.textContent=f.emoji;
+    e.style.animationDelay=-(i*.45)+"s";
+    e.style.left=(-28-i*18)+"px";
+    $(target).appendChild(e);
+  });
+}
 function viewOrder(){$("orderFull").innerHTML=state.order.map(i=>`<div class="ticket-item" style="font-size:14px;text-align:left">${itemText(i)}</div>`).join("")+(savedBuild?`<p class="sub">Saved build: ${food(savedBuild.type).emoji} ${cap(food(savedBuild.type).name)}</p>`:"");$("orderModal").classList.add("active")}function closeOrder(){$("orderModal").classList.remove("active")}
 function serveTray(){if(!state.tray.length)return toast("Make the order first");stopTimer();let acc=scoreOrder(state.order,state.tray);let bonus=state.mode==="coop"?Math.round(acc/8):0;state.coopBonus+=bonus;let coins=Math.max(1,Math.round(acc*.8+state.patience*.2+bonus));state.coins+=coins;state.served++;$("uiCoins").textContent=state.coins;$("uiServed").textContent=state.served;burst((acc>=90?"Perfect Combo! ":"Served Combo! ")+"+"+coins+" 🪙");sendNet("progress",progressPayload());if(state.served>=state.goal)setTimeout(levelDone,800);else setTimeout(newCustomer,850)}
 function scoreOrder(order,tray){let used=new Set(),earned=0,total=order.length*100;order.forEach(w=>{let best=0,bi=-1;tray.forEach((m,i)=>{if(used.has(i))return;let s=0;if(m.id===w.id){let fields=food(w.id).fields.map(x=>x[0]);s+=25;fields.forEach(f=>{if(m[f]===w[f])s+=75/fields.length})}if(s>best){best=s;bi=i}});if(bi>=0)used.add(bi);earned+=best});return Math.max(0,Math.round((earned/total)*100-Math.max(0,tray.length-order.length)*10))}
@@ -209,16 +310,50 @@ function renderRooms(){let rooms=net.connected?net.rooms:[];$("roomList").innerH
 function joinListed(code){$("joinCode").value=code;joinByCode()}
 function showRoom(room){$("roomModal").classList.add("active");$("roomTitle").textContent=room.mode==="versus"?"Versus Room":"Co-op Room";$("roomCode").textContent=room.code;$("roomInfo").textContent="Each player uses their chef name. Vote a map when ready.";renderRoomPlayers()}
 function renderRoomPlayers(){let ps=(net.room&&net.room.players)||net.players||[];$("roomPlayers").innerHTML=ps.map(p=>`<div class="room"><strong>${p.face||"🧑‍🍳"} ${p.name||"Chef"}</strong><small>Score ${p.score||0} · Served ${p.served||0} ${p.order&&p.order.length? "· Order: "+shortOrder(p.order):""}</small></div>`).join("")}
-function openVoting(){if(!net.room)return;sendNet("openVote",{});$("voteModal").classList.add("active");renderVoteMaps()}
-function renderVoteMaps(){let picks=[0,1,2,3,4,5,6,7,8,9];$("voteMaps").innerHTML=picks.map(id=>{let m=MAPS[id],votes=Object.values(net.votes||{}).filter(v=>v===id).length;return`<button class="map-card ${net.votes[net.id]===id?"selected":""}" onclick="voteMap(${id})"><b>${m.emoji}</b><strong>${m.name}</strong><span class="tiny">${m.desc}</span><br><small>Votes: ${votes}</small></button>`}).join("")}
-function voteMap(id){sendNet("vote",{mapId:id});net.votes[net.id]=id;renderVoteMaps()}function readyVote(){sendNet("ready",{})}function closeVote(){$("voteModal").classList.remove("active")}
+function openVoting(){
+  if(!net.room){toast("Create or join a room first");return;}
+  closeRoom();
+  $("voteModal").classList.add("active");
+  renderVoteMaps();
+  sendNet("openVote",{});
+}
+function renderVoteMaps(){
+  let maxPick=Math.min(unlockedThemeCount||3,12);
+  let picks=Array.from({length:maxPick},(_,i)=>i);
+  if(!$("voteMaps"))return;
+  $("voteMaps").innerHTML=picks.map(id=>{
+    let m=MAPS[id],votes=Object.values(net.votes||{}).filter(v=>Number(v)===id).length;
+    return `<button class="mapCard ${Number((net.votes||{})[net.id])===id?"selected":""}" onclick="voteMap(${id})"><b>${m.emoji}</b><div><strong>${m.name}</strong><span>${m.desc}</span><br><em class="eventTag">${m.event}</em><br><small>Votes: ${votes}</small></div></button>`;
+  }).join("");
+}
+function voteMap(id){net.votes=net.votes||{};net.votes[net.id]=id;renderVoteMaps();sendNet("vote",{mapId:id});toast("Map vote saved ✓")}function readyVote(){if(!net.votes||net.votes[net.id]===undefined){voteMap(0);}sendNet("ready",{});toast("Ready — waiting for other chefs ✓")}function closeVote(){$("voteModal").classList.remove("active")}
 function backToRoom(){closeVote(); if(net.room){$("roomModal").classList.add("active"); renderRoomPlayers();}}
 function closeRoom(){$("roomModal").classList.remove("active")}
 function goHome(){closeResult(); stopTimer(); state.multiplayer=false; state.mode="solo"; show("menu");}
 function nextEarnedLevel(){closeResult(); startLevel(1,state.multiplayer,state.mode,state.mapId);}
 function leaveRoom(){sendNet("leaveRoom",{});net.room=null;net.players=[];closeRoom();closeVote();renderRooms()}
 function renderOtherOrder(){let other=(net.players||[]).find(p=>p.id!==net.id);$("otherEmoji").textContent=other?other.face||"👩‍🍳":"👀";$("otherOrder").innerHTML=other&&other.order&&other.order.length?other.order.map(i=>`<div class="ticket-item">${food(i.id).emoji} ${cap(food(i.id).name)}</div>`).join(""):'<div class="ticket-item">Waiting for real player...</div>'}
-function startMusic(){if(muted||audio.ctx)return;try{let C=window.AudioContext||window.webkitAudioContext;audio.ctx=new C();audio.master=audio.ctx.createGain();audio.master.gain.value=volume*.08;audio.master.connect(audio.ctx.destination);let notes=[523,659,784,659,587,698,880,698,988,784],i=0;audio.beat=setInterval(()=>{if(muted||!audio.ctx)return;let o=audio.ctx.createOscillator(),g=audio.ctx.createGain();o.type="triangle";o.frequency.value=notes[i++%notes.length];g.gain.setValueAtTime(.35,audio.ctx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audio.ctx.currentTime+.3);o.connect(g);g.connect(audio.master);o.start();o.stop(audio.ctx.currentTime+.33)},330)}catch(e){}}
+function startMusic(){
+  if(muted||audio.ctx)return;
+  try{
+    let C=window.AudioContext||window.webkitAudioContext;
+    audio.ctx=new C();
+    audio.master=audio.ctx.createGain();
+    audio.master.gain.value=volume*.1;
+    audio.master.connect(audio.ctx.destination);
+    let i=0;
+    audio.beat=setInterval(()=>{
+      if(muted||!audio.ctx)return;
+      let pattern=THEME_MUSIC_PATTERNS[state.mapId%THEME_MUSIC_PATTERNS.length];
+      let o=audio.ctx.createOscillator(),g=audio.ctx.createGain();
+      o.type=(state.mapId%3===0)?"triangle":((state.mapId%3===1)?"sine":"square");
+      o.frequency.value=pattern[i++%pattern.length];
+      g.gain.setValueAtTime(.32,audio.ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001,audio.ctx.currentTime+.28);
+      o.connect(g);g.connect(audio.master);o.start();o.stop(audio.ctx.currentTime+.3);
+    },330+(state.mapId%5)*18);
+  }catch(e){}
+}
 function stopMusic(){if(audio.beat)clearInterval(audio.beat);audio.beat=null;if(audio.ctx){audio.ctx.close();audio.ctx=null}}function toggleMute(){muted=!muted;localStorage.ssss_muted=muted?"1":"0";$("soundLabel").textContent=muted?"Off":"On";if(muted)stopMusic();else startMusic()}
 function setVolume(v){volume=Number(v)/100;localStorage.ssss_volume=String(v);if(audio.master)audio.master.gain.value=volume*.08}
 function beep(freq=520,dur=.05){if(muted)return;try{if(!audio.ctx)startMusic();let c=audio.ctx,o=c.createOscillator(),g=c.createGain();o.frequency.value=freq;g.gain.setValueAtTime(volume*.08,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur)}catch(e){}}
