@@ -1,22 +1,19 @@
-# Sunny Side Snack Shack — Ultimate Upgrade Patch
+# Sunny Side Snack Shack — Targeted Sync Upgrade Patch
 
-Built from the working reverted ZIP. Core UI preserved.
+Built from the agreed working ZIP. No broad UI redesign.
 
-Added:
-- 200 unique world/map entries.
-- More culture-inspired food/drink items.
-- Co-op shared customer name/order preserved.
-- Solo upgrades no longer affect multiplayer.
-- Online team bonus upgrades affect multiplayer.
-- Multiplayer order goals scale beyond 4/4 as maps advance.
-- Wrong orders still count toward level completion.
-- VIP orders with higher reward.
+Targeted fixes/additions:
+- Co-op shared customer name and shared order stay synced.
+- Solo/offline upgrades do not affect multiplayer.
+- Online team upgrades apply to multiplayer.
+- 200 unique world/map entries added.
+- More culture-inspired foods added.
+- Multiplayer goals scale upward past 4/4 as maps advance.
+- VIP orders added.
 - Timer fail restarts the level.
-- Multiplayer next-level vote: all players must vote within 15 seconds or return home.
+- Multiplayer next-level vote: all remaining room players must vote within 15 seconds.
+- If a player chooses Home or times out, they leave; remaining players can continue.
 - 30-second online upgrade break before next multiplayer level.
-- Player leaving continues using server broadcast removal.
-- Team level progress resets on next level.
-
-Deploy:
-Build command: npm install
-Start command: npm start
+- Player leaving uses room broadcast removal.
+- Team progress resets on the next level.
+- Conveyor labels hidden and tray items remain in order.

@@ -186,11 +186,13 @@ wss.on("connection", ws => {
           send(clientSocket(p.id), { type: "sharedState", teamServed: room.teamServed });
         }
         broadcastRoom(room);
-        if (room.teamServed >= 4) finishRoom(room,"Team");
+        const goal = Math.min(30,4+Math.floor((room.mapId||0)/8)*2);
+        if (room.teamServed >= goal) finishRoom(room,"Team");
       } else {
         for (const p of room.players) send(clientSocket(p.id), { type: "orderDone", name: player ? player.name : "Chef", score: Number(msg.score || 0) });
         broadcastRoom(room);
-        if (player && Number(player.served || 0) >= 4) finishRoom(room, player.name || "Chef");
+        const goal = Math.min(30,4+Math.floor((room.mapId||0)/8)*2);
+        if (player && Number(player.served || 0) >= goal) finishRoom(room, player.name || "Chef");
       }
     }
 
@@ -199,7 +201,8 @@ wss.on("connection", ws => {
       const room = rooms.get(c.room);
       if (!room) return;
       if (msg.choice !== "next") {
-        for (const p of room.players) send(clientSocket(p.id), { type:"forceHome" });
+        leave(ws);
+        send(ws, { type:"forceHome" });
         return;
       }
       room.nextVotes = room.nextVotes || {};
@@ -214,7 +217,8 @@ wss.on("connection", ws => {
     if (msg.type === "nextVoteTimeout") {
       const room = rooms.get(c.room);
       if (!room) return;
-      for (const p of room.players) send(clientSocket(p.id), { type:"forceHome" });
+      leave(ws);
+      send(ws, { type:"forceHome" });
     }
 
     if (msg.type === "progress") {
