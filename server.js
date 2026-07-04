@@ -175,6 +175,7 @@ wss.on("connection", ws => {
         player.score = Number(msg.total || player.score || 0);
         player.served = Number(msg.served || player.served || 0);
       }
+      const goal = Math.min(30,4+Math.floor((room.mapId||0)/8)*2);
       if (room.mode === "coop") {
         room.teamServed = (room.teamServed || 0) + 1;
         room.sharedTray = [];
@@ -186,12 +187,10 @@ wss.on("connection", ws => {
           send(clientSocket(p.id), { type: "sharedState", teamServed: room.teamServed });
         }
         broadcastRoom(room);
-        const goal = Math.min(30,4+Math.floor((room.mapId||0)/8)*2);
         if (room.teamServed >= goal) finishRoom(room,"Team");
       } else {
         for (const p of room.players) send(clientSocket(p.id), { type: "orderDone", name: player ? player.name : "Chef", score: Number(msg.score || 0) });
         broadcastRoom(room);
-        const goal = Math.min(30,4+Math.floor((room.mapId||0)/8)*2);
         if (player && Number(player.served || 0) >= goal) finishRoom(room, player.name || "Chef");
       }
     }

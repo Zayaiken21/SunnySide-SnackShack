@@ -517,7 +517,7 @@ button,input{pointer-events:auto!important}
 }
 
 
-/* TARGETED SYNC/UPGRADE PATCH ONLY */
+/* TARGETED PATCH ONLY */
 .machine{
   font-size:0!important;
   color:transparent!important;
@@ -535,22 +535,6 @@ button,input{pointer-events:auto!important}
   text-shadow:none!important;
   line-height:normal!important;
 }
-.beltFood{
-  width:18px!important;
-  height:16px!important;
-  font-size:12px!important;
-}
-.teamProgress{
-  grid-column:1/-1;
-  background:#fff;
-  border:3px solid #fff0bd;
-  border-radius:15px;
-  padding:4px 8px;
-  font-size:10px;
-  font-weight:1000;
-  text-align:center;
-  box-shadow:var(--soft);
-}
 .vipTag{
   display:inline-block;
   background:linear-gradient(#fff,#ffd76d);
@@ -559,16 +543,7 @@ button,input{pointer-events:auto!important}
   padding:2px 7px;
   font-size:9px;
   font-weight:1000;
-  margin-left:4px;
-}
-.resultPlaces{text-align:left;margin:10px 0}
-.resultPlaces div{
-  background:#fff7d7;
-  border:2px solid #fff;
-  border-radius:13px;
-  padding:7px 9px;
-  margin:4px 0;
-  font-weight:1000;
+  margin-right:4px;
 }
 .levelVoteInfo,.upgradeTimer{
   background:#fff;
@@ -595,19 +570,14 @@ button,input{pointer-events:auto!important}
 }
 .upgradeShopCard strong{display:block;font-size:12px}
 .upgradeShopCard small{display:block;font-size:9px;font-weight:900;opacity:.82;margin:4px 0}
-.matchTimerPill{
-  background:#fff;
-  border-radius:999px;
-  padding:8px 9px;
-  font-size:11px;
+.resultPlaces{text-align:left;margin:10px 0}
+.resultPlaces div{
+  background:#fff7d7;
+  border:2px solid #fff;
+  border-radius:13px;
+  padding:7px 9px;
+  margin:4px 0;
   font-weight:1000;
-  box-shadow:inset 0 -3px rgba(0,0,0,.04);
-  white-space:nowrap;
-}
-@media(max-width:430px){
-  .upgradeShopGrid{grid-template-columns:1fr}
-  .beltFood{width:16px!important;height:15px!important;font-size:11px!important}
-  .matchTimerPill{font-size:10px;padding:7px 6px}
 }
 
 </style>
@@ -689,7 +659,7 @@ window.addEventListener("error", function(e){
 <div class="modal" id="builder"><div class="panel"><h2 id="builderTitle">Build Food</h2><div class="preview" id="preview">🍽️</div><div id="builderBody"></div><div class="build-actions"><button class="btn blue" onclick="viewOrder()">📋 View Order</button><button class="btn pink" onclick="saveBuildAndClose()">Save & Back</button></div><button class="btn green" onclick="addBuilt()">Add to Tray</button><button class="btn pink" onclick="discardBuild()">Discard Build</button></div></div>
 <div class="modal" id="orderModal"><div class="panel"><h2>Customer Ticket 📋</h2><div id="orderFull"></div><button class="btn blue" onclick="closeOrder()">Back to Cooking</button></div></div>
 <div class="modal" id="roomModal"><div class="panel"><h2 id="roomTitle">Room Created</h2><div class="code" id="roomCode">ABC123</div><p id="roomInfo" class="sub"></p><div id="roomPlayers"></div><div class="roomActions"><button class="btn blue" onclick="show('multi');closeRoom()">← Match Center</button><button class="btn green" onclick="openVoting()">Vote Map</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
-<div class="modal" id="nextVoteModal"><div class="panel"><h2>Vote Next Level ➡️</h2><p class="sub">All online players must vote within 15 seconds. Players who choose Home leave the room.</p><div class="levelVoteInfo" id="nextVoteInfo">Waiting...</div><button class="btn green" onclick="voteNextLevel()">Vote Next</button><button class="btn pink" onclick="voteReturnHome()">Go Home</button></div></div>
+<div class="modal" id="nextVoteModal"><div class="panel"><h2>Vote Next Level ➡️</h2><p class="sub">All remaining online players must vote within 15 seconds. Choosing Home removes you from the room.</p><div class="levelVoteInfo" id="nextVoteInfo">Waiting...</div><button class="btn green" onclick="voteNextLevel()">Vote Next</button><button class="btn pink" onclick="voteReturnHome()">Go Home</button></div></div>
 <div class="modal" id="onlineUpgradeModal"><div class="panel"><h2>Online Upgrade Break 🛠</h2><p class="sub">30 seconds. Online upgrades apply to multiplayer. Offline upgrades do not affect online matches.</p><div class="upgradeTimer" id="upgradeTimer">30</div><div class="upgradeShopGrid" id="onlineUpgradeGrid"></div><button class="btn green" onclick="finishUpgradeBreak()">Ready Now</button></div></div>
 <div class="modal" id="result"><div class="panel"><h2 id="resultTitle">Round Complete!</h2><p id="resultText"></p><div class="progressNote" id="unlockText">Progress saved.</div><div class="homeActions"><button class="btn green" onclick="openNextVote()">Next Level</button><button class="btn blue" onclick="restartLevel()">Retry</button></div><button class="btn pink" onclick="goHome()">🏠 Back Home</button></div></div>
 <div class="orderDoneBanner" id="doneBanner">Order completed!</div><div class="toast" id="toast">Nice!</div>
@@ -789,7 +759,7 @@ function buyUpgrade(id,price){
   localStorage.ssss_account_coins=accountCoins;localStorage.ssss_upgrades=JSON.stringify(upgrades);
   openUpgrades();toast("Upgrade bought ✓");
 }
-function init(){ensureExtraFoodsAndMaps(); $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
+function init(){ssssEnsureExtraFoodsAndMaps(); $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
 function applyWorld(mapId){
   let m=MAPS[mapId];
   document.documentElement.style.setProperty("--mapBg",m.bg);
@@ -822,7 +792,7 @@ function markLevelComplete(){
   unlockedThemeCount=Math.min(100,3+Math.floor(completedLevels/3)*3);
   return unlockedThemeCount>before;
 }
-function startLevel(level=1,multi=false,mode="solo",mapId=0){let c=cfg(level,mapId);state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:(multi?4:c.goal),tray:[],sharedTray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false,sharedTray:[]};state.goal=state.multiplayer?multiplayerGoalForMap():soloGoalForMap(c.goal);savedBuild=null;applyWorld(mapId); if(audio.ctx){stopMusic();startMusic();}$("mapName").textContent=`${c.map.emoji} ${c.map.fullName} · L${level}`;$("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=state.goal;renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();show("play");newCustomer();sendNet("progress",progressPayload())}
+function startLevel(level=1,multi=false,mode="solo",mapId=0){let c=cfg(level,mapId);state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:(multi?4:c.goal),tray:[],sharedTray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false,sharedTray:[]};state.goal=state.multiplayer?ssssMultiGoalForMap(state.mapId):ssssSoloGoalForMap(c.goal,state.mapId);savedBuild=null;applyWorld(mapId); if(audio.ctx){stopMusic();startMusic();}$("mapName").textContent=`${c.map.emoji} ${c.map.fullName} · L${level}`;$("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=state.goal;renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();show("play");newCustomer();sendNet("progress",progressPayload())}
 
 function teamServedCount(){
   if(!(state.multiplayer&&state.mode==="coop")) return state.served||0;
@@ -876,26 +846,31 @@ function continueNextLevel(){
 }
 
 
-function getOnlineUpgrades(){
+function ssssGetOnlineUpgrades(){
   try{return JSON.parse(localStorage.ssss_online_upgrades||"{}")}catch(e){return{}}
 }
-function getOnlineUpgradeLevel(k){return getOnlineUpgrades()[k]||0}
-function setOnlineUpgradeLevel(k,v){let u=getOnlineUpgrades();u[k]=v;localStorage.ssss_online_upgrades=JSON.stringify(u)}
-function multiplayerGoalForMap(){
-  return Math.min(30,4+Math.floor((state.mapId||0)/8)*2);
+function ssssGetOnlineUpgradeLevel(k){return ssssGetOnlineUpgrades()[k]||0}
+function ssssSetOnlineUpgradeLevel(k,v){
+  let u=ssssGetOnlineUpgrades();
+  u[k]=v;
+  localStorage.ssss_online_upgrades=JSON.stringify(u);
 }
-function soloGoalForMap(base){
-  return Math.min(30,(base||4)+Math.floor((state.mapId||0)/12));
+function ssssMultiGoalForMap(mapId){
+  return Math.min(30,4+Math.floor((mapId||0)/8)*2);
 }
-function teamServedCount(){
+function ssssSoloGoalForMap(base,mapId){
+  return Math.min(30,(base||4)+Math.floor((mapId||0)/12));
+}
+function ssssTeamServedCount(){
   if(!(state.multiplayer&&state.mode==="coop")) return state.served||0;
   if(typeof state.teamServed==="number") return state.teamServed;
   return (net.players||[]).reduce((sum,p)=>sum+(Number(p.served)||0),0);
 }
-function updateServedUI(){
-  if($("uiServed")) $("uiServed").textContent=(state.multiplayer&&state.mode==="coop")?teamServedCount():(state.served||0);
+function ssssUpdateServedUI(){
+  if($("uiServed")) $("uiServed").textContent=(state.multiplayer&&state.mode==="coop")?ssssTeamServedCount():(state.served||0);
+  if($("uiGoal")) $("uiGoal").textContent=state.goal||4;
 }
-function passProgressOnce(){
+function ssssPassProgressOnce(){
   if(state._passedThisRound)return;
   state._passedThisRound=true;
   let old=Number(localStorage.ssss_completed_levels||0);
@@ -904,31 +879,31 @@ function passProgressOnce(){
   unlockedThemeCount=Math.min(200,3+Math.floor(completedLevels/3)*3);
   if(typeof renderMapJourney==="function")renderMapJourney();
 }
-function nextMapId(){return Math.min(199,(state.mapId||0)+1)}
-function placementHTML(players){
+function ssssNextMapId(){return Math.min(199,(state.mapId||0)+1)}
+function ssssPlacementHTML(players){
   let ps=[...(players||net.players||[])].sort((a,b)=>(Number(b.served||0)-Number(a.served||0))||(Number(b.score||0)-Number(a.score||0)));
   return `<div class="resultPlaces">${ps.map((p,i)=>`<div>${i+1}. ${p.name||"Chef"} — ✅ ${p.served||0}/${state.goal||4} · 🪙 ${p.score||0}</div>`).join("")}</div>`;
 }
-function showMatchResults(msg){
+function ssssShowMatchResults(msg){
   stopTimer();
   state.matchEnded=true;
-  passProgressOnce();
+  ssssPassProgressOnce();
   $("resultTitle").textContent=state.mode==="coop"?"Team Level Complete! 🤝":"Versus Results! 🏆";
   if(state.mode==="coop"){
-    $("resultText").innerHTML=`Team completed ${msg.teamServed||teamServedCount()}/${state.goal} orders. Everyone advances.`;
+    $("resultText").innerHTML=`Team completed ${msg.teamServed||ssssTeamServedCount()}/${state.goal} orders. Everyone advances.`;
   }else{
-    $("resultText").innerHTML=`${msg.winner||"Winner"} finished first.`+placementHTML(msg.players);
+    $("resultText").innerHTML=`${msg.winner||"Winner"} finished first.`+ssssPlacementHTML(msg.players);
   }
   if($("unlockText"))$("unlockText").textContent="Progress saved. Vote to continue together.";
   $("result").classList.add("active");
   confetti();
 }
-function continueNextLevel(){
+function ssssContinueNextLevel(){
   closeResult();
-  startLevel(1,state.multiplayer,state.mode,nextMapId());
+  startLevel(1,state.multiplayer,state.mode,ssssNextMapId());
 }
 function openNextVote(){
-  if(!state.multiplayer){continueNextLevel();return;}
+  if(!state.multiplayer){ssssContinueNextLevel();return;}
   $("nextVoteModal").classList.add("active");
   let left=15;
   $("nextVoteInfo").textContent=`Vote next level: 0/${(net.players||[]).length||1} · ${left}s`;
@@ -955,7 +930,7 @@ function openOnlineUpgrades(){
     ["focus","Online Focus Timer","Small online patience helper for the whole match."]
   ];
   $("onlineUpgradeGrid").innerHTML=shop.map(([k,n,d])=>{
-    let lv=getOnlineUpgradeLevel(k), price=75+lv*90;
+    let lv=ssssGetOnlineUpgradeLevel(k), price=75+lv*90;
     return `<div class="upgradeShopCard"><strong>${n} Lv.${lv}</strong><small>${d}</small><button class="btn small green" onclick="buyOnlineUpgrade('${k}',${price})">Buy ${price}</button></div>`;
   }).join("");
   let t=30;
@@ -967,15 +942,15 @@ function buyOnlineUpgrade(k,price){
   if(accountCoins<price)return toast("Need more coins");
   accountCoins-=price;
   localStorage.ssss_account_coins=accountCoins;
-  setOnlineUpgradeLevel(k,getOnlineUpgradeLevel(k)+1);
+  ssssSetOnlineUpgradeLevel(k,ssssGetOnlineUpgradeLevel(k)+1);
   openOnlineUpgrades();
 }
 function finishUpgradeBreak(){
   clearInterval(state.upgradeBreakTimer);
   $("onlineUpgradeModal").classList.remove("active");
-  continueNextLevel();
+  ssssContinueNextLevel();
 }
-function ensureExtraFoodsAndMaps(){
+function ssssEnsureExtraFoodsAndMaps(){
   try{
     const cultureFoods=[
       ["sushi snack box","🍣","Snack"],["rice bowl","🍚","Fresh"],["spring roll","🥬","Snack"],["dumpling cup","🥟","Snack"],["arepa pocket","🫓","Grill"],["plantain bites","🍌","Fry"],["falafel wrap","🧆","Grill"],["hummus cup","🫘","Fresh"],["gyro pita","🥙","Grill"],["tropical tea","🧋","Drink"],["matcha smoothie","🍵","Drink"],["horchata cup","🥛","Drink"],["dragon fruit bowl","🐉","Fresh"],["baklava bite","🍯","Dessert"],["mochi cup","🍡","Dessert"],["churro bites","🥨","Dessert"],["crepe roll","🥞","Dessert"],["bibimbap mini","🍲","Fresh"],["curry puff","🥟","Snack"],["jerk veggie slider","🍔","Grill"]
@@ -1103,7 +1078,7 @@ function renderBelts(){
   });
 }
 function viewOrder(){$("orderFull").innerHTML=state.order.map(i=>`<div class="ticket-item" style="font-size:14px;text-align:left">${itemText(i)}</div>`).join("")+(savedBuild?`<p class="sub">Saved build: ${food(savedBuild.type).emoji} ${cap(food(savedBuild.type).name)}</p>`:"");$("orderModal").classList.add("active")}function closeOrder(){$("orderModal").classList.remove("active")}
-function serveTray(){if(!state.tray.length)return toast("Make the order first");stopTimer();let acc=scoreOrder(state.order,state.tray);let onlineTeam=getOnlineUpgradeLevel("team");let bonus=state.mode==="coop"?Math.round(acc/(8-(Math.min(4,onlineTeam)))):0;state.coopBonus+=bonus;let coins=Math.max(1,Math.round(acc*.8+state.patience*.2+bonus+(state.multiplayer?0:(upgrades.prep||0))*2));state.coins+=coins;accountCoins+=Math.max(1,Math.round(coins*(1+(upgrades.tips||0)*0.1)));localStorage.ssss_account_coins=accountCoins;state.served++;$("uiCoins").textContent=state.coins;updateServedUI();burst((acc>=90?"Perfect Combo! ":"Served Combo! ")+"+"+coins+" 🪙");sendNet("orderComplete",{score:coins,total:state.coins,served:state.served,mode:state.mode});sendNet("progress",progressPayload());if(state.multiplayer){setTimeout(newCustomer,850)}else if(state.multiplayer){setTimeout(newCustomer,850)}else if(state.served>=state.goal)setTimeout(levelDone,800);else setTimeout(newCustomer,850);}
+function serveTray(){if(!state.tray.length)return toast("Make the order first");stopTimer();let acc=scoreOrder(state.order,state.tray);let onlineTeam=ssssGetOnlineUpgradeLevel("team");let bonus=state.mode==="coop"?Math.round(acc/(8-(Math.min(4,onlineTeam)))):0;state.coopBonus+=bonus;let coins=Math.max(1,Math.round(acc*.8+state.patience*.2+bonus+(state.multiplayer?0:(upgrades.prep||0))*2));state.coins+=coins;accountCoins+=Math.max(1,Math.round(coins*(1+(upgrades.tips||0)*0.1)));localStorage.ssss_account_coins=accountCoins;state.served++;$("uiCoins").textContent=state.coins;updateServedUI();burst((acc>=90?"Perfect Combo! ":"Served Combo! ")+"+"+coins+" 🪙");sendNet("orderComplete",{score:coins,total:state.coins,served:state.served,mode:state.mode});sendNet("progress",progressPayload());if(state.multiplayer){setTimeout(newCustomer,850)}else if(state.multiplayer){setTimeout(newCustomer,850)}else if(state.served>=state.goal)setTimeout(levelDone,800);else setTimeout(newCustomer,850);}
 function scoreOrder(order,tray){let used=new Set(),earned=0,total=order.length*100;order.forEach(w=>{let best=0,bi=-1;tray.forEach((m,i)=>{if(used.has(i))return;let s=0;if(m.id===w.id){let fields=food(w.id).fields.map(x=>x[0]);s+=25;fields.forEach(f=>{if(m[f]===w[f])s+=75/fields.length})}if(s>best){best=s;bi=i}});if(bi>=0)used.add(bi);earned+=best});return Math.max(0,Math.round((earned/total)*100-Math.max(0,tray.length-order.length)*10))}
 function levelDone(){
   stopTimer();
@@ -1166,7 +1141,7 @@ function showSpinner(candidates=[],duration=1800){
 function closeSpin(){$("spinModal").classList.remove("active");}
 function connectOnline(){if(net.connected)return toast("Already connected");let name=$("playerName").value.trim();if(!name)return toast("Enter your chef name first");let proto=location.protocol==="https:"?"wss":"ws",url=(location.protocol==="file:")?"ws://localhost:3000":`${proto}://${location.host}`;try{let ws=new WebSocket(url);net.ws=ws;ws.onopen=()=>{net.connected=true;localStorage.ssss_name=name;$("netDot").classList.add("on");$("netText").textContent="Connected";sendNet("hello",{name});toast("Connected 🎮")};ws.onmessage=e=>handleNet(JSON.parse(e.data));ws.onclose=()=>{net.connected=false;$("netDot").classList.remove("on");$("netText").textContent="Not Connected";renderRooms()};ws.onerror=()=>toast("Connection failed. Deploy/run server.")}catch(e){toast("Connection blocked")}}
 function sendNet(type,data={}){if(net.ws&&net.ws.readyState===1)net.ws.send(JSON.stringify({type,...data}))}
-function handleNet(msg){if(msg.type==="welcome"){net.id=msg.id;net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="rooms"){net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="room"){net.room=msg.room;net.players=msg.room.players||[];showRoom(msg.room)}if(msg.type==="players"){net.players=msg.players||[];renderRoomPlayers();renderScoreboard();renderOtherOrder()}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="matchEnd"){net.players=msg.players||net.players;showMatchResults(msg);}if(msg.type==="nextVoteState"){if($("nextVoteInfo"))$("nextVoteInfo").textContent=`Vote next level: ${msg.count}/${msg.total} · 15s max`;}if(msg.type==="openUpgradeBreak"){openOnlineUpgrades();}if(msg.type==="forceHome"){goHome();}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="matchEnd"){net.players=msg.players||net.players;showMatchResults(msg);}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="sharedOrder"){if(state.multiplayer&&state.mode==="coop"){applySharedOrder(msg.order||[],msg.customerName)}}if(msg.type==="sharedTray"){if(state.multiplayer&&state.mode==="coop"){applySharedTray(msg.tray||[])}}if(msg.type==="orderDone"){showOrderDone(msg.name,msg.score);if(state.mode==="coop"){if(msg.order)applySharedOrder(msg.order);applySharedTray([])}}if(msg.type==="votes"){net.votes=msg.votes||{};renderVoteMaps()}if(msg.type==="tutorialVote"){showTutorialVote(msg.votes||{})}if(msg.type==="tutorialStart"){runTutorial(msg.show!==false)}if(msg.type==="spin"){showSpinner(msg.candidates||[],msg.duration||1800)}if(msg.type==="start"){setTimeout(()=>{closeSpin();closeRoom();closeVote();startLevel(1,true,msg.mode||"coop",msg.mapId||0)}, msg.delay||0)}if(msg.type==="error")toast(msg.message||"Server error")}
+function handleNet(msg){if(msg.type==="welcome"){net.id=msg.id;net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="rooms"){net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="room"){net.room=msg.room;net.players=msg.room.players||[];showRoom(msg.room)}if(msg.type==="players"){net.players=msg.players||[];renderRoomPlayers();renderScoreboard();renderOtherOrder()}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);ssssUpdateServedUI();renderScoreboard();}if(msg.type==="matchEnd"){net.players=msg.players||net.players;ssssShowMatchResults(msg);}if(msg.type==="nextVoteState"){if($("nextVoteInfo"))$("nextVoteInfo").textContent=`Vote next level: ${msg.count}/${msg.total} · 15s max`;}if(msg.type==="openUpgradeBreak"){openOnlineUpgrades();}if(msg.type==="forceHome"){goHome();}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="matchEnd"){net.players=msg.players||net.players;showMatchResults(msg);}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="sharedOrder"){if(state.multiplayer&&state.mode==="coop"){applySharedOrder(msg.order||[],msg.customerName)}}if(msg.type==="sharedTray"){if(state.multiplayer&&state.mode==="coop"){applySharedTray(msg.tray||[])}}if(msg.type==="orderDone"){showOrderDone(msg.name,msg.score);if(state.mode==="coop"){if(msg.order)applySharedOrder(msg.order);applySharedTray([])}}if(msg.type==="votes"){net.votes=msg.votes||{};renderVoteMaps()}if(msg.type==="tutorialVote"){showTutorialVote(msg.votes||{})}if(msg.type==="tutorialStart"){runTutorial(msg.show!==false)}if(msg.type==="spin"){showSpinner(msg.candidates||[],msg.duration||1800)}if(msg.type==="start"){setTimeout(()=>{closeSpin();closeRoom();closeVote();startLevel(1,true,msg.mode||"coop",msg.mapId||0)}, msg.delay||0)}if(msg.type==="error")toast(msg.message||"Server error")}
 function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[]}}
 function requireName(){let name=$("playerName").value.trim();if(!name){toast("Enter your chef name first");return null}localStorage.ssss_name=name;return name}
 function createRoom(mode){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first for real multiplayer");sendNet("createRoom",{mode,name})}
