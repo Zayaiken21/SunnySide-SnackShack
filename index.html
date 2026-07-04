@@ -397,6 +397,76 @@ button,input{pointer-events:auto!important}
 .beltTrack{z-index:8!important;overflow:hidden!important}
 .beltFood{font-size:13px!important;width:20px!important;height:18px!important}
 
+
+/* FINAL SAFE PATCH: conveyor cleanup, team counter, peaceful music support */
+.machine{
+  font-size:0!important;
+  color:transparent!important;
+  text-shadow:none!important;
+}
+.machine > b,
+.machine > span.steam{
+  display:none!important;
+}
+.machine .beltTrack,
+.machine .beltTrack *,
+.machine .beltFood{
+  font-size:13px!important;
+  color:initial!important;
+  text-shadow:none!important;
+}
+.beltTrack{
+  position:absolute!important;
+  left:8px!important;
+  right:8px!important;
+  bottom:6px!important;
+  height:22px!important;
+  border-radius:12px!important;
+  border:2px solid rgba(255,255,255,.8)!important;
+  background:repeating-linear-gradient(90deg,#74431d 0 18px,#9c6330 18px 36px,#5b3216 36px 42px)!important;
+  overflow:hidden!important;
+  z-index:10!important;
+}
+.beltTrack:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 8px,transparent 8px 18px);
+  animation:beltMoveClean .85s linear infinite;
+}
+@keyframes beltMoveClean{to{transform:translateX(-42px)}}
+.beltFood{
+  position:absolute!important;
+  bottom:1px!important;
+  width:20px!important;
+  height:18px!important;
+  border-radius:7px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:#fff7d7!important;
+  border:2px solid #fff!important;
+  box-shadow:0 2px 4px rgba(0,0,0,.18)!important;
+  animation:moveFoodClean 2.7s linear infinite!important;
+  z-index:15!important;
+}
+@keyframes moveFoodClean{from{left:-28px}to{left:106%}}
+.teamProgress{
+  grid-column:1/-1;
+  background:#fff;
+  border:3px solid #fff0bd;
+  border-radius:15px;
+  padding:4px 8px;
+  font-size:10px;
+  font-weight:1000;
+  text-align:center;
+  box-shadow:var(--soft);
+}
+@media(max-width:430px){
+  .beltFood{width:18px!important;height:16px!important;font-size:12px!important}
+  .teamProgress{font-size:8.5px}
+}
+
 </style>
 
 <script>
@@ -547,7 +617,7 @@ if(localStorage.ssss_save_version!==SAVE_VERSION){
 }
 let completedLevels=Number(localStorage.ssss_completed_levels||0);
 let unlockedThemeCount=Math.min(100,3+Math.floor(completedLevels/3)*3);
-let muted=localStorage.ssss_muted==="1"?true:false, volume=Number(localStorage.ssss_volume||85)/100;
+let muted=localStorage.ssss_muted==="1"?true:false, volume=Number(localStorage.ssss_volume||100)/100;
 let accountCoins=Number(localStorage.ssss_account_coins||0);let upgrades=JSON.parse(localStorage.ssss_upgrades||"{\"prep\":0,\"patience\":0,\"tips\":0,\"team\":0}");let state={level:1,mapId:0,mode:"solo",multiplayer:false,coins:0,served:0,goal:4,tray:[],order:null,patience:100,timer:null,category:"Drink",coopBonus:0,paused:false,sharedTray:[]};
 let builder={type:null,selections:{}}, savedBuild=null, net={ws:null,id:null,room:null,connected:false,rooms:[],players:[],votes:{}}, audio={ctx:null,beat:null,master:null};
 const $=id=>document.getElementById(id), slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"");
@@ -607,8 +677,27 @@ function markLevelComplete(){
   unlockedThemeCount=Math.min(100,3+Math.floor(completedLevels/3)*3);
   return unlockedThemeCount>before;
 }
-function startLevel(level=1,multi=false,mode="solo",mapId=0){let c=cfg(level,mapId);state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:c.goal,tray:[],sharedTray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false,sharedTray:[]};savedBuild=null;applyWorld(mapId); if(audio.ctx){stopMusic();startMusic();}$("mapName").textContent=`${c.map.emoji} ${c.map.fullName} · L${level}`;$("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=c.goal;renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();show("play");newCustomer();sendNet("progress",progressPayload())}
-function renderScoreboard(){let me={id:net.id||"me",name:$("playerName").value||"Solo Chef",score:state.coins,served:state.served,order:state.order,me:true,coopBonus:state.coopBonus};let players=state.multiplayer?net.players.map(p=>p.id===net.id?{...p,score:state.coins,served:state.served,order:state.order,me:true,coopBonus:state.coopBonus}:p):[me];if(!players.some(p=>p.me))players.unshift(me);$("scoreboard").innerHTML=players.slice(0,4).map(p=>`<div class="score-card ${state.mode==="coop"?"coop-bonus":""}"><div class="face">${p.face||"🧑‍🍳"}</div><div><strong>${p.name||"Chef"} ${p.me?"(You)":""}</strong><span>🪙 ${p.score||0} · ✅ ${p.served||0}</span>${state.mode==="coop"?`<span>🤝 Bonus +${p.coopBonus||0}</span>`:`<span class="versus-order">${p.order?shortOrder(p.order):"Waiting for order..."}</span>`}</div></div>`).join("")}
+function startLevel(level=1,multi=false,mode="solo",mapId=0){let c=cfg(level,mapId);state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:(multi?4:c.goal),tray:[],sharedTray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false,sharedTray:[]};savedBuild=null;applyWorld(mapId); if(audio.ctx){stopMusic();startMusic();}$("mapName").textContent=`${c.map.emoji} ${c.map.fullName} · L${level}`;$("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=c.goal;renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();show("play");newCustomer();sendNet("progress",progressPayload())}
+
+function teamServedCount(){
+  if(!(state.multiplayer&&state.mode==="coop")) return state.served||0;
+  if(typeof state.teamServed === "number") return state.teamServed;
+  return (net.players||[]).reduce((sum,p)=>sum+(Number(p.served)||0),0);
+}
+function updateServedUI(){
+  if($("uiServed")) $("uiServed").textContent = (state.multiplayer&&state.mode==="coop") ? teamServedCount() : (state.served||0);
+}
+
+function renderScoreboard(){
+  let me={id:net.id||"me",name:$("playerName").value||"Chef",score:state.coins,served:state.served,order:state.order,me:true};
+  let players=state.multiplayer?net.players.map(p=>p.id===net.id?{...p,score:state.coins,served:state.served,order:state.order,me:true}:p):[me];
+  if(!players.some(p=>p.me))players.unshift(me);
+  $("scoreboard").innerHTML=players.slice(0,4).map(p=>`<div class="score-card ${state.mode==="coop"?"coop-bonus":""}"><div class="face">${p.face||"🧑‍🍳"}</div><div><strong>${p.name||"Chef"} ${p.me?"(You)":""}</strong><span>🪙 ${p.score||0} · ✅ ${p.served||0}</span>${state.mode==="coop"?`<span>🤝 Team Bonus +${state.coopBonus||0}</span>`:`<span class="versus-order">${p.order?shortOrder(p.order):"Waiting for order..."}</span>`}</div></div>`).join("");
+  if(state.multiplayer&&state.mode==="coop"){
+    $("scoreboard").insertAdjacentHTML("beforeend",`<div class="teamProgress">Team Orders Served: ✅ ${teamServedCount()}/${state.goal}</div>`);
+  }
+  updateServedUI();
+}
 function shortOrder(order){return order.map(item=>food(item.id).emoji+" "+cap(food(item.id).name)).join(" · ")}
 function renderCategories(){let c=cfg(state.level,state.mapId),cats=[...new Set(c.foods.map(f=>f.station))];$("categoryTabs").innerHTML=cats.map(cat=>`<button class="tab ${state.category===cat?"active":""}" onclick="pickCategory('${cat}')">${CAT_ICON[cat]} ${cat}</button>`).join("")}
 function pickCategory(cat){state.category=cat;renderCategories();renderFoods()}
@@ -703,7 +792,7 @@ function renderBelts(){
   });
 }
 function viewOrder(){$("orderFull").innerHTML=state.order.map(i=>`<div class="ticket-item" style="font-size:14px;text-align:left">${itemText(i)}</div>`).join("")+(savedBuild?`<p class="sub">Saved build: ${food(savedBuild.type).emoji} ${cap(food(savedBuild.type).name)}</p>`:"");$("orderModal").classList.add("active")}function closeOrder(){$("orderModal").classList.remove("active")}
-function serveTray(){if(!state.tray.length)return toast("Make the order first");stopTimer();let acc=scoreOrder(state.order,state.tray);let bonus=state.mode==="coop"?Math.round(acc/(8-(Math.min(4,upgrades.team||0)))):0;state.coopBonus+=bonus;let coins=Math.max(1,Math.round(acc*.8+state.patience*.2+bonus+(upgrades.prep||0)*2));state.coins+=coins;accountCoins+=Math.max(1,Math.round(coins*(1+(upgrades.tips||0)*0.1)));localStorage.ssss_account_coins=accountCoins;state.served++;$("uiCoins").textContent=state.coins;$("uiServed").textContent=state.served;burst((acc>=90?"Perfect Combo! ":"Served Combo! ")+"+"+coins+" 🪙");sendNet("orderComplete",{score:coins,total:state.coins,served:state.served,mode:state.mode});sendNet("progress",progressPayload());if(state.served>=state.goal)setTimeout(levelDone,800);else setTimeout(newCustomer,850);}
+function serveTray(){if(!state.tray.length)return toast("Make the order first");stopTimer();let acc=scoreOrder(state.order,state.tray);let bonus=state.mode==="coop"?Math.round(acc/(8-(Math.min(4,upgrades.team||0)))):0;state.coopBonus+=bonus;let coins=Math.max(1,Math.round(acc*.8+state.patience*.2+bonus+(upgrades.prep||0)*2));state.coins+=coins;accountCoins+=Math.max(1,Math.round(coins*(1+(upgrades.tips||0)*0.1)));localStorage.ssss_account_coins=accountCoins;state.served++;$("uiCoins").textContent=state.coins;updateServedUI();burst((acc>=90?"Perfect Combo! ":"Served Combo! ")+"+"+coins+" 🪙");sendNet("orderComplete",{score:coins,total:state.coins,served:state.served,mode:state.mode});sendNet("progress",progressPayload());if(state.served>=state.goal)setTimeout(levelDone,800);else setTimeout(newCustomer,850);}
 function scoreOrder(order,tray){let used=new Set(),earned=0,total=order.length*100;order.forEach(w=>{let best=0,bi=-1;tray.forEach((m,i)=>{if(used.has(i))return;let s=0;if(m.id===w.id){let fields=food(w.id).fields.map(x=>x[0]);s+=25;fields.forEach(f=>{if(m[f]===w[f])s+=75/fields.length})}if(s>best){best=s;bi=i}});if(bi>=0)used.add(bi);earned+=best});return Math.max(0,Math.round((earned/total)*100-Math.max(0,tray.length-order.length)*10))}
 function levelDone(){
   stopTimer();
@@ -766,7 +855,7 @@ function showSpinner(candidates=[],duration=1800){
 function closeSpin(){$("spinModal").classList.remove("active");}
 function connectOnline(){if(net.connected)return toast("Already connected");let name=$("playerName").value.trim();if(!name)return toast("Enter your chef name first");let proto=location.protocol==="https:"?"wss":"ws",url=(location.protocol==="file:")?"ws://localhost:3000":`${proto}://${location.host}`;try{let ws=new WebSocket(url);net.ws=ws;ws.onopen=()=>{net.connected=true;localStorage.ssss_name=name;$("netDot").classList.add("on");$("netText").textContent="Connected";sendNet("hello",{name});toast("Connected 🎮")};ws.onmessage=e=>handleNet(JSON.parse(e.data));ws.onclose=()=>{net.connected=false;$("netDot").classList.remove("on");$("netText").textContent="Not Connected";renderRooms()};ws.onerror=()=>toast("Connection failed. Deploy/run server.")}catch(e){toast("Connection blocked")}}
 function sendNet(type,data={}){if(net.ws&&net.ws.readyState===1)net.ws.send(JSON.stringify({type,...data}))}
-function handleNet(msg){if(msg.type==="welcome"){net.id=msg.id;net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="rooms"){net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="room"){net.room=msg.room;net.players=msg.room.players||[];showRoom(msg.room)}if(msg.type==="players"){net.players=msg.players||[];renderRoomPlayers();renderScoreboard();renderOtherOrder()}if(msg.type==="sharedOrder"){if(state.multiplayer&&state.mode==="coop"){applySharedOrder(msg.order||[],msg.customerName)}}if(msg.type==="sharedTray"){if(state.multiplayer&&state.mode==="coop"){applySharedTray(msg.tray||[])}}if(msg.type==="orderDone"){showOrderDone(msg.name,msg.score);if(state.mode==="coop"){if(msg.order)applySharedOrder(msg.order);applySharedTray([])}}if(msg.type==="votes"){net.votes=msg.votes||{};renderVoteMaps()}if(msg.type==="tutorialVote"){showTutorialVote(msg.votes||{})}if(msg.type==="tutorialStart"){runTutorial(msg.show!==false)}if(msg.type==="spin"){showSpinner(msg.candidates||[],msg.duration||1800)}if(msg.type==="start"){setTimeout(()=>{closeSpin();closeRoom();closeVote();startLevel(1,true,msg.mode||"coop",msg.mapId||0)}, msg.delay||0)}if(msg.type==="error")toast(msg.message||"Server error")}
+function handleNet(msg){if(msg.type==="welcome"){net.id=msg.id;net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="rooms"){net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="room"){net.room=msg.room;net.players=msg.room.players||[];showRoom(msg.room)}if(msg.type==="players"){net.players=msg.players||[];renderRoomPlayers();renderScoreboard();renderOtherOrder()}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="sharedOrder"){if(state.multiplayer&&state.mode==="coop"){applySharedOrder(msg.order||[],msg.customerName)}}if(msg.type==="sharedTray"){if(state.multiplayer&&state.mode==="coop"){applySharedTray(msg.tray||[])}}if(msg.type==="orderDone"){showOrderDone(msg.name,msg.score);if(state.mode==="coop"){if(msg.order)applySharedOrder(msg.order);applySharedTray([])}}if(msg.type==="votes"){net.votes=msg.votes||{};renderVoteMaps()}if(msg.type==="tutorialVote"){showTutorialVote(msg.votes||{})}if(msg.type==="tutorialStart"){runTutorial(msg.show!==false)}if(msg.type==="spin"){showSpinner(msg.candidates||[],msg.duration||1800)}if(msg.type==="start"){setTimeout(()=>{closeSpin();closeRoom();closeVote();startLevel(1,true,msg.mode||"coop",msg.mapId||0)}, msg.delay||0)}if(msg.type==="error")toast(msg.message||"Server error")}
 function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[]}}
 function requireName(){let name=$("playerName").value.trim();if(!name){toast("Enter your chef name first");return null}localStorage.ssss_name=name;return name}
 function createRoom(mode){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first for real multiplayer");sendNet("createRoom",{mode,name})}
@@ -801,27 +890,36 @@ function goHome(){closeResult(); stopTimer(); state.multiplayer=false; state.mod
 function nextEarnedLevel(){closeResult(); startLevel(1,state.multiplayer,state.mode,state.mapId);}
 function leaveRoom(){sendNet("leaveRoom",{});net.room=null;net.players=[];closeRoom();closeVote();renderRooms()}
 function renderOtherOrder(){let other=(net.players||[]).find(p=>p.id!==net.id);$("otherEmoji").textContent=other?other.face||"👩‍🍳":"👀";$("otherOrder").innerHTML=other&&other.order&&other.order.length?other.order.map(i=>`<div class="ticket-item">${food(i.id).emoji} ${cap(food(i.id).name)}</div>`).join(""):'<div class="ticket-item">Waiting for real player...</div>'}
+
+/* peaceful music override */
 function startMusic(){
   if(muted||audio.ctx)return;
   try{
     let C=window.AudioContext||window.webkitAudioContext;
     audio.ctx=new C();
     audio.master=audio.ctx.createGain();
-    audio.master.gain.value=volume*.1;
+    audio.master.gain.value=volume*.055;
     audio.master.connect(audio.ctx.destination);
+    let scales=[
+      [392,440,494,587,659,587,494,440],
+      [349,392,440,523,587,523,440,392],
+      [330,392,494,523,659,523,494,392],
+      [294,349,392,440,523,440,392,349]
+    ];
     let i=0;
     audio.beat=setInterval(()=>{
       if(muted||!audio.ctx)return;
-      let pattern=THEME_MUSIC_PATTERNS[state.mapId%THEME_MUSIC_PATTERNS.length];
+      let notes=scales[state.mapId%scales.length];
       let o=audio.ctx.createOscillator(),g=audio.ctx.createGain();
-      o.type=(state.mapId%3===0)?"triangle":((state.mapId%3===1)?"sine":"square");
-      o.frequency.value=pattern[i++%pattern.length];
-      g.gain.setValueAtTime(.32,audio.ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(.001,audio.ctx.currentTime+.28);
-      o.connect(g);g.connect(audio.master);o.start();o.stop(audio.ctx.currentTime+.3);
-    },330+(state.mapId%5)*18);
+      o.type="sine";
+      o.frequency.value=notes[i++%notes.length];
+      g.gain.setValueAtTime(.16,audio.ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001,audio.ctx.currentTime+.62);
+      o.connect(g);g.connect(audio.master);o.start();o.stop(audio.ctx.currentTime+.65);
+    },720);
   }catch(e){}
 }
+
 function stopMusic(){if(audio.beat)clearInterval(audio.beat);audio.beat=null;if(audio.ctx){audio.ctx.close();audio.ctx=null}}function toggleMute(){muted=!muted;localStorage.ssss_muted=muted?"1":"0";$("soundLabel").textContent=muted?"Off":"On";if(muted)stopMusic();else startMusic()}
 function setVolume(v){volume=Number(v)/100;localStorage.ssss_volume=String(v);if(audio.master)audio.master.gain.value=volume*.08}
 function beep(freq=520,dur=.05){if(muted)return;try{if(!audio.ctx)startMusic();let c=audio.ctx,o=c.createOscillator(),g=c.createGain();o.frequency.value=freq;g.gain.setValueAtTime(volume*.08,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur)}catch(e){}}

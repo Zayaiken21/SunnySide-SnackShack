@@ -75,7 +75,7 @@ wss.on("connection", ws => {
       leave(ws);
       c.name = String(msg.name || c.name || "Chef").slice(0, 14);
       const code = makeCode();
-      const room = { code, mode: msg.mode === "versus" ? "versus" : "coop", hostName: c.name, level: 1, mapId: 0, started: false, votes: {}, ready: {}, tutorialVotes:{}, sharedOrder:null, sharedTray:[], sharedCustomerName:null, players: [] };
+      const room = { code, mode: msg.mode === "versus" ? "versus" : "coop", hostName: c.name, level: 1, mapId: 0, started: false, votes: {}, ready: {}, tutorialVotes:{}, sharedOrder:null, sharedTray:[], sharedCustomerName:null, teamServed:0, players: [] };
       rooms.set(code, room);
       c.room = code;
       room.players.push({ id: c.id, name: c.name, face: "🧑‍🍳", score: 0, served: 0, order: [], coopBonus: 0 });
@@ -144,7 +144,7 @@ wss.on("connection", ws => {
         for (const p of room.players) send(clientSocket(p.id), { type: "spin", candidates: unique, duration: 1800 });
         setTimeout(() => {
           const selected = unique[Math.floor(Math.random() * unique.length)] || 0;
-          room.mapId = selected; room.level = 1; room.started = true;
+          room.mapId = selected; room.level = 1; room.started = true; room.teamServed=0;
           for (const p of room.players) send(clientSocket(p.id), { type: "start", level: 1, mapId: selected, mode: room.mode, delay: 350 });
           broadcastRooms();
         }, 1900);
@@ -159,11 +159,26 @@ wss.on("connection", ws => {
       for (const p of room.players) send(clientSocket(p.id), { type: "sharedTray", tray: room.sharedTray });
     }
     if (msg.type === "orderComplete") {
-      const room = rooms.get(c.room); if (!room) return;
+      const room = rooms.get(c.room);
+      if (!room) return;
       const player = room.players.find(p => p.id === c.id);
-      if (player) { player.score = Number(msg.total || player.score || 0); player.served = Number(msg.served || player.served || 0); }
-      if (room.mode === "coop") { room.sharedTray = []; room.sharedOrder = null; for (const p of room.players) { send(clientSocket(p.id), { type: "orderDone", name: player ? player.name : "Chef", score: Number(msg.score || 0), order: null }); send(clientSocket(p.id), { type: "sharedTray", tray: [] }); } }
-      else { for (const p of room.players) send(clientSocket(p.id), { type: "orderDone", name: player ? player.name : "Chef", score: Number(msg.score || 0) }); }
+      if (player) {
+        player.score = Number(msg.total || player.score || 0);
+        player.served = Number(msg.served || player.served || 0);
+      }
+      if (room.mode === "coop") {
+        room.teamServed = (room.teamServed || 0) + 1;
+        room.sharedTray = [];
+        room.sharedOrder = null;
+        room.sharedCustomerName = null;
+        for (const p of room.players) {
+          send(clientSocket(p.id), { type: "orderDone", name: player ? player.name : "Chef", score: Number(msg.score || 0), tray: [] });
+          send(clientSocket(p.id), { type: "sharedTray", tray: [] });
+          send(clientSocket(p.id), { type: "sharedState", teamServed: room.teamServed });
+        }
+      } else {
+        for (const p of room.players) send(clientSocket(p.id), { type: "orderDone", name: player ? player.name : "Chef", score: Number(msg.score || 0) });
+      }
       broadcastRoom(room);
     }
 
