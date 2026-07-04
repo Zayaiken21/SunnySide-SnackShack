@@ -1,3 +1,3 @@
-# Sunny Side Snack Shack — Final Sync Patch
+# Sunny Side Snack Shack — Live Results Final Build
 
-Co-op shared order and tray sync, versus separate orders, clean animated real-food conveyors, and order-complete broadcasts.
+Co-op shared orders/tray, versus separate orders, live results, duplicate item prevention, smaller animated conveyor sprites, synced co-op customer names, and full-volume music default.

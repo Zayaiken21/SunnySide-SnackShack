@@ -75,7 +75,7 @@ wss.on("connection", ws => {
       leave(ws);
       c.name = String(msg.name || c.name || "Chef").slice(0, 14);
       const code = makeCode();
-      const room = { code, mode: msg.mode === "versus" ? "versus" : "coop", hostName: c.name, level: 1, mapId: 0, started: false, votes: {}, ready: {}, tutorialVotes:{}, sharedOrder:null, sharedTray:[], players: [] };
+      const room = { code, mode: msg.mode === "versus" ? "versus" : "coop", hostName: c.name, level: 1, mapId: 0, started: false, votes: {}, ready: {}, tutorialVotes:{}, sharedOrder:null, sharedTray:[], sharedCustomerName:null, players: [] };
       rooms.set(code, room);
       c.room = code;
       room.players.push({ id: c.id, name: c.name, face: "🧑‍🍳", score: 0, served: 0, order: [], coopBonus: 0 });
@@ -118,10 +118,17 @@ wss.on("connection", ws => {
     if (msg.type === "newSharedOrder") {
       const room = rooms.get(c.room);
       if (!room || room.mode !== "coop") return;
-      if (room.sharedOrder && room.sharedOrder.length) { for (const p of room.players) send(clientSocket(p.id), { type: "sharedOrder", order: room.sharedOrder }); return; }
+      if (room.sharedOrder && room.sharedOrder.length) {
+        for (const p of room.players) send(clientSocket(p.id), { type: "sharedOrder", order: room.sharedOrder, customerName: room.sharedCustomerName });
+        return;
+      }
       room.sharedOrder = Array.isArray(msg.order) ? msg.order.slice(0, 6) : [];
+      room.sharedCustomerName = String(msg.customerName || "Team Combo").slice(0, 40);
       room.sharedTray = [];
-      for (const p of room.players) { send(clientSocket(p.id), { type: "sharedOrder", order: room.sharedOrder }); send(clientSocket(p.id), { type: "sharedTray", tray: room.sharedTray }); }
+      for (const p of room.players) {
+        send(clientSocket(p.id), { type: "sharedOrder", order: room.sharedOrder, customerName: room.sharedCustomerName });
+        send(clientSocket(p.id), { type: "sharedTray", tray: room.sharedTray });
+      }
     }
 
     if (msg.type === "tutorialVote") {
