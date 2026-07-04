@@ -1,13 +1,22 @@
-# Sunny Side Snack Shack — Reverted Minimal Patch
+# Sunny Side Snack Shack — Ultimate Upgrade Patch
 
-Reverted to the last working ZIP and applied only these requested fixes:
+Built from the working reverted ZIP. Core UI preserved.
 
-- Conveyor station words hidden globally.
-- Conveyor shows all tray items in order.
-- Team mode counts completed orders together for all players.
-- Team win/pass happens for everyone at 4/4.
-- Versus ends for everyone when one player reaches 4/4.
-- Versus results show placements.
-- Continue/Next advances to the next map.
+Added:
+- 200 unique world/map entries.
+- More culture-inspired food/drink items.
+- Co-op shared customer name/order preserved.
+- Solo upgrades no longer affect multiplayer.
+- Online team bonus upgrades affect multiplayer.
+- Multiplayer order goals scale beyond 4/4 as maps advance.
+- Wrong orders still count toward level completion.
+- VIP orders with higher reward.
+- Timer fail restarts the level.
+- Multiplayer next-level vote: all players must vote within 15 seconds or return home.
+- 30-second online upgrade break before next multiplayer level.
+- Player leaving continues using server broadcast removal.
+- Team level progress resets on next level.
 
-No extra UI redesign was added.
+Deploy:
+Build command: npm install
+Start command: npm start
