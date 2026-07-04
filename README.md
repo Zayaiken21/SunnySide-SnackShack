@@ -1,42 +1,28 @@
-# Sunny Side Snack Shack — Theme Map Pro
+# Sunny Side Snack Shack — Fixed Multiplayer + Progress Build
 
-## New fixes
+## Fixes in this version
 
-- Solo mode stays solo.
-- Multiplayer requires a chef name before connecting/hosting/joining.
-- Chef names show in room, scoreboard, versus order panel, and co-op panel.
-- Theme map journey replaces plain level cards.
-- 100 themed map stages.
-- Antarctica Pet Café and Amazon Rainforest Shack included.
-- Each stage has events and unique world styling.
-- Customers can order multiple items.
-- Conveyor belts only show real tray/saved-build foods.
-- Wider food menu with theme categories.
-- Music volume slider and mute toggle.
-- Real-player-only multiplayer server.
+- Screen no longer pushes below the bottom on iPhone; play area scrolls safely.
+- Multiplayer rooms allow up to 4 real players.
+- Scoreboard is compact and can show up to 4 players.
+- Vote Map has a proper Back to Room button.
+- Players can pick maps, then every match still starts at Level 1.
+- Progress was reset with a new save version.
+- Players start with only 3 themes unlocked.
+- Completing levels unlocks 3 new themes every 3 completed levels.
+- Themes are uniquely generated with different style/event names.
+- Themes are not simply all handed to the player.
+- Result menu has Next, Retry, and Back Home.
+- Pause menu has Resume, Restart, Map Select, and Home.
+- Solo stays solo.
+- Conveyor belts only show real tray or saved-build foods.
+- Customers can order multiple combo items.
+- Food layout and player layout are more compact for phones.
 
-## Run
+## Deploy
 
-```bash
+Build command:
 npm install
+
+Start command:
 npm start
-```
-
-Open:
-
-```text
-http://localhost:3000
-```
-
-On iPhone on same Wi-Fi:
-
-```text
-http://YOUR-COMPUTER-IP:3000
-```
-
-## Render
-
-Upload to GitHub and create a Render Web Service.
-
-- Build command: `npm install`
-- Start command: `npm start`

@@ -21,7 +21,7 @@ function makeCode() {
 function send(ws, data) { if (ws && ws.readyState === ws.OPEN) ws.send(JSON.stringify(data)); }
 function clientSocket(id) { return [...clients.entries()].find(([, c]) => c.id === id)?.[0]; }
 function publicRooms() {
-  return [...rooms.values()].filter(r => r.players.length < 2 && !r.started)
+  return [...rooms.values()].filter(r => r.players.length < 4 && !r.started)
     .map(r => ({ code: r.code, mode: r.mode, players: r.players.length, hostName: r.hostName }));
 }
 function broadcastRooms() {
@@ -86,7 +86,7 @@ wss.on("connection", ws => {
     if (msg.type === "joinRoom") {
       const code = String(msg.code || "").toUpperCase();
       const room = rooms.get(code);
-      if (!room || room.players.length >= 2 || room.started) return send(ws, { type:"error", message:"Room not found, full, or already started." });
+      if (!room || room.players.length >= 4 || room.started) return send(ws, { type:"error", message:"Room not found, full, or already started." });
       leave(ws);
       c.name = String(msg.name || c.name || "Chef").slice(0, 14);
       c.room = code;
@@ -108,7 +108,7 @@ wss.on("connection", ws => {
       room.ready[c.id] = true;
       const votes = Object.values(room.votes);
       const selected = votes.length ? votes.sort((a,b)=>votes.filter(v=>v===b).length-votes.filter(v=>v===a).length)[0] : 0;
-      if (room.players.length === 2 && room.players.every(p => room.ready[p.id])) {
+      if (room.players.length >= 2 && room.players.every(p => room.ready[p.id])) {
         room.mapId = selected; room.level = 1; room.started = true;
         for (const p of room.players) send(clientSocket(p.id), { type: "start", level: 1, mapId: room.mapId, mode: room.mode });
         broadcastRooms();
