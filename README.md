@@ -1,13 +1,16 @@
-# Sunny Side Snack Shack — Final Safe Counter + Conveyor Patch
+# Sunny Side Snack Shack — Ready Patch
 
-This keeps the working version and fixes only:
+Keeps the working version and fixes the last multiplayer/gameplay issues:
 
-- Conveyor station words/text are hidden.
-- Only real tray/saved items show on the moving conveyor.
-- Team mode top counter now updates from all players: 1/4, 2/4, etc.
-- Server broadcasts team served count to everyone.
-- Multiplayer goal is 4 for team and versus.
-- Music is calmer, slower, and more peaceful.
+- Team top tracker uses the same fitting style as the working tracker.
+- Team completion advances every player, not only the individual who served most.
+- Team orders are counted together: 1/4, 2/4, 3/4, 4/4.
+- Versus ends for everyone when any individual player reaches 4/4.
+- Versus results show placements by orders served and score.
+- Continue/Next Level advances to the next map/world.
+- Conveyor station words are hidden globally.
+- Conveyor shows all tray items in order with staggered movement.
+- The existing working UI and formatting are preserved.
 
 Deploy:
 Build command: npm install
