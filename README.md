@@ -1,14 +1,19 @@
-# Sunny Side Snack Shack — Minor Sync Fix
+# Sunny Side Snack Shack — Final Team Upgrade Patch
 
-Base: the exact working ZIP uploaded by the user.
+Base: exact uploaded ZIP. Existing UI/layout preserved.
 
-Minor fixes only:
-- Restores readable top tracker sizing.
-- Hides conveyor station text behind belts.
-- Co-op team uses the same customer name and same order from the server.
-- Co-op team served count updates for all players.
-- Co-op ends for everyone when the team goal is reached.
-- Versus ends for everyone when one player reaches the goal.
-- Server resets team progress when next match starts.
+Targeted changes only:
+- Co-op teammates see the same customer name and order.
+- Co-op uses the highest online time upgrade from the team.
+- Versus uses only each player's own online time upgrade.
+- Offline/single-player patience upgrades do not affect multiplayer.
+- Multiplayer result screen requires vote to continue.
+- 15-second next-level vote; Home/timed-out players leave the room.
+- 30-second online upgrade break before the next multiplayer level.
+- Starting the next level resets orders/coins/tray/team progress to 0.
+- Server ends co-op for everyone at team goal and versus for everyone when one player wins.
+- Player leaving is removed through room broadcast.
 
-No broad UI redesign.
+Deploy:
+Build command: npm install
+Start command: npm start

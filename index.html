@@ -517,71 +517,40 @@ button,input{pointer-events:auto!important}
 }
 
 
-/* MINOR FIX ONLY */
-.topbar{
-  display:grid!important;
-  grid-template-columns:minmax(0,1fr) 64px 76px 46px!important;
-  gap:6px!important;
-  align-items:center!important;
-  padding-right:7px!important;
-}
-.topbar .pill{
-  min-width:0!important;
-  overflow:hidden!important;
-  text-overflow:ellipsis!important;
-  white-space:nowrap!important;
-}
-.topbar .pill:nth-child(2),
-.topbar .pill:nth-child(3){
-  justify-content:center!important;
-  text-align:center!important;
-}
-.pauseBtn{
-  position:static!important;
-  transform:none!important;
-  width:44px!important;
-  height:44px!important;
-  min-width:44px!important;
-  min-height:44px!important;
-  margin:0!important;
-}
-.machine{
-  font-size:0!important;
-  color:transparent!important;
-  text-shadow:none!important;
-  line-height:0!important;
-}
-.machine > b,
-.machine > span.steam{
-  display:none!important;
-}
-.machine .beltTrack,
-.machine .beltTrack *,
-.machine .beltFood{
-  color:initial!important;
-  text-shadow:none!important;
-  line-height:normal!important;
-}
-.beltFood{
-  width:18px!important;
-  height:16px!important;
-  font-size:12px!important;
-}
-.teamProgress{
-  grid-column:1/-1;
+/* FINAL TEAM SYNC PATCH — additive only */
+.levelVoteInfo,.upgradeTimer{
   background:#fff;
   border:3px solid #fff0bd;
-  border-radius:15px;
-  padding:4px 8px;
-  font-size:10px;
+  border-radius:18px;
+  padding:9px;
+  margin:7px 0;
   font-weight:1000;
-  text-align:center;
   box-shadow:var(--soft);
 }
-@media(max-width:430px){
-  .topbar{grid-template-columns:minmax(0,1fr) 56px 68px 42px!important;gap:5px!important}
-  .topbar .pill{font-size:10px!important;padding-left:6px!important;padding-right:6px!important}
-  .pauseBtn{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important}
+.upgradeShopGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin:8px 0;
+}
+.upgradeShopCard{
+  background:#fff;
+  border:3px solid #fff0bd;
+  border-radius:18px;
+  padding:9px;
+  text-align:left;
+  box-shadow:var(--soft);
+}
+.upgradeShopCard strong{display:block;font-size:12px}
+.upgradeShopCard small{display:block;font-size:9px;font-weight:900;opacity:.82;margin:4px 0}
+.resultPlaces{text-align:left;margin:10px 0}
+.resultPlaces div{
+  background:#fff7d7;
+  border:2px solid #fff;
+  border-radius:13px;
+  padding:7px 9px;
+  margin:4px 0;
+  font-weight:1000;
 }
 
 </style>
@@ -663,7 +632,9 @@ window.addEventListener("error", function(e){
 <div class="modal" id="builder"><div class="panel"><h2 id="builderTitle">Build Food</h2><div class="preview" id="preview">🍽️</div><div id="builderBody"></div><div class="build-actions"><button class="btn blue" onclick="viewOrder()">📋 View Order</button><button class="btn pink" onclick="saveBuildAndClose()">Save & Back</button></div><button class="btn green" onclick="addBuilt()">Add to Tray</button><button class="btn pink" onclick="discardBuild()">Discard Build</button></div></div>
 <div class="modal" id="orderModal"><div class="panel"><h2>Customer Ticket 📋</h2><div id="orderFull"></div><button class="btn blue" onclick="closeOrder()">Back to Cooking</button></div></div>
 <div class="modal" id="roomModal"><div class="panel"><h2 id="roomTitle">Room Created</h2><div class="code" id="roomCode">ABC123</div><p id="roomInfo" class="sub"></p><div id="roomPlayers"></div><div class="roomActions"><button class="btn blue" onclick="show('multi');closeRoom()">← Match Center</button><button class="btn green" onclick="openVoting()">Vote Map</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
-<div class="modal" id="result"><div class="panel"><h2 id="resultTitle">Round Complete!</h2><p id="resultText"></p><div class="progressNote" id="unlockText">Progress saved.</div><div class="homeActions"><button class="btn green" onclick="continueNextLevel()">Next Level</button><button class="btn blue" onclick="restartLevel()">Retry</button></div><button class="btn pink" onclick="goHome()">🏠 Back Home</button></div></div>
+<div class="modal" id="nextVoteModal"><div class="panel"><h2>Vote Next Level ➡️</h2><p class="sub">All online players must vote within 15 seconds. If you choose Home, you leave the room.</p><div class="levelVoteInfo" id="nextVoteInfo">Waiting...</div><button class="btn green" onclick="voteNextLevel()">Vote Next</button><button class="btn pink" onclick="voteReturnHome()">Go Home</button></div></div>
+<div class="modal" id="onlineUpgradeModal"><div class="panel"><h2>30 Second Upgrade Break 🛠</h2><p class="sub">Team time upgrades help everyone in co-op. Versus upgrades only help the player who owns them.</p><div class="upgradeTimer" id="upgradeTimer">30</div><div class="upgradeShopGrid" id="onlineUpgradeGrid"></div><button class="btn green" onclick="finishUpgradeBreak()">Ready Now</button></div></div>
+<div class="modal" id="result"><div class="panel"><h2 id="resultTitle">Round Complete!</h2><p id="resultText"></p><div class="progressNote" id="unlockText">Progress saved.</div><div class="homeActions"><button class="btn green" onclick="openNextVote()">Next Level</button><button class="btn blue" onclick="restartLevel()">Retry</button></div><button class="btn pink" onclick="goHome()">🏠 Back Home</button></div></div>
 <div class="orderDoneBanner" id="doneBanner">Order completed!</div><div class="toast" id="toast">Nice!</div>
 </main>
 
@@ -794,7 +765,7 @@ function markLevelComplete(){
   unlockedThemeCount=Math.min(100,3+Math.floor(completedLevels/3)*3);
   return unlockedThemeCount>before;
 }
-function startLevel(level=1,multi=false,mode="solo",mapId=0){let c=cfg(level,mapId);state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:(multi?4:c.goal),tray:[],sharedTray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false,sharedTray:[]};if(multi){state.goal=minorGoalForMap(mapId);}savedBuild=null;applyWorld(mapId);minorUpdateTopTracker(); if(audio.ctx){stopMusic();startMusic();}$("mapName").textContent=`${c.map.emoji} ${c.map.fullName} · L${level}`;$("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=state.goal;renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();show("play");newCustomer();sendNet("progress",progressPayload())}
+function startLevel(level=1,multi=false,mode="solo",mapId=0){let c=cfg(level,mapId);state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:(multi?4:c.goal),tray:[],sharedTray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false,sharedTray:[]};state._finalStarted=true;state.teamServed=0;state.sharedTray=[];savedBuild=null;applyWorld(mapId); if(audio.ctx){stopMusic();startMusic();}$("mapName").textContent=`${c.map.emoji} ${c.map.fullName} · L${level}`;$("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=c.goal;renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();show("play");newCustomer();sendNet("progress",progressPayload())}
 
 function teamServedCount(){
   if(!(state.multiplayer&&state.mode==="coop")) return state.served||0;
@@ -848,44 +819,111 @@ function continueNextLevel(){
 }
 
 
-function minorTeamServedCount(){
+function finalGetOnlineUpgrades(){
+  try{return JSON.parse(localStorage.ssss_online_upgrades||"{}")}catch(e){return{}}
+}
+function finalGetOnlineUpgradeLevel(k){return finalGetOnlineUpgrades()[k]||0}
+function finalSetOnlineUpgradeLevel(k,v){
+  let u=finalGetOnlineUpgrades();
+  u[k]=v;
+  localStorage.ssss_online_upgrades=JSON.stringify(u);
+}
+function finalOwnTimeUpgrade(){
+  // Offline waiting-room upgrades affect solo only. Online time upgrade affects online.
+  return state.multiplayer ? finalGetOnlineUpgradeLevel("time") : (upgrades.patience||0);
+}
+function finalBestTeamTimeUpgrade(){
+  if(!(state.multiplayer&&state.mode==="coop")) return finalOwnTimeUpgrade();
+  let mine=finalGetOnlineUpgradeLevel("time");
+  let fromPlayers=(net.players||[]).map(p=>Number(p.timeUpgrade||0));
+  return Math.max(mine,...fromPlayers,0);
+}
+function finalTeamServedCount(){
   if(!(state.multiplayer&&state.mode==="coop")) return state.served||0;
   if(typeof state.teamServed==="number") return state.teamServed;
   return (net.players||[]).reduce((sum,p)=>sum+(Number(p.served)||0),0);
 }
-function minorGoalForMap(mapId){
-  return Math.min(30,4+Math.floor((mapId||0)/8)*2);
-}
-function minorUpdateTopTracker(){
-  if(state.multiplayer) state.goal=minorGoalForMap(state.mapId||0);
-  if($("uiServed")) $("uiServed").textContent=(state.multiplayer&&state.mode==="coop")?minorTeamServedCount():(state.served||0);
+function finalUpdateTop(){
+  if($("uiServed")) $("uiServed").textContent=(state.multiplayer&&state.mode==="coop")?finalTeamServedCount():(state.served||0);
   if($("uiGoal")) $("uiGoal").textContent=state.goal||4;
 }
-function minorApplySharedOrder(order,customerName){
-  if(!Array.isArray(order)||!order.length)return;
-  state.order=order.map(o=>{
-    let f=food(o.id), item={id:o.id};
-    f.fields.forEach(([field,vals])=>item[field]=o[field]||vals[0]);
-    return item;
-  });
-  state.customerName=customerName||state.customerName||"Team Combo";
-  if($("custName")) $("custName").textContent=state.customerName;
-  renderTicket();renderScoreboard();minorUpdateTopTracker();
+function finalResetRoundCounters(){
+  state.served=0;
+  state.coins=0;
+  state.teamServed=0;
+  state.tray=[];
+  state.sharedTray=[];
+  savedBuild=null;
+  if($("uiCoins"))$("uiCoins").textContent=0;
+  finalUpdateTop();
 }
-function minorPlacementHTML(players){
+function finalPlacementHTML(players){
   let ps=[...(players||net.players||[])].sort((a,b)=>(Number(b.served||0)-Number(a.served||0))||(Number(b.score||0)-Number(a.score||0)));
   return `<div class="resultPlaces">${ps.map((p,i)=>`<div>${i+1}. ${p.name||"Chef"} — ✅ ${p.served||0}/${state.goal||4} · 🪙 ${p.score||0}</div>`).join("")}</div>`;
 }
-function minorShowMatchEnd(msg){
+function finalShowMatchEnd(msg){
   stopTimer();
   state.matchEnded=true;
   $("resultTitle").textContent=state.mode==="coop"?"Team Level Complete! 🤝":"Versus Results! 🏆";
   $("resultText").innerHTML=state.mode==="coop"
-    ? `Team completed ${msg.teamServed||minorTeamServedCount()}/${state.goal||4} orders.`
-    : `${msg.winner||"Winner"} finished first.`+minorPlacementHTML(msg.players);
-  if($("unlockText")) $("unlockText").textContent="Round finished.";
+    ? `Team completed ${msg.teamServed||finalTeamServedCount()}/${state.goal||4} orders.`
+    : `${msg.winner||"Winner"} finished first.`+finalPlacementHTML(msg.players);
+  if($("unlockText")) $("unlockText").textContent="Vote to continue together.";
   $("result").classList.add("active");
   confetti();
+}
+function finalContinueNextLevel(){
+  closeResult();
+  finalResetRoundCounters();
+  startLevel(1,state.multiplayer,state.mode,Math.min(199,(state.mapId||0)+1));
+}
+function openNextVote(){
+  if(!state.multiplayer){finalContinueNextLevel();return;}
+  $("nextVoteModal").classList.add("active");
+  let left=15;
+  $("nextVoteInfo").textContent=`Vote next level: 0/${(net.players||[]).length||1} · ${left}s`;
+  clearInterval(state.nextVoteTimer);
+  state.nextVoteTimer=setInterval(()=>{
+    left--;
+    if($("nextVoteInfo"))$("nextVoteInfo").textContent=`Vote next level · ${left}s left`;
+    if(left<=0){
+      clearInterval(state.nextVoteTimer);
+      sendNet("nextVoteTimeout",{});
+      goHome();
+    }
+  },1000);
+}
+function voteNextLevel(){sendNet("nextVote",{choice:"next"});toast("Voted next ✓")}
+function voteReturnHome(){sendNet("nextVote",{choice:"home"});goHome()}
+function openOnlineUpgrades(){
+  $("nextVoteModal").classList.remove("active");
+  $("onlineUpgradeModal").classList.add("active");
+  const shop=[
+    ["time","Customer Time Boost","Co-op uses the highest team level. Versus uses only yours."],
+    ["team","Team Bonus Counter","Adds more co-op bonus coins online."],
+    ["vip","VIP Bell","Improves online VIP rewards."],
+    ["sync","Shared Prep Table","Team-focused online prep upgrade."]
+  ];
+  $("onlineUpgradeGrid").innerHTML=shop.map(([k,n,d])=>{
+    let lv=finalGetOnlineUpgradeLevel(k), price=75+lv*90;
+    return `<div class="upgradeShopCard"><strong>${n} Lv.${lv}</strong><small>${d}</small><button class="btn small green" onclick="buyOnlineUpgrade('${k}',${price})">Buy ${price}</button></div>`;
+  }).join("");
+  let t=30;
+  $("upgradeTimer").textContent=t;
+  clearInterval(state.upgradeBreakTimer);
+  state.upgradeBreakTimer=setInterval(()=>{t--;$("upgradeTimer").textContent=t;if(t<=0)finishUpgradeBreak()},1000);
+}
+function buyOnlineUpgrade(k,price){
+  if(accountCoins<price)return toast("Need more coins");
+  accountCoins-=price;
+  localStorage.ssss_account_coins=accountCoins;
+  finalSetOnlineUpgradeLevel(k,finalGetOnlineUpgradeLevel(k)+1);
+  openOnlineUpgrades();
+}
+function finishUpgradeBreak(){
+  clearInterval(state.upgradeBreakTimer);
+  $("onlineUpgradeModal").classList.remove("active");
+  finalContinueNextLevel();
 }
 
 function renderScoreboard(){
@@ -897,6 +935,8 @@ function renderScoreboard(){
     $("scoreboard").insertAdjacentHTML("beforeend",`<div class="teamProgress">Team Orders Served: ✅ ${teamServedCount()}/${state.goal}</div>`);
   }
   updateServedUI();
+
+  finalUpdateTop();
 }
 function shortOrder(order){return order.map(item=>food(item.id).emoji+" "+cap(food(item.id).name)).join(" · ")}
 function renderCategories(){let c=cfg(state.level,state.mapId),cats=[...new Set(c.foods.map(f=>f.station))];$("categoryTabs").innerHTML=cats.map(cat=>`<button class="tab ${state.category===cat?"active":""}" onclick="pickCategory('${cat}')">${CAT_ICON[cat]} ${cat}</button>`).join("")}
@@ -925,7 +965,15 @@ function food(id){return FOODS.find(f=>f.id===id)||FOODS[0]}function cap(s){retu
 function randomFood(){let c=cfg(state.level,state.mapId),f=c.foods[Math.floor(Math.random()*c.foods.length)],it={id:f.id};f.fields.forEach(([field,vals])=>it[field]=vals[Math.floor(Math.random()*vals.length)]);return it}
 function itemText(item){let f=food(item.id);return `${f.emoji} ${cap(f.name)}: ${f.fields.map(([x])=>item[x]).join(", ")}`}
 function applySharedOrder(order,customerName){
-  minorApplySharedOrder(order,customerName);
+  if(!Array.isArray(order)||!order.length)return;
+  state.order=order.map(o=>{
+    let f=food(o.id), item={id:o.id};
+    f.fields.forEach(([field,vals])=>item[field]=o[field]||vals[0]);
+    return item;
+  });
+  state.customerName=customerName||state.customerName||"Team Combo";
+  if($("custName"))$("custName").textContent=state.customerName;
+  renderTicket();renderScoreboard();finalUpdateTop();
 }
 function applySharedTray(tray){if(!Array.isArray(tray))return;state.sharedTray=tray;if(state.multiplayer&&state.mode==="coop")state.tray=tray.map(x=>({...x}));renderTray();renderBelts();renderScoreboard();}
 function showOrderDone(name,score){let b=$("doneBanner");if(b){b.textContent=`${name||"Chef"} completed an order! +${score||0}`;b.classList.remove("show");void b.offsetWidth;b.classList.add("show");}}
@@ -933,7 +981,7 @@ function newCustomer(){stopTimer();let c=cfg(state.level,state.mapId);state.tray
   if(state.multiplayer&&state.mode==="coop"){
     state.customerName=$("custName") ? $("custName").textContent : "Team Combo";
     sendNet("newSharedOrder",{order:state.order,customerName:state.customerName});
-  }state.patience=100;$("patience").style.width="100%";$("custEmoji").textContent=CUSTOMERS[Math.floor(Math.random()*CUSTOMERS.length)];$("custName").textContent=NAMES[Math.floor(Math.random()*NAMES.length)]+"'s Combo";renderTicket();startTimer();sendNet("progress",progressPayload());renderScoreboard()}
+  }state.patience=Math.min(130,100+finalBestTeamTimeUpgrade()*6);$("patience").style.width="100%";$("custEmoji").textContent=CUSTOMERS[Math.floor(Math.random()*CUSTOMERS.length)];$("custName").textContent=NAMES[Math.floor(Math.random()*NAMES.length)]+"'s Combo";renderTicket();startTimer();sendNet("progress",progressPayload());renderScoreboard()}
 function renderTicket(){$("ticketItems").innerHTML=state.order.map(i=>`<div class="ticket-item">${itemText(i)}</div>`).join("")}
 function startTimer(){let total=cfg(state.level,state.mapId).patience,start=Date.now();state.timer=setInterval(()=>{if(state.paused)return;let e=(Date.now()-start)/1000;state.patience=Math.max(0,100-(e/total)*100);$("patience").style.width=state.patience+"%";if(state.patience<=0){stopTimer();toast("Customer left!");setTimeout(newCustomer,800)}},120)}
 function stopTimer(){if(state.timer)clearInterval(state.timer);state.timer=null}
@@ -1057,8 +1105,8 @@ function showSpinner(candidates=[],duration=1800){
 function closeSpin(){$("spinModal").classList.remove("active");}
 function connectOnline(){if(net.connected)return toast("Already connected");let name=$("playerName").value.trim();if(!name)return toast("Enter your chef name first");let proto=location.protocol==="https:"?"wss":"ws",url=(location.protocol==="file:")?"ws://localhost:3000":`${proto}://${location.host}`;try{let ws=new WebSocket(url);net.ws=ws;ws.onopen=()=>{net.connected=true;localStorage.ssss_name=name;$("netDot").classList.add("on");$("netText").textContent="Connected";sendNet("hello",{name});toast("Connected 🎮")};ws.onmessage=e=>handleNet(JSON.parse(e.data));ws.onclose=()=>{net.connected=false;$("netDot").classList.remove("on");$("netText").textContent="Not Connected";renderRooms()};ws.onerror=()=>toast("Connection failed. Deploy/run server.")}catch(e){toast("Connection blocked")}}
 function sendNet(type,data={}){if(net.ws&&net.ws.readyState===1)net.ws.send(JSON.stringify({type,...data}))}
-function handleNet(msg){if(msg.type==="welcome"){net.id=msg.id;net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="rooms"){net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="room"){net.room=msg.room;net.players=msg.room.players||[];showRoom(msg.room)}if(msg.type==="players"){net.players=msg.players||[];renderRoomPlayers();renderScoreboard();renderOtherOrder()}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="matchEnd"){net.players=msg.players||net.players;showMatchResults(msg);}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="sharedOrder"){if(state.multiplayer&&state.mode==="coop"){applySharedOrder(msg.order||[],msg.customerName)}}if(msg.type==="sharedTray"){if(state.multiplayer&&state.mode==="coop"){applySharedTray(msg.tray||[])}}if(msg.type==="orderDone"){showOrderDone(msg.name,msg.score);if(state.mode==="coop"){if(msg.order)applySharedOrder(msg.order);applySharedTray([])}}if(msg.type==="votes"){net.votes=msg.votes||{};renderVoteMaps()}if(msg.type==="tutorialVote"){showTutorialVote(msg.votes||{})}if(msg.type==="tutorialStart"){runTutorial(msg.show!==false)}if(msg.type==="spin"){showSpinner(msg.candidates||[],msg.duration||1800)}if(msg.type==="start"){setTimeout(()=>{closeSpin();closeRoom();closeVote();startLevel(1,true,msg.mode||"coop",msg.mapId||0)}, msg.delay||0)}if(msg.type==="error")toast(msg.message||"Server error")}
-function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[]}}
+function handleNet(msg){if(msg.type==="welcome"){net.id=msg.id;net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="rooms"){net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="room"){net.room=msg.room;net.players=msg.room.players||[];showRoom(msg.room)}if(msg.type==="players"){net.players=msg.players||[];renderRoomPlayers();renderScoreboard();renderOtherOrder()}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);finalUpdateTop();renderScoreboard();}if(msg.type==="matchEnd"){net.players=msg.players||net.players;finalShowMatchEnd(msg);}if(msg.type==="nextVoteState"){if($("nextVoteInfo"))$("nextVoteInfo").textContent=`Vote next level: ${msg.count}/${msg.total} · 15s max`;}if(msg.type==="openUpgradeBreak"){openOnlineUpgrades();}if(msg.type==="forceHome"){goHome();}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="matchEnd"){net.players=msg.players||net.players;showMatchResults(msg);}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="sharedOrder"){if(state.multiplayer&&state.mode==="coop"){applySharedOrder(msg.order||[],msg.customerName)}}if(msg.type==="sharedTray"){if(state.multiplayer&&state.mode==="coop"){applySharedTray(msg.tray||[])}}if(msg.type==="orderDone"){showOrderDone(msg.name,msg.score);if(state.mode==="coop"){if(msg.order)applySharedOrder(msg.order);applySharedTray([])}}if(msg.type==="votes"){net.votes=msg.votes||{};renderVoteMaps()}if(msg.type==="tutorialVote"){showTutorialVote(msg.votes||{})}if(msg.type==="tutorialStart"){runTutorial(msg.show!==false)}if(msg.type==="spin"){showSpinner(msg.candidates||[],msg.duration||1800)}if(msg.type==="start"){setTimeout(()=>{closeSpin();closeRoom();closeVote();startLevel(1,true,msg.mode||"coop",msg.mapId||0)}, msg.delay||0)}if(msg.type==="error")toast(msg.message||"Server error")}
+function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[],timeUpgrade:finalGetOnlineUpgradeLevel("time")}}
 function requireName(){let name=$("playerName").value.trim();if(!name){toast("Enter your chef name first");return null}localStorage.ssss_name=name;return name}
 function createRoom(mode){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first for real multiplayer");sendNet("createRoom",{mode,name})}
 function joinByCode(){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first");let code=$("joinCode").value.trim().toUpperCase();if(!code)return toast("Enter code");sendNet("joinRoom",{code,name})}
@@ -1089,7 +1137,7 @@ function voteMap(id){net.votes=net.votes||{};net.votes[net.id]=id;renderVoteMaps
 function backToRoom(){closeVote(); if(net.room){$("roomModal").classList.add("active"); renderRoomPlayers();}}
 function closeRoom(){$("roomModal").classList.remove("active")}
 function goHome(){closeResult(); stopTimer(); state.multiplayer=false; state.mode="solo"; show("menu");}
-function nextEarnedLevel(){continueNextLevel()}
+function nextEarnedLevel(){openNextVote()}
 function leaveRoom(){sendNet("leaveRoom",{});net.room=null;net.players=[];closeRoom();closeVote();renderRooms()}
 function renderOtherOrder(){let other=(net.players||[]).find(p=>p.id!==net.id);$("otherEmoji").textContent=other?other.face||"👩‍🍳":"👀";$("otherOrder").innerHTML=other&&other.order&&other.order.length?other.order.map(i=>`<div class="ticket-item">${food(i.id).emoji} ${cap(food(i.id).name)}</div>`).join(""):'<div class="ticket-item">Waiting for real player...</div>'}
 

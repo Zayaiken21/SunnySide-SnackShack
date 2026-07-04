@@ -153,7 +153,7 @@ wss.on("connection", ws => {
         for (const p of room.players) send(clientSocket(p.id), { type: "spin", candidates: unique, duration: 1800 });
         setTimeout(() => {
           const selected = unique[Math.floor(Math.random() * unique.length)] || 0;
-          room.mapId = selected; room.level = 1; room.started = true; room.ended=false; room.teamServed=0; room.sharedOrder=null; room.sharedTray=[]; room.sharedCustomerName=null; room.ended=false; room.teamServed=0; room.teamServed=0;
+          room.mapId = selected; room.level = 1; room.started = true; room.ended=false; room.teamServed=0; room.sharedOrder=null; room.sharedTray=[]; room.sharedCustomerName=null; room.nextVotes={}; room.goal=Math.min(30,4+Math.floor((room.mapId||0)/8)*2); room.ended=false; room.teamServed=0; room.teamServed=0;
           for (const p of room.players) send(clientSocket(p.id), { type: "start", level: 1, mapId: selected, mode: room.mode, delay: 350 });
           broadcastRooms();
         }, 1900);
@@ -174,8 +174,9 @@ wss.on("connection", ws => {
       if (player) {
         player.score = Number(msg.total || player.score || 0);
         player.served = Number(msg.served || player.served || 0);
+        player.timeUpgrade = Number(msg.timeUpgrade || player.timeUpgrade || 0);
       }
-      const goal = Math.min(30,4+Math.floor((room.mapId||0)/8)*2);
+      const goal = Number(room.goal || 4);
       if (room.mode === "coop") {
         room.teamServed = (room.teamServed || 0) + 1;
         room.sharedTray = [];
@@ -193,6 +194,31 @@ wss.on("connection", ws => {
         broadcastRoom(room);
         if (player && Number(player.served || 0) >= goal) finishRoom(room, player.name || "Chef");
       }
+    }
+
+
+    if (msg.type === "nextVote") {
+      const room = rooms.get(c.room);
+      if (!room) return;
+      if (msg.choice !== "next") {
+        leave(ws);
+        send(ws, { type:"forceHome" });
+        return;
+      }
+      room.nextVotes = room.nextVotes || {};
+      room.nextVotes[c.id] = true;
+      const count = Object.keys(room.nextVotes).length;
+      const total = room.players.length;
+      for (const p of room.players) send(clientSocket(p.id), { type:"nextVoteState", count, total });
+      if (count >= total) {
+        for (const p of room.players) send(clientSocket(p.id), { type:"openUpgradeBreak" });
+      }
+    }
+    if (msg.type === "nextVoteTimeout") {
+      const room = rooms.get(c.room);
+      if (!room) return;
+      leave(ws);
+      send(ws, { type:"forceHome" });
     }
 
     if (msg.type === "progress") {
