@@ -1,3 +1,18 @@
-# Sunny Side Snack Shack — Live Results Final Build
+# Sunny Side Snack Shack — Restored Safe Patch
 
-Co-op shared orders/tray, versus separate orders, live results, duplicate item prevention, smaller animated conveyor sprites, synced co-op customer names, and full-volume music default.
+This build restores the working home menu and applies only safe fixes:
+
+- Home menu buttons click again.
+- Decorative layers cannot block taps.
+- Pause button stays inside the game border.
+- Conveyor shows only real tray/saved-build foods.
+- Multiple conveyor items can animate.
+- Co-op tray updates sync to teammates.
+- Co-op shared order/customer name is supported.
+- Duplicate tray items are rejected unless the order needs them.
+- Order completion broadcasts to other players.
+- Home music volume is reachable again.
+
+Deploy:
+Build command: npm install
+Start command: npm start
