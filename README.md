@@ -1,19 +1,18 @@
-# Sunny Side Snack Shack — V12 Full Stability Fix
+# Sunny Side Snack Shack — Final Team Upgrade Patch
 
-Base: v11 fixes ZIP plus the working style from the uploaded patch.
+Base: exact uploaded ZIP. Existing UI/layout preserved.
 
-Fixed:
-- Top HUD now shows full coins, timer, and orders without truncating.
-- Pause button opens the pause/menu screen reliably.
-- Co-op customers/orders are server-synced and do not rapidly change after a customer leaves or an order completes.
-- If a customer leaves in co-op, the customer leaves for the whole team and the server assigns the next shared order once.
-- Duplicate server order echoes no longer restart the timer or flicker the customer.
-- Single-player map list scrolls again.
-- “undefined” world description is fixed.
-- Conveyor station label text is hidden globally.
-- Level timer remains visible and stable.
-- Co-op/versus server finish logic remains intact.
-- Additional foods and detailed worlds from v11 remain included.
+Targeted changes only:
+- Co-op teammates see the same customer name and order.
+- Co-op uses the highest online time upgrade from the team.
+- Versus uses only each player's own online time upgrade.
+- Offline/single-player patience upgrades do not affect multiplayer.
+- Multiplayer result screen requires vote to continue.
+- 15-second next-level vote; Home/timed-out players leave the room.
+- 30-second online upgrade break before the next multiplayer level.
+- Starting the next level resets orders/coins/tray/team progress to 0.
+- Server ends co-op for everyone at team goal and versus for everyone when one player wins.
+- Player leaving is removed through room broadcast.
 
 Deploy:
 Build command: npm install
