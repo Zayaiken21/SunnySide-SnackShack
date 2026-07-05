@@ -553,6 +553,60 @@ button,input{pointer-events:auto!important}
   font-weight:1000;
 }
 
+/* ===== CONTENT PACK V10 — gameplay UI ===== */
+.levelClock{background:linear-gradient(#eafff0,#c7f5d5)!important;min-width:64px;text-align:center}
+.levelClock.warn{background:linear-gradient(#fff0d6,#ffd98a)!important;animation:clockPulse .8s ease-in-out infinite}
+.levelClock.danger{background:linear-gradient(#ffe0e0,#ff9a9a)!important;color:#7a1020!important;animation:clockPulse .5s ease-in-out infinite}
+@keyframes clockPulse{50%{transform:scale(1.08)}}
+.vipBanner{
+  position:absolute;left:8px;right:8px;top:70px;z-index:14;display:none;
+  background:linear-gradient(90deg,#ffd166,#ff8ad8,#8dc8ff);
+  border:3px solid #fff;border-radius:16px;padding:7px 10px;text-align:center;
+  font-weight:1000;font-size:12px;color:#4a2a10;box-shadow:var(--shadow);
+}
+.vipBanner.show{display:block;animation:vipIn .4s ease}
+@keyframes vipIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.dual-stage.vipActive .lane:first-child{outline:3px solid #ffd166;box-shadow:0 0 0 3px rgba(255,209,102,.4),var(--soft)}
+.vipTag{display:inline-block;background:#ffd166;border:2px solid #fff;border-radius:99px;padding:1px 7px;font-size:9px;font-weight:1000;margin-left:4px}
+.foodbtn.signature{outline:2px solid #ffcf63;position:relative}
+.foodbtn.signature:after{content:"★";position:absolute;top:3px;right:5px;font-size:10px;color:#ff9a3d}
+.wrongFlash{animation:wrongShake .4s ease}
+@keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.timeUpModal .panel{border-color:#ff9a9a}
+.orderTag{display:inline-block;background:#eaffef;border:2px solid #fff;border-radius:99px;padding:2px 7px;font-size:9px;font-weight:1000;margin-left:4px}
+.orderTag.wrong{background:#ffe0e0}
+/* compact world picker */
+.worldMapCompact{max-width:640px;margin:0 auto}
+.worldPicker{background:var(--worldBg,#eef);border:3px solid #fff;border-radius:20px;padding:12px;box-shadow:var(--soft);margin-bottom:10px}
+.worldPicker .worldHeader{display:flex;gap:10px;align-items:center;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.4);margin-bottom:8px}
+.worldPicker .worldIcon{font-size:30px}
+.worldPicker .worldHeader strong{display:block;font-size:15px}
+.worldPicker .worldHeader span{font-size:11px;opacity:.95}
+.worldSelect{width:100%;padding:11px 14px;border-radius:14px;border:3px solid #fff;background:#fff;font-weight:1000;font-size:14px;color:#333;box-shadow:var(--soft);cursor:pointer}
+.worldMeta{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.pill.small{font-size:10px;padding:4px 9px}
+.worldMapCompact .nodeGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:520px){.worldMapCompact .nodeGrid{grid-template-columns:1fr}}
+/* ===== Themed world decor (re-enabled, tasteful) ===== */
+#worldDecor.worldDecor{display:block!important;position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+#worldDecor .decorItem{position:absolute;filter:drop-shadow(0 4px 4px rgba(0,0,0,.15));animation:decorFloat ease-in-out infinite alternate;will-change:transform}
+@keyframes decorFloat{from{transform:translateY(0) rotate(-4deg)}to{transform:translateY(-14px) rotate(4deg)}}
+#worldDecor.weather-snow:before,#worldDecor.weather-petals:before,#worldDecor.weather-ember:before,#worldDecor.weather-sand:before,#worldDecor.weather-bubble:before,#worldDecor.weather-sparkle:before,#worldDecor.weather-leaves:before,#worldDecor.weather-confetti:before,#worldDecor.weather-stars:before{
+  content:"";position:absolute;inset:-20% 0 0 0;pointer-events:none;
+  background-repeat:repeat;background-size:120px 120px;animation:weatherFall linear infinite;
+}
+#worldDecor.weather-snow:before{background-image:radial-gradient(circle,rgba(255,255,255,.9) 2px,transparent 3px);animation-duration:7s;opacity:.7}
+#worldDecor.weather-petals:before{background-image:radial-gradient(circle,rgba(255,180,220,.8) 3px,transparent 4px);animation-duration:9s;opacity:.6}
+#worldDecor.weather-ember:before{background-image:radial-gradient(circle,rgba(255,140,60,.9) 2px,transparent 3px);animation-duration:5s;animation-direction:reverse;opacity:.7}
+#worldDecor.weather-sand:before{background-image:linear-gradient(90deg,transparent,rgba(255,220,150,.3),transparent);background-size:200px 100%;animation:sandBlow 4s linear infinite;opacity:.5}
+#worldDecor.weather-bubble:before{background-image:radial-gradient(circle,rgba(200,240,255,.6) 4px,transparent 5px);animation-duration:8s;animation-direction:reverse;opacity:.5}
+#worldDecor.weather-sparkle:before{background-image:radial-gradient(circle,rgba(255,255,200,.9) 1.5px,transparent 2px);animation-duration:6s;opacity:.7}
+#worldDecor.weather-leaves:before{background-image:radial-gradient(ellipse 4px 2px,rgba(120,220,120,.7) 60%,transparent 70%);animation-duration:8s;opacity:.55}
+#worldDecor.weather-confetti:before{background-image:radial-gradient(circle,rgba(255,120,200,.8) 2px,transparent 3px),radial-gradient(circle,rgba(120,200,255,.8) 2px,transparent 3px);background-position:0 0,60px 60px;animation-duration:6s;opacity:.6}
+#worldDecor.weather-stars:before{background-image:radial-gradient(circle,rgba(255,255,255,.9) 1px,transparent 2px);background-size:80px 80px;animation:twinkle 3s ease-in-out infinite;opacity:.8}
+@keyframes weatherFall{from{background-position-y:0}to{background-position-y:120px}}
+@keyframes sandBlow{from{background-position-x:0}to{background-position-x:200px}}
+@keyframes twinkle{0%,100%{opacity:.4}50%{opacity:.9}}
 </style>
 
 <script>
@@ -579,7 +633,7 @@ window.addEventListener("error", function(e){
   <div class="card menu-card">
     <div class="sign">Sunny Side<br>Snack Shack</div>
     <div class="food-row" id="menuFoods"></div>
-    <p class="sub">Theme Map Pro: real multiplayer names, map voting, animated real-food conveyor belts, combo orders, events, music volume, and 100 themed stages.</p>
+    <p class="sub">Theme Map Pro: real multiplayer names, map voting, animated real-food conveyor belts, combo orders, events, music volume, and 200 themed stages across 20 worlds.</p>
     <button class="btn green" onclick="show('levels')">🌍 Theme Map Journey</button>
     <button class="btn purple" onclick="show('multi')">🎮 Real Multiplayer</button><button class="btn blue" onclick="openUpgrades()">🛠 Snack Shack Upgrades</button>
     <button class="btn pink" onclick="toggleMute()">🎵 Music/SFX: <span id="soundLabel">On</span></button>
@@ -588,7 +642,7 @@ window.addEventListener("error", function(e){
 </section>
 
 <section class="screen" id="levels">
-  <div class="topbar"><button class="btn small blue" onclick="show('menu')">← Menu</button><div class="pill">100 Theme Maps</div><button class="btn small pink" onclick="startLevel(1,false,'solo',0)">Start Beach L1</button></div>
+  <div class="topbar"><button class="btn small blue" onclick="show('menu')">← Menu</button><div class="pill">200 Theme Maps</div><button class="btn small pink" onclick="startLevel(1,false,'solo',0)">Start Beach L1</button></div>
   <div class="mapJourney" id="mapJourney"><div class="pathLine"></div></div>
 </section>
 
@@ -605,7 +659,8 @@ window.addEventListener("error", function(e){
 </section>
 
 <section class="screen play" id="play">
-  <div class="topbar"><div class="pill" id="mapName">Map</div><div class="pill">🪙 <span id="uiCoins">0</span></div><div class="pill">✅ <span id="uiServed">0</span>/<span id="uiGoal">3</span></div><button class="btn small pink pauseBtn" onclick="pauseGame()" aria-label="Pause">⏸</button></div>
+  <div class="topbar"><div class="pill" id="mapName">Map</div><div class="pill">🪙 <span id="uiCoins">0</span></div><div class="pill">✅ <span id="uiServed">0</span>/<span id="uiGoal">3</span></div><div class="pill levelClock" id="levelClock">⏱ 1:00</div><button class="btn small pink pauseBtn" onclick="pauseGame()" aria-label="Pause">⏸</button></div>
+  <div class="vipBanner" id="vipBanner">⭐ VIP CUSTOMER — serve fast for bonus coins!</div>
   <div class="area">
     <div class="scoreboard" id="scoreboard"></div>
     <div class="dual-stage">
@@ -650,68 +705,257 @@ function unlockAudio(){
 }
 ["touchstart","click"].forEach(ev=>document.addEventListener(ev,unlockAudio,{once:true,passive:true}));
 
+/*===CONTENT-PACK-V10-BEGIN===*/
 const BASE_FOODS=[
-["lemonade","🍋","Drink"],["pink lemonade","🌸","Drink"],["limeade","🟢","Drink"],["orange juice","🍊","Drink"],["apple juice","🍎","Drink"],["berry punch","🫐","Drink"],["mango smoothie","🥭","Drink"],["strawberry smoothie","🍓","Drink"],["banana smoothie","🍌","Drink"],["blueberry smoothie","🫐","Drink"],["coconut shake","🥥","Drink"],["vanilla milkshake","🥛","Drink"],["hot cocoa","☕","Drink"],["mint cocoa","🌿","Drink"],["rainforest juice","🍍","Drink"],
-["classic burger","🍔","Grill"],["cheese burger","🧀","Grill"],["double burger","🍔","Grill"],["veggie burger","🥕","Grill"],["mushroom burger","🍄","Grill"],["avocado burger","🥑","Grill"],["classic hot dog","🌭","Grill"],["mustard hot dog","🌭","Grill"],["grilled cheese","🧀","Grill"],["toastie sandwich","🥪","Grill"],["sunny taco","🌮","Grill"],["mini pizza","🍕","Grill"],["fish sandwich","🐟","Grill"],["campfire melt","🥪","Grill"],
-["small fries","🍟","Fry"],["large fries","🍟","Fry"],["curly fries","🍟","Fry"],["waffle fries","🧇","Fry"],["sweet potato fries","🍠","Fry"],["tater tots","🥔","Fry"],["onion rings","🧅","Fry"],["corn fritters","🌽","Fry"],["potato wedges","🥔","Fry"],["pretzel bites","🥨","Fry"],["banana chips","🍌","Fry"],["crispy stars","⭐","Fry"],
-["chocolate chip cookie","🍪","Dessert"],["sugar cookie","🍪","Dessert"],["sprinkle cookie","🍪","Dessert"],["brownie bite","🟫","Dessert"],["cupcake","🧁","Dessert"],["donut","🍩","Dessert"],["ice cream cup","🍨","Dessert"],["fruit cup","🍓","Dessert"],["mini pie","🥧","Dessert"],["pudding cup","🍮","Dessert"],["snow cone","🍧","Dessert"],["castle cake","🍰","Dessert"],
-["apple slices","🍎","Fresh"],["orange wedges","🍊","Fresh"],["melon bowl","🍉","Fresh"],["pineapple sticks","🍍","Fresh"],["mango cubes","🥭","Fresh"],["berry bowl","🫐","Fresh"],["banana bites","🍌","Fresh"],["salad cup","🥗","Fresh"],["carrot sticks","🥕","Fresh"],["fruit skewer","🍡","Fresh"],["jungle salad","🥗","Fresh"],
-["popcorn","🍿","Snack"],["pretzel","🥨","Snack"],["nacho cup","🧀","Snack"],["bagel bite","🥯","Snack"],["rice ball","🍙","Snack"],["waffle stack","🧇","Snack"],["pancake stack","🥞","Snack"],["cheese plate","🧀","Snack"],["party platter","🍱","Snack"],["trail mix","🥜","Snack"],["astronaut bites","🛰️","Snack"],["polar pet treats","🐾","Snack"]
+["lemonade","🍋","Drink"],["pink lemonade","🌸","Drink"],["limeade","🟢","Drink"],["orange juice","🍊","Drink"],["apple juice","🍎","Drink"],["berry punch","🫐","Drink"],["mango smoothie","🥭","Drink"],["strawberry smoothie","🍓","Drink"],["banana smoothie","🍌","Drink"],["blueberry smoothie","🫐","Drink"],["coconut shake","🥥","Drink"],["vanilla milkshake","🥛","Drink"],["hot cocoa","☕","Drink"],["mint cocoa","🌿","Drink"],["pineapple cooler","🍍","Drink"],["matcha latte","🍵","Drink"],["thai iced tea","🧋","Drink"],["bubble tea","🧋","Drink"],["horchata","🥛","Drink"],["mango lassi","🥭","Drink"],["espresso","☕","Drink"],["galaxy shake","🌌","Drink"],["watermelon agua","🍉","Drink"],["hibiscus tea","🌺","Drink"],["kelp smoothie","🥬","Drink"],
+["classic burger","🍔","Grill"],["cheese burger","🧀","Grill"],["double burger","🍔","Grill"],["veggie burger","🥕","Grill"],["mushroom burger","🍄","Grill"],["avocado burger","🥑","Grill"],["classic hot dog","🌭","Grill"],["mustard hot dog","🌭","Grill"],["grilled cheese","🧀","Grill"],["toastie sandwich","🥪","Grill"],["street taco","🌮","Grill"],["wood-fired pizza","🍕","Grill"],["fish sandwich","🐟","Grill"],["campfire melt","🥪","Grill"],["sushi roll","🍣","Grill"],["ramen bowl","🍜","Grill"],["takoyaki","🐙","Grill"],["bbq rack","🍖","Grill"],["kebab skewer","🍢","Grill"],["bulgogi plate","🥩","Grill"],["corn dog","🌭","Grill"],["poke bowl","🍲","Grill"],["turkey leg","🍗","Grill"],["hot wings","🍗","Grill"],["quesadilla","🫓","Grill"],["naan wrap","🫓","Grill"],
+["small fries","🍟","Fry"],["large fries","🍟","Fry"],["curly fries","🍟","Fry"],["waffle fries","🧇","Fry"],["sweet potato fries","🍠","Fry"],["tater tots","🥔","Fry"],["onion rings","🧅","Fry"],["corn fritters","🌽","Fry"],["potato wedges","🥔","Fry"],["pretzel bites","🥨","Fry"],["tempura","🍤","Fry"],["spring roll","🥟","Fry"],["churros","🥖","Fry"],["samosa","🥟","Fry"],["mozzarella sticks","🧀","Fry"],["crispy stars","⭐","Fry"],["hush puppies","🟤","Fry"],["plantain chips","🍌","Fry"],
+["chocolate chip cookie","🍪","Dessert"],["sugar cookie","🍪","Dessert"],["sprinkle cookie","🍪","Dessert"],["brownie bite","🟫","Dessert"],["cupcake","🧁","Dessert"],["donut","🍩","Dessert"],["ice cream cup","🍨","Dessert"],["fruit cup","🍓","Dessert"],["mini pie","🥧","Dessert"],["pudding cup","🍮","Dessert"],["snow cone","🍧","Dessert"],["castle cake","🍰","Dessert"],["mochi","🍡","Dessert"],["macaron","🌈","Dessert"],["gelato","🍦","Dessert"],["jalebi","🟠","Dessert"],["bingsu","🍧","Dessert"],["flan","🍮","Dessert"],["rainbow sundae","🍨","Dessert"],["cannoli","🥐","Dessert"],
+["apple slices","🍎","Fresh"],["orange wedges","🍊","Fresh"],["melon bowl","🍉","Fresh"],["pineapple sticks","🍍","Fresh"],["mango cubes","🥭","Fresh"],["berry bowl","🫐","Fresh"],["banana bites","🍌","Fresh"],["garden salad","🥗","Fresh"],["carrot sticks","🥕","Fresh"],["fruit skewer","🍡","Fresh"],["caprese cup","🍅","Fresh"],["seaweed salad","🥬","Fresh"],["poke cup","🐟","Fresh"],["guac cup","🥑","Fresh"],["mint yogurt","🥛","Fresh"],["tropical bowl","🥭","Fresh"],
+["popcorn","🍿","Snack"],["pretzel","🥨","Snack"],["nacho cup","🧀","Snack"],["bagel bite","🥯","Snack"],["rice ball","🍙","Snack"],["waffle stack","🧇","Snack"],["pancake stack","🥞","Snack"],["cheese plate","🧀","Snack"],["party platter","🍱","Snack"],["trail mix","🥜","Snack"],["edamame","🫛","Snack"],["dumplings","🥟","Snack"],["cotton candy","🍬","Snack"],["gumball cup","🔴","Snack"],["astronaut bites","🛰️","Snack"],["polar treats","🐾","Snack"],["nachos supreme","🌶️","Snack"],["soft pretzel","🥨","Snack"]
 ];
 
-const WORLD_THEMES=[
- {name:"Lagoon Learning Coast",emoji:"🌊",bg:"linear-gradient(#75e7ff 0 35%,#29b8df 36%,#0879a6 75%,#035a7e 100%)",cats:["Drink","Fresh","Dessert","Snack"],desc:"Underwater snack school with bubble cafés and sea-friend customers."},
- {name:"Polar Pals Passage",emoji:"🐧",bg:"linear-gradient(#b9f2ff 0 42%,#effcff 43%,#d8f7ff 68%,#bdefff 100%)",cats:["Drink","Grill","Dessert","Snack"],desc:"Antarctic trails, polar pets, cocoa, burgers, and snow-day desserts."},
- {name:"Canopy Jungle Trail",emoji:"🦜",bg:"linear-gradient(#7decc0 0 32%,#3fc783 33%,#1f8f57 72%,#176b42 100%)",cats:["Drink","Fresh","Snack","Grill"],desc:"Rainforest kitchens with tropical fruit, tacos, and jungle snack rushes."},
- {name:"Oasis Heat Highway",emoji:"🏜️",bg:"linear-gradient(#80dfff 0 38%,#ffe29c 39%,#e9ad55 72%,#cf813d 100%)",cats:["Drink","Fresh","Fry","Snack"],desc:"Desert diners serving cold drinks and crispy sides to travelers."},
- {name:"Cloudtop Camp Range",emoji:"⛰️",bg:"linear-gradient(#9fdfff 0 36%,#8caf9b 37%,#6e8f72 66%,#4f7046 100%)",cats:["Grill","Fry","Snack","Dessert"],desc:"Mountain camp kitchens with grilled melts, fries, and firelight snacks."},
- {name:"Neon Rooftop Row",emoji:"🌆",bg:"linear-gradient(#8ec8ff 0 42%,#b9a7df 43%,#6f6c9f 74%,#4a476d 100%)",cats:["Drink","Grill","Fry","Snack"],desc:"City roof stops with fast combo orders and glowing skyline events."},
- {name:"Cosmic Canteen Orbit",emoji:"🚀",bg:"linear-gradient(#0d1538 0 55%,#29336b 56%,#5f6fb2 100%)",cats:["Drink","Snack","Dessert","Grill"],desc:"Space station food courts with galaxy shakes and compact snack packs."},
- {name:"Dino Picnic Valley",emoji:"🦕",bg:"linear-gradient(#a5ec75 0 38%,#6fcf5f 39%,#4da74b 70%,#367a39 100%)",cats:["Grill","Fry","Fresh","Drink"],desc:"Dino mascot parks with big appetite combos and picnic meals."},
- {name:"Royal Fairground Kingdom",emoji:"🏰",bg:"linear-gradient(#9edcff 0 38%,#d6c1ff 39%,#8d77c7 75%,#6a58a8 100%)",cats:["Dessert","Snack","Drink","Grill"],desc:"Castle fairs with sweet treats, pretzels, royal drinks, and festival plates."},
- {name:"Volcano Glow Boardwalk",emoji:"🌋",bg:"linear-gradient(#31203b 0 28%,#9b3546 29%,#e46a33 62%,#2c1d2f 100%)",cats:["Grill","Fry","Drink","Dessert"],desc:"Lava-lit finale world with bold grills, spicy fries, and glowing desserts."}
+/* Culture routing: which foods each world prefers to surface.
+   Each world already lists cats; within a cat we bias toward these signature ids. */
+const WORLD_FOOD_HINTS = {
+  beach:["classic burger","cheese burger","small fries","lemonade","pink lemonade","ice cream cup","snow cone","fish sandwich"],
+  tokyo:["sushi roll","ramen bowl","takoyaki","tempura","matcha latte","bubble tea","mochi","edamame","dumplings"],
+  italy:["wood-fired pizza","cannoli","gelato","espresso","caprese cup","garden salad","macaron"],
+  mexico:["street taco","quesadilla","churros","horchata","watermelon agua","guac cup","nacho cup","nachos supreme"],
+  india:["samosa","naan wrap","mango lassi","jalebi","mint yogurt","hot wings","kebab skewer"],
+  paris:["macaron","cannoli","espresso","matcha latte","caprese cup","garden salad","soft pretzel"],
+  arctic:["hot cocoa","mint cocoa","grilled cheese","campfire melt","snow cone","ice cream cup","polar treats"],
+  jungle:["pineapple cooler","tropical bowl","mango cubes","street taco","fruit skewer","plantain chips"],
+  desert:["watermelon agua","hibiscus tea","kebab skewer","waffle fries","onion rings","mint yogurt"],
+  mountain:["campfire melt","grilled cheese","waffle fries","tater tots","hot cocoa","brownie bite"],
+  city:["double burger","classic hot dog","curly fries","bubble tea","soft pretzel","nacho cup"],
+  space:["galaxy shake","astronaut bites","rainbow sundae","bbq rack","edamame","cotton candy"],
+  dino:["bbq rack","turkey leg","large fries","classic burger","fruit skewer","apple juice"],
+  castle:["turkey leg","soft pretzel","castle cake","cupcake","apple juice","hot wings"],
+  volcano:["hot wings","bbq rack","sweet potato fries","churros","watermelon agua","flan"],
+  korea:["corn dog","bulgogi plate","dumplings","bingsu","bubble tea","seaweed salad"],
+  hawaii:["poke bowl","poke cup","pineapple cooler","tropical bowl","gelato","kebab skewer"],
+  candy:["rainbow sundae","cupcake","cotton candy","gumball cup","snow cone","bubble tea"],
+  ocean:["kelp smoothie","seaweed salad","fruit cup","snow cone","rice ball","berry bowl"],
+  newyork:["classic hot dog","soft pretzel","large fries","bagel bite","espresso","cheese plate"]
+};
+
+const WORLDS = [
+  { key:"beach",  name:"Sunny Shores Boardwalk", emoji:"🏖️", cuisine:"American Beach Snacks",
+    bg:"linear-gradient(#7fe4ff 0 34%,#37b7e6 35%,#0d84b4 74%,#065f86 100%)",
+    cats:["Drink","Grill","Fry","Dessert"], decor:["🏖️","🌴","🐚","🏄","🍦","⛱️"],
+    weather:"sun", scale:[523,587,659,784,880,784,659,587], tip:"Classic seaside grills, cold drinks, sweet treats." },
+  { key:"tokyo",  name:"Neon Tokyo Night Market", emoji:"🏮", cuisine:"Japanese Street Food",
+    bg:"linear-gradient(#1a1140 0 40%,#3a1f6b 41%,#7a2f9b 72%,#2a1440 100%)",
+    cats:["Drink","Grill","Snack","Dessert"], decor:["🏮","🍜","🍣","🌸","🎏","🗼"],
+    weather:"petals", scale:[587,659,740,880,988,880,740,659], tip:"Ramen, sushi, mochi under glowing lanterns." },
+  { key:"italy",  name:"Tuscan Piazza Trattoria", emoji:"🍝", cuisine:"Italian Kitchen",
+    bg:"linear-gradient(#9fd8ff 0 36%,#ffe6a0 37%,#e0a85a 72%,#b9793a 100%)",
+    cats:["Drink","Grill","Fresh","Dessert"], decor:["🍝","🍕","🍷","🫒","🧄","⛲"],
+    weather:"sun", scale:[523,622,698,784,932,784,698,622], tip:"Pasta, pizza, gelato in a sunlit piazza." },
+  { key:"mexico", name:"Fiesta Cantina Plaza", emoji:"🌮", cuisine:"Mexican Street Eats",
+    bg:"linear-gradient(#ff9a5c 0 34%,#ffd166 35%,#e0563b 72%,#a83820 100%)",
+    cats:["Drink","Grill","Fresh","Snack"], decor:["🌮","🌶️","🎉","🪅","🌵","🎸"],
+    weather:"confetti", scale:[523,587,659,698,880,698,659,587], tip:"Tacos, aguas frescas, and festival snacks." },
+  { key:"india",  name:"Spice Bazaar Junction", emoji:"🍛", cuisine:"Indian Bazaar",
+    bg:"linear-gradient(#ffb15c 0 34%,#ff8a4d 35%,#c94f8f 72%,#7a3a8f 100%)",
+    cats:["Drink","Grill","Fresh","Dessert"], decor:["🍛","🫓","🌶️","🪔","🐘","🕌"],
+    weather:"sun", scale:[554,622,698,830,932,830,698,622], tip:"Curries, naan, lassi, and jalebi sweets." },
+  { key:"paris",  name:"Montmartre Café Row", emoji:"🥐", cuisine:"French Patisserie",
+    bg:"linear-gradient(#a8c8ff 0 38%,#d6c1ff 39%,#8d77c7 74%,#5a4a8f 100%)",
+    cats:["Drink","Fresh","Dessert","Snack"], decor:["🥐","🥖","🧀","🗼","☕","🎨"],
+    weather:"petals", scale:[523,587,698,784,880,784,698,587], tip:"Croissants, macarons, and café crème." },
+  { key:"arctic", name:"Aurora Ice Village", emoji:"🐧", cuisine:"Frostberg Cocoa Hut",
+    bg:"linear-gradient(#bdf2ff 0 42%,#eafcff 43%,#c8f0ff 68%,#a5e5ff 100%)",
+    cats:["Drink","Grill","Dessert","Snack"], decor:["🐧","❄️","🧊","🏔️","☃️","🌌"],
+    weather:"snow", scale:[494,587,659,740,880,740,659,587], tip:"Cocoa, warm melts, and snow-day desserts." },
+  { key:"jungle", name:"Rainforest Canopy Camp", emoji:"🦜", cuisine:"Tropical Jungle Fare",
+    bg:"linear-gradient(#7decc0 0 32%,#3fc783 33%,#1f8f57 72%,#146b42 100%)",
+    cats:["Drink","Fresh","Snack","Grill"], decor:["🦜","🌿","🍍","🐒","🦋","🏝️"],
+    weather:"leaves", scale:[523,659,698,784,988,784,698,659], tip:"Tropical fruit, tacos, jungle snack rushes." },
+  { key:"desert", name:"Golden Dune Oasis", emoji:"🏜️", cuisine:"Oasis Traveler Diner",
+    bg:"linear-gradient(#80dfff 0 36%,#ffe29c 37%,#e9ad55 72%,#cf813d 100%)",
+    cats:["Drink","Fresh","Fry","Snack"], decor:["🏜️","🐪","🌵","🌅","🪔","⛺"],
+    weather:"sand", scale:[554,622,698,784,880,784,698,622], tip:"Cold drinks and crispy sides for travelers." },
+  { key:"mountain", name:"Alpine Summit Lodge", emoji:"⛰️", cuisine:"Mountain Campfire Grill",
+    bg:"linear-gradient(#9fdfff 0 36%,#8caf9b 37%,#6e8f72 66%,#4f7046 100%)",
+    cats:["Grill","Fry","Snack","Dessert"], decor:["⛰️","🏕️","🔥","🌲","🦌","🪵"],
+    weather:"snow", scale:[523,587,659,698,880,698,659,587], tip:"Grilled melts, fries, and firelight snacks." },
+  { key:"city",   name:"Skyline Rooftop Row", emoji:"🌆", cuisine:"City Fast Combos",
+    bg:"linear-gradient(#8ec8ff 0 42%,#b9a7df 43%,#6f6c9f 74%,#4a476d 100%)",
+    cats:["Drink","Grill","Fry","Snack"], decor:["🌆","🚕","🏙️","🌃","🗽","🎧"],
+    weather:"none", scale:[587,659,740,830,988,830,740,659], tip:"Fast combo orders under a glowing skyline." },
+  { key:"space",  name:"Orbital Space Canteen", emoji:"🚀", cuisine:"Galaxy Food Pod",
+    bg:"linear-gradient(#0d1538 0 55%,#29336b 56%,#5f6fb2 100%)",
+    cats:["Drink","Snack","Dessert","Grill"], decor:["🚀","🪐","👽","🌟","🛰️","☄️"],
+    weather:"stars", scale:[523,659,784,880,1046,880,784,659], tip:"Galaxy shakes and compact snack packs." },
+  { key:"dino",   name:"Jurassic Picnic Valley", emoji:"🦕", cuisine:"Dino Big-Appetite BBQ",
+    bg:"linear-gradient(#a5ec75 0 38%,#6fcf5f 39%,#4da74b 70%,#367a39 100%)",
+    cats:["Grill","Fry","Fresh","Drink"], decor:["🦕","🦖","🌋","🥚","🦴","🌴"],
+    weather:"leaves", scale:[440,523,587,659,784,659,587,523], tip:"Huge combos and picnic meals for dino fans." },
+  { key:"castle", name:"Royal Fairground Keep", emoji:"🏰", cuisine:"Kingdom Festival Feast",
+    bg:"linear-gradient(#9edcff 0 38%,#d6c1ff 39%,#8d77c7 75%,#6a58a8 100%)",
+    cats:["Dessert","Snack","Drink","Grill"], decor:["🏰","👑","🐉","🎪","⚔️","🎠"],
+    weather:"confetti", scale:[523,587,698,784,880,784,698,587], tip:"Sweet treats, pretzels, and festival plates." },
+  { key:"volcano", name:"Lava Glow Boardwalk", emoji:"🌋", cuisine:"Volcano Spice Grill",
+    bg:"linear-gradient(#31203b 0 28%,#9b3546 29%,#e46a33 62%,#2c1d2f 100%)",
+    cats:["Grill","Fry","Drink","Dessert"], decor:["🌋","🔥","🌶️","🏝️","💥","🪨"],
+    weather:"ember", scale:[440,523,622,740,880,740,622,523], tip:"Bold grills, spicy fries, glowing desserts." },
+  { key:"korea",  name:"Seoul Lantern Alley", emoji:"🥢", cuisine:"Korean Street Grill",
+    bg:"linear-gradient(#ff9ecf 0 34%,#c58aff 35%,#6a5fb2 72%,#3a3470 100%)",
+    cats:["Drink","Grill","Snack","Fresh"], decor:["🥢","🍡","🌶️","🏮","🎎","🌸"],
+    weather:"petals", scale:[587,698,784,880,988,880,784,698], tip:"Tteokbokki, KBBQ, and sweet corn dogs." },
+  { key:"hawaii", name:"Aloha Luau Lagoon", emoji:"🌺", cuisine:"Hawaiian Island Plates",
+    bg:"linear-gradient(#5fe0ff 0 34%,#2fc7c7 35%,#0f9a8f 72%,#0a6f6a 100%)",
+    cats:["Drink","Fresh","Grill","Dessert"], decor:["🌺","🍍","🏝️","🌊","🥥","🎶"],
+    weather:"leaves", scale:[523,659,698,784,880,784,698,659], tip:"Poke, pineapple, and island grill plates." },
+  { key:"candy",  name:"Sugarcloud Sweets Fair", emoji:"🍭", cuisine:"Candyland Confections",
+    bg:"linear-gradient(#ffb3e6 0 36%,#ffd6f0 37%,#c98ae0 72%,#9a5fc0 100%)",
+    cats:["Dessert","Drink","Snack","Fresh"], decor:["🍭","🧁","🍬","🌈","🍩","🎡"],
+    weather:"sparkle", scale:[587,698,784,932,1046,932,784,698], tip:"Sundaes, cupcakes, and candy clouds." },
+  { key:"ocean",  name:"Coral Reef Café", emoji:"🐠", cuisine:"Underwater Snack School",
+    bg:"linear-gradient(#75e7ff 0 34%,#29b8df 35%,#0879a6 74%,#035a7e 100%)",
+    cats:["Drink","Fresh","Dessert","Snack"], decor:["🐠","🐚","🪸","🐙","🫧","🐢"],
+    weather:"bubble", scale:[494,587,659,740,880,740,659,587], tip:"Bubbly cafés with sea-friend customers." },
+  { key:"newyork", name:"Times Square Food Cart", emoji:"🗽", cuisine:"NYC Cart Classics",
+    bg:"linear-gradient(#2a2f55 0 40%,#4a4f85 41%,#8a6fd0 72%,#e0a85a 100%)",
+    cats:["Grill","Fry","Drink","Snack"], decor:["🗽","🌭","🥨","🚖","🏙️","🎆"],
+    weather:"none", scale:[587,659,740,880,988,880,740,659], tip:"Hot dogs, pretzels, and street-cart combos." }
 ];
-const LEVEL_NAMES=[
- "Bubble Gate","Coral Corner","Pearl Pier","Kelp Kitchen","Turtle Turn","Seahorse Stop","Reef Relay","Shell Station","Octo Outpost","Lagoon Finale",
- "Snow Pup Stop","Iceberg Inn","Penguin Plaza","Frosty Fry Point","Cocoa Cabin","Aurora Alley","Polar Picnic","Snowdrift Stand","Glacier Grill","Blizzard Banquet",
- "Parrot Post","Mango Bridge","Vine Market","Toucan Terrace","Pineapple Path","Orchid Outpost","Monkey Grove","River Canopy","Jungle Junction","Rainfall Feast",
- "Cactus Counter","Mirage Market","Dune Drive","Camel Crossing","Sunset Sips","Golden Grain Stop","Oasis Oven","Sandstorm Snacks","Lantern Dunes","Desert Feast",
- "Pine Peak","Cabin Creek","Campfire Circle","River Rock Grill","Eagle Ridge","Maple Meadow","Lantern Lodge","Summit Snacks","Starlit Trail","Mountain Feast",
- "Metro Munch","Taxi Terrace","Billboard Bites","Skyscraper Sips","Parkside Plates","Rush Hour Roof","Neon Noodles","Skyline Stand","Moon Roof Market","City Feast",
- "Launch Lunch","Orbit Oven","Comet Counter","Moon Milkshakes","Meteor Meals","Starlab Snacks","Galaxy Grill","Rocket Ring","Nova Nibbles","Space Feast",
- "Raptor Road","Bronto Burgers","Fossil Fries","Jungle Jurassic","Dino Dock","Amber Alley","Pterodactyl Picnic","Volcano Vista","Giganto Grove","Dino Feast",
- "Castle Gate","Knight Nibbles","Royal Road","Crown Cookie Court","Dragon Drinkery","Jester Junction","Moat Market","Queen’s Kitchen","King’s Counter","Royal Feast",
- "Ember Entry","Lava Lemonade","Ash Alley","Magma Meals","Glow Grill","Cinder Snacks","Firefly Fries","Crater Counter","Inferno Inn","Sunset Finale"
-];
-const EVENT_NAMES=[
- "Combo Sprint","Big Family Orders","Perfect Accuracy Bonus","VIP Pet Visit","Double Tip Window",
- "Speedy Patience Rush","Dessert Spotlight","Grill Master Bonus","Fresh Food Bonus","Finale Crowd"
-];
-const MAPS=Array.from({length:100},(_,i)=>{
-  let w=Math.floor(i/10), n=i%10, wt=WORLD_THEMES[w];
+
+const STAGE_NAMES = {
+  beach:["Sandy Start","Surf Shack","Pier Pop","Tide Table","Shell Stand","Dune Diner","Wave Window","Sunset Sips","Cabana Counter","Boardwalk Finale"],
+  tokyo:["Lantern Lane","Ramen Row","Sushi Stop","Mochi Market","Neon Nook","Sakura Stand","Arcade Alley","Tempura Terrace","Bento Bridge","Shibuya Finale"],
+  italy:["Piazza Post","Pasta Porch","Pizza Point","Gelato Gate","Olive Oven","Vino Veranda","Fresco Fork","Trattoria Turn","Ciao Counter","Tuscan Finale"],
+  mexico:["Cantina Corner","Taco Terrace","Salsa Stand","Fiesta Fork","Agua Alley","Piñata Post","Churro Chute","Mercado Market","Sombrero Stop","Fiesta Finale"],
+  india:["Bazaar Bridge","Curry Corner","Naan Nook","Spice Stall","Chai Chowk","Tandoor Turn","Masala Market","Lassi Lane","Jalebi Junction","Bazaar Finale"],
+  paris:["Café Corner","Croissant Cove","Macaron Mews","Bistro Bridge","Boulangerie","Éclair Étage","Fromage Fork","Terrace Table","Rue Royale","Montmartre Finale"],
+  arctic:["Snow Pup Stop","Iceberg Inn","Penguin Plaza","Frost Fry Point","Cocoa Cabin","Aurora Alley","Polar Picnic","Snowdrift Stand","Glacier Grill","Blizzard Finale"],
+  jungle:["Parrot Post","Mango Bridge","Vine Market","Toucan Terrace","Pineapple Path","Orchid Outpost","Monkey Grove","River Canopy","Jungle Junction","Rainfall Finale"],
+  desert:["Cactus Counter","Mirage Market","Dune Drive","Camel Crossing","Sunset Sips","Grain Gate","Oasis Oven","Sandstorm Stand","Lantern Dunes","Oasis Finale"],
+  mountain:["Pine Peak","Cabin Creek","Campfire Circle","River Rock Grill","Eagle Ridge","Maple Meadow","Lantern Lodge","Summit Snacks","Starlit Trail","Summit Finale"],
+  city:["Metro Munch","Taxi Terrace","Billboard Bites","Skyscraper Sips","Parkside Plates","Rush Roof","Neon Noodles","Skyline Stand","Moon Roof","City Finale"],
+  space:["Launch Lunch","Orbit Oven","Comet Counter","Moon Milkshakes","Meteor Meals","Starlab Snacks","Galaxy Grill","Rocket Ring","Nova Nibbles","Cosmic Finale"],
+  dino:["Raptor Road","Bronto Burgers","Fossil Fries","Jungle Jurassic","Dino Dock","Amber Alley","Ptero Picnic","Volcano Vista","Giganto Grove","Jurassic Finale"],
+  castle:["Castle Gate","Knight Nibbles","Royal Road","Crown Court","Dragon Drinkery","Jester Junction","Moat Market","Queen's Kitchen","King's Counter","Royal Finale"],
+  volcano:["Ember Entry","Lava Lemonade","Ash Alley","Magma Meals","Glow Grill","Cinder Snacks","Firefly Fries","Crater Counter","Inferno Inn","Volcano Finale"],
+  korea:["Lantern Alley","Tteok Terrace","Kimchi Corner","Skewer Stand","Bingsu Bridge","Hanok Hall","Ramyeon Row","Bulgogi Bay","Corndog Court","Seoul Finale"],
+  hawaii:["Aloha Arch","Poke Pier","Luau Lawn","Coconut Cove","Shaka Shack","Hula Hut","Lei Lane","Volcano View","Mahalo Market","Aloha Finale"],
+  candy:["Gumdrop Gate","Lollipop Lane","Cupcake Court","Sprinkle Stand","Taffy Terrace","Cocoa Cloud","Jellybean June","Marshmallow Mews","Sundae Street","Sugar Finale"],
+  ocean:["Bubble Gate","Coral Corner","Pearl Pier","Kelp Kitchen","Turtle Turn","Seahorse Stop","Reef Relay","Shell Station","Octo Outpost","Reef Finale"],
+  newyork:["Cart Corner","Hot Dog Hub","Pretzel Plaza","Deli Drive","Bagel Bridge","Broadway Bites","Subway Snacks","Uptown Oven","Liberty Lane","Times Square Finale"]
+};
+const WORLD_CUSTOMERS = {
+  beach:["Surfer Sam","Sandy Skye","Shelly Rae","Cabana Cody","Tidal Tia","Boardwalk Bo"],
+  tokyo:["Hiro","Yuki","Sakura","Kenji","Aiko","Ramen Ren"],
+  italy:["Luca","Sofia","Marco","Bella","Gio","Nonna Rosa"],
+  mexico:["Mateo","Lucia","Diego","Rosa","Paco","Fiesta Fina"],
+  india:["Aarav","Priya","Rohan","Diya","Kabir","Chai Anaya"],
+  paris:["Émile","Chloé","Louis","Margot","Céleste","Café Colette"],
+  arctic:["Nanuk","Frost","Pip","Iggy","Blizzy","Cocoa Coral"],
+  jungle:["Rio","Mira","Kiki","Toco","Bloom","Vine Vera"],
+  desert:["Zayd","Amira","Cass","Dune Dax","Sahara Sy","Oasis Omar"],
+  mountain:["Cliff","Willa","Aspen","Ridge","Piney Pat","Camp Cody"],
+  city:["Max","Ivy","Dash","Nova","Metro Mel","Sky Sadie"],
+  space:["Astra","Cosmo","Nyx","Orbit Ollie","Luna","Star Stella"],
+  dino:["Rex","Fern","Spike","Dot","Bronto Bo","Rawr Remy"],
+  castle:["Sir Ash","Lady Elle","Prince Kip","Duke Dob","Jester Jo","Queen Quinn"],
+  volcano:["Blaze","Cinder","Ember","Ash Ada","Magma Mo","Lava Lux"],
+  korea:["Minjun","Seoyeon","Jiho","Hana","Doyun","Tteok Tae"],
+  hawaii:["Kai","Leilani","Koa","Nalu","Mahi","Aloha Ani"],
+  candy:["Gigi","Taffy","Cocoa","Jelly Jo","Minty Mae","Sugar Sy"],
+  ocean:["Finn","Coral","Pearl","Shelly","Bubbles","Reef Rue"],
+  newyork:["Tony","Rosie","Vic","Deli Dan","Broadway Bea","Liberty Lou"]
+};
+const WORLD_FACES = {
+  beach:["😎","🏄","🤙","🥳","😊"], tokyo:["😸","🧑","🙂","😄","🥰"],
+  italy:["😋","🤌","😊","😄","🥰"], mexico:["🤠","😃","🥳","😎","😄"],
+  india:["😊","😄","🙂","🥰","😃"], paris:["🥰","😌","🙂","😊","😉"],
+  arctic:["🐧","🥶","😊","🙂","😄"], jungle:["🦜","😄","🐒","😊","🥰"],
+  desert:["🐪","😎","🙂","😊","😄"], mountain:["🧗","😊","🙂","🥾","😄"],
+  city:["😎","🧑","😄","🙂","🤳"], space:["👽","🧑‍🚀","🤖","😄","🌟"],
+  dino:["🦖","😄","🦕","😊","🥚"], castle:["👑","🤴","👸","🧙","😄"],
+  volcano:["🥵","😎","😄","🔥","🙂"], korea:["😊","😄","🙂","🥰","😉"],
+  hawaii:["🌺","🤙","😎","🥳","😊"], candy:["🥰","😋","😄","🍭","😊"],
+  ocean:["🐠","😄","🐙","🙂","🫧"], newyork:["😎","🗽","🧑","😄","🙂"]
+};
+const VIP_FACES=["🤩","👑","🌟","💎","🦄","🎩"];
+const VIP_NAMES=["VIP Guest","Food Critic","Star Chef","Golden Guest","Royal Regular","Mayor"];
+
+const TOTAL_WORLDS=WORLDS.length, STAGES_PER_WORLD=10, TOTAL_MAPS=TOTAL_WORLDS*STAGES_PER_WORLD;
+const MAPS=Array.from({length:TOTAL_MAPS},(_,i)=>{
+  const wi=Math.floor(i/STAGES_PER_WORLD), si=i%STAGES_PER_WORLD, w=WORLDS[wi];
   return {
-    id:i, world:w, name:`${LEVEL_NAMES[i]}`, fullName:`World ${w+1}-${n+1}: ${LEVEL_NAMES[i]}`,
-    emoji:wt.emoji, desc:wt.desc, event:EVENT_NAMES[n], bg:wt.bg, cats:wt.cats
+    id:i, world:wi, worldKey:w.key, name:STAGE_NAMES[w.key][si],
+    fullName:`${w.name} ${si+1}-10: ${STAGE_NAMES[w.key][si]}`,
+    shortName:`W${wi+1}-${si+1}`, emoji:w.emoji, cuisine:w.cuisine, desc:w.tip,
+    bg:w.bg, cats:w.cats, decor:w.decor, weather:w.weather, scale:w.scale,
+    isFinale:si===9, vip:(si%5===4), event:(si%5===4?"⭐ VIP Rush":(w.cuisine))
   };
 });
 
 const CAT_ICON={Drink:"🥤",Grill:"🔥",Fry:"🍟",Dessert:"🍪",Fresh:"🥗",Snack:"🍿"};
 const CUSTOMERS=["😎","😊","🤠","🥰","😄","🙂","🤩","🧒","👧","👦","🧑","👩","👨","🧔","👱"];
 const NAMES=["Mango Max","Lemon Lily","Sunny Sam","Cookie Coco","Berry Ben","Picnic Pip","Happy Harper","Fries Finn","Soda Skye","Burger Bea","Taco Tia","Peach Poe","Melon Mia","Snack Nico"];
-const SAVE_VERSION="theme-map-pro-v7-production-fix";
+/*===CONTENT-PACK-V10-END===*/
+const SAVE_VERSION="theme-map-pro-v10-200worlds";
 if(localStorage.ssss_save_version!==SAVE_VERSION){
+  // Preserve real earned progress; clear only potentially-stale per-run keys.
+  const keepCoins=localStorage.ssss_account_coins||"0";
+  const keepUpg=localStorage.ssss_upgrades||"";
+  const keepOnline=localStorage.ssss_online_upgrades||"";
+  const keepName=localStorage.ssss_name||"";
+  const keepMuted=localStorage.ssss_muted||"";
+  const keepVol=localStorage.ssss_volume||"";
+  const keepDone=localStorage.ssss_completed_levels||"0";
   localStorage.clear();
   localStorage.ssss_save_version=SAVE_VERSION;
+  localStorage.ssss_account_coins=keepCoins;
+  if(keepUpg)localStorage.ssss_upgrades=keepUpg;
+  if(keepOnline)localStorage.ssss_online_upgrades=keepOnline;
+  if(keepName)localStorage.ssss_name=keepName;
+  if(keepMuted)localStorage.ssss_muted=keepMuted;
+  if(keepVol)localStorage.ssss_volume=keepVol;
+  localStorage.ssss_completed_levels=keepDone;
 }
 let completedLevels=Number(localStorage.ssss_completed_levels||0);
-let unlockedThemeCount=Math.min(100,3+Math.floor(completedLevels/3)*3);
+let unlockedThemeCount=Math.min(200,10+Math.floor(completedLevels/4)*10);
 let muted=localStorage.ssss_muted==="1"?true:false, volume=Number(localStorage.ssss_volume||100)/100;
 let accountCoins=Number(localStorage.ssss_account_coins||0);let upgrades=JSON.parse(localStorage.ssss_upgrades||"{\"prep\":0,\"patience\":0,\"tips\":0,\"team\":0}");let state={level:1,mapId:0,mode:"solo",multiplayer:false,coins:0,served:0,goal:4,tray:[],order:null,patience:100,timer:null,category:"Drink",coopBonus:0,paused:false,sharedTray:[]};
 let builder={type:null,selections:{}}, savedBuild=null, net={ws:null,id:null,room:null,connected:false,rooms:[],players:[],votes:{}}, audio={ctx:null,beat:null,master:null};
 const $=id=>document.getElementById(id), slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"");
 const FOODS=BASE_FOODS.map((x,i)=>({id:slug(x[0]),name:x[0],emoji:x[1],station:x[2],unlock:1+Math.floor(i/2.2),fields:fieldsFor(x[2])}));
 function fieldsFor(st){if(st==="Drink")return [["size",["small","medium","large"]],["ice",["no ice","light ice","extra ice"]],["sweetness",["low sweet","medium sweet","super sweet"]]];if(st==="Grill")return [["toast",["soft","toasty","extra toasty"]],["main",["single","double","veggie"]],["topping",["plain","cheese","lettuce","tomato","sauce"]]];if(st==="Fry")return [["size",["small","medium","large"]],["crisp",["soft","crispy","extra crispy"]],["season",["no salt","light salt","sunny spice"]]];if(st==="Dessert")return [["pack",["single","two-pack","party pack"]],["style",["plain","sprinkles","chocolate drizzle"]]];if(st==="Fresh")return [["size",["snack cup","regular cup","big bowl"]],["chill",["room temp","cool","icy fresh"]],["extra",["plain","honey","lemon squeeze"]]];return [["size",["mini","regular","jumbo"]],["style",["plain","cheesy","rainbow"]],["side",["napkin","dip cup","fruit side"]]]}
-function cfg(level,mapId){let m=MAPS[mapId||0], foods=FOODS.filter(f=>m.cats.includes(f.station)&&f.unlock<=Math.max(18,level*4));return{map:m,foods,goal:Math.min(18,4+Math.floor(level/6)),combo:Math.min(5,2+Math.floor(level/18)),patience:Math.max(18,44-Math.floor(level/5))+(upgrades.patience||0)*3,target:120+level*20}}
+/* ===== Difficulty ramp — must match server.js copies ===== */
+function goalForMap(mapId,mode){const base=Math.min(15,6+Math.floor((mapId||0)/20));return mode==="versus"?Math.max(4,Math.round(base*0.7)):base;}
+function comboForMap(mapId){return Math.min(6,2+Math.floor((mapId||0)/30));}
+function baseSecondsForMap(mapId){const world=Math.floor((mapId||0)/STAGES_PER_WORLD);const g=Math.min(15,6+Math.floor((mapId||0)/20));return Math.max(55,72+g*6-world*2);}
+function worldFoodsFor(mapId){
+  const m=MAPS[mapId||0];
+  const inCats=FOODS.filter(f=>m.cats.includes(f.station));
+  const hints=(WORLD_FOOD_HINTS[m.worldKey]||[]).map(n=>slug(n));
+  // Signature foods for this world's cuisine come first, then the rest of the cats.
+  const sig=inCats.filter(f=>hints.includes(f.id));
+  const rest=inCats.filter(f=>!hints.includes(f.id));
+  return {sig,rest,all:sig.concat(rest)};
+}
+function cfg(level,mapId){
+  let m=MAPS[mapId||0];
+  let wf=worldFoodsFor(mapId);
+  // deeper maps unlock more of the menu; early maps keep it approachable
+  let depth=6+Math.floor((mapId||0)/6);
+  let foods=wf.all.filter(f=>f.unlock<=Math.max(8,depth));
+  if(foods.length<6) foods=wf.all.slice(0,Math.max(6,foods.length)); // never starve a menu
+  return {
+    map:m, foods,
+    goal:goalForMap(mapId,state.mode),
+    combo:comboForMap(mapId),
+    seconds:baseSecondsForMap(mapId),
+    patience:Math.max(16,42-Math.floor((mapId||0)/10)),
+    target:120+(mapId||0)*12,
+    vip:!!m.vip, signatureHints:(WORLD_FOOD_HINTS[m.worldKey]||[]).map(n=>slug(n))
+  };
+}
 function openUpgrades(){
   $("upgradeModal").classList.add("active");
   $("accountCoins").textContent=accountCoins;
@@ -736,36 +980,82 @@ function init(){ $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class=
 function applyWorld(mapId){
   let m=MAPS[mapId];
   document.documentElement.style.setProperty("--mapBg",m.bg);
-  if($("worldDecor")) $("worldDecor").innerHTML="";
+  let decor=$("worldDecor");
+  if(decor){
+    // Floating themed decor emojis unique to this world + a weather layer.
+    let items=[];
+    for(let i=0;i<14;i++){
+      let e=m.decor[i%m.decor.length];
+      let left=(i*7.3+ (i%3)*4)%96;
+      let top=(i*11+ (i%4)*6)%88;
+      let size=18+((i*13)%22);
+      let dur=8+((i*7)%10);
+      let delay=(i*0.7)%6;
+      items.push(`<span class="decorItem" style="left:${left}%;top:${top}%;font-size:${size}px;animation-duration:${dur}s;animation-delay:-${delay}s;opacity:${0.18+((i%5)*0.05)}">${e}</span>`);
+    }
+    decor.innerHTML=items.join("");
+    decor.className="worldDecor weather-"+(m.weather||"none");
+  }
 }
-function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");if(id!=="play")stopTimer();startMusic()}
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");if(id!=="play"){stopTimer();if(id!=="pause")stopLevelClock();}startMusic()}
 function renderMapJourney(){
-  unlockedThemeCount=Math.min(100,3+Math.floor(Number(localStorage.ssss_completed_levels||0)/3)*3);
+  unlockedThemeCount=Math.min(200,10+Math.floor(Number(localStorage.ssss_completed_levels||0)/4)*10);
   let wrap=$("mapJourney");
   if(!wrap)return;
-  let sections=WORLD_THEMES.map((w,wi)=>{
-    let nodes=MAPS.filter(m=>m.world===wi).map(m=>{
-      let locked=m.id>=unlockedThemeCount;
-      return `<button class="mapNode ${locked?'locked':''}" onclick="${locked?`toast('Complete more levels to unlock this stop 🔒')`:`startLevel(1,false,'solo',${m.id})`}">
-        <b>${locked?'🔒':m.emoji}</b><strong>${m.fullName}</strong>
-        <span>${locked?'Locked — earn by completing levels.':m.event+' · '+m.name}</span>
-        <small>${locked?'Locked':m.cats.map(c=>CAT_ICON[c]).join(' ')}</small>
-      </button>`;
-    }).join("");
-    return `<section class="worldSection" style="--worldBg:${w.bg}"><div class="worldHeader"><div class="worldIcon">${w.emoji}</div><div><strong>World ${wi+1}: ${w.name}</strong><span>${w.desc}</span></div></div><div class="nodeGrid">${nodes}</div></section>`;
+  // Compact dropdown UI: a world picker + only the selected world's stages.
+  if(typeof state.journeyWorld!=="number") state.journeyWorld=0;
+  let unlockedWorlds=Math.min(TOTAL_WORLDS,Math.ceil(unlockedThemeCount/STAGES_PER_WORLD));
+  let options=WORLDS.map((w,wi)=>{
+    let locked=wi>=unlockedWorlds;
+    return `<option value="${wi}" ${wi===state.journeyWorld?'selected':''} ${locked?'disabled':''}>${w.emoji} World ${wi+1}: ${w.name}${locked?' 🔒':''}</option>`;
   }).join("");
-  wrap.className="worldMap";
-  wrap.innerHTML=sections;
+  let w=WORLDS[state.journeyWorld];
+  let stages=MAPS.filter(m=>m.world===state.journeyWorld).map(m=>{
+    let locked=m.id>=unlockedThemeCount;
+    return `<button class="mapNode ${locked?'locked':''}" onclick="${locked?`toast('Complete more levels to unlock 🔒')`:`startLevel(1,false,'solo',${m.id})`}">
+      <b>${locked?'🔒':m.emoji}</b><strong>${m.shortName} · ${m.name}${m.vip?' <span class="vipTag">VIP</span>':''}</strong>
+      <span>${locked?'Locked — earn by completing levels.':(m.vip?'⭐ VIP stage · ':'')+m.cuisine}</span>
+      <small>${locked?'Locked':m.cats.map(c=>CAT_ICON[c]).join(' ')}</small>
+    </button>`;
+  }).join("");
+  wrap.className="worldMapCompact";
+  wrap.innerHTML=`
+    <div class="worldPicker" style="--worldBg:${w.bg}">
+      <div class="worldHeader"><div class="worldIcon">${w.emoji}</div>
+        <div style="flex:1"><strong>${w.cuisine}</strong><span>${w.desc}</span></div></div>
+      <select class="worldSelect" onchange="state.journeyWorld=+this.value;renderMapJourney()">${options}</select>
+      <div class="worldMeta"><span class="pill small">${w.decor.slice(0,4).join(' ')}</span><span class="pill small">${MAPS.filter(m=>m.world===state.journeyWorld&&!m.vip).length} stages + ${MAPS.filter(m=>m.world===state.journeyWorld&&m.vip).length} VIP</span></div>
+    </div>
+    <div class="nodeGrid">${stages}</div>
+    <p class="sub" style="margin-top:8px">Unlocked worlds: ${unlockedWorlds}/${TOTAL_WORLDS} · Complete levels to open more.</p>`;
 }
 function markLevelComplete(){
   let old=Number(localStorage.ssss_completed_levels||0);
   localStorage.ssss_completed_levels=String(old+1);
   completedLevels=old+1;
   let before=unlockedThemeCount;
-  unlockedThemeCount=Math.min(100,3+Math.floor(completedLevels/3)*3);
+  unlockedThemeCount=Math.min(200,10+Math.floor(completedLevels/4)*10);
   return unlockedThemeCount>before;
 }
-function startLevel(level=1,multi=false,mode="solo",mapId=0){let c=cfg(level,mapId);state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:(multi?4:c.goal),tray:[],sharedTray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false,sharedTray:[]};state._finalStarted=true;state.teamServed=0;state.sharedTray=[];savedBuild=null;applyWorld(mapId); if(audio.ctx){stopMusic();startMusic();}$("mapName").textContent=`${c.map.emoji} ${c.map.fullName} · L${level}`;$("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=c.goal;renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();show("play");newCustomer();sendNet("progress",progressPayload())}
+function startLevel(level=1,multi=false,mode="solo",mapId=0,opts={}){
+  let c=cfg(level,mapId);
+  let goal=goalForMap(mapId,mode);
+  state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:goal,tray:[],sharedTray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false,matchEnded:false,currentVip:false};
+  state._finalStarted=true;state.teamServed=0;state.sharedTray=[];savedBuild=null;
+  // server-authoritative level end time for multiplayer
+  state.levelEndsAt=(multi&&opts.endsAt)?opts.endsAt:0;
+  if(multi&&opts.goal) state.goal=opts.goal;
+  applyWorld(mapId);
+  if(audio.ctx){stopMusic();startMusic();}
+  $("mapName").textContent=`${c.map.emoji} ${MAPS[mapId].shortName} · ${MAPS[mapId].name}`;
+  $("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=state.goal;
+  updateVipUI(false);
+  renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();
+  show("play");
+  startLevelClock();
+  newCustomer();
+  sendNet("progress",progressPayload());
+}
 
 function teamServedCount(){
   if(!(state.multiplayer&&state.mode==="coop")) return state.served||0;
@@ -791,7 +1081,7 @@ function passProgressOnce(){
   let old=Number(localStorage.ssss_completed_levels||0);
   localStorage.ssss_completed_levels=String(old+1);
   completedLevels=old+1;
-  unlockedThemeCount=Math.min(100,3+Math.floor(completedLevels/3)*3);
+  unlockedThemeCount=Math.min(200,10+Math.floor(completedLevels/4)*10);
   if(typeof renderMapJourney==="function")renderMapJourney();
 }
 function nextMapId(){
@@ -838,6 +1128,24 @@ function finalBestTeamTimeUpgrade(){
   let fromPlayers=(net.players||[]).map(p=>Number(p.timeUpgrade||0));
   return Math.max(mine,...fromPlayers,0);
 }
+/* Online-only team upgrades (co-op shares the strongest; versus uses only your own). */
+function finalOnlineTeamBonusLevel(){
+  if(!state.multiplayer) return upgrades.team||0;
+  let mine=finalGetOnlineUpgradeLevel("team");
+  if(state.mode!=="coop") return mine;
+  let fromPlayers=(net.players||[]).map(p=>Number(p.teamBonus||0));
+  return Math.max(mine,...fromPlayers,0);
+}
+function finalOnlinePrepLevel(){
+  if(!state.multiplayer) return upgrades.prep||0;
+  let mine=finalGetOnlineUpgradeLevel("sync");
+  if(state.mode!=="coop") return mine;
+  let fromPlayers=(net.players||[]).map(p=>Number(p.prepLevel||0));
+  return Math.max(mine,...fromPlayers,0);
+}
+function finalOnlineVipLevel(){
+  return state.multiplayer?finalGetOnlineUpgradeLevel("vip"):0;
+}
 function finalTeamServedCount(){
   if(!(state.multiplayer&&state.mode==="coop")) return state.served||0;
   if(typeof state.teamServed==="number") return state.teamServed;
@@ -862,20 +1170,47 @@ function finalPlacementHTML(players){
   return `<div class="resultPlaces">${ps.map((p,i)=>`<div>${i+1}. ${p.name||"Chef"} — ✅ ${p.served||0}/${state.goal||4} · 🪙 ${p.score||0}</div>`).join("")}</div>`;
 }
 function finalShowMatchEnd(msg){
-  stopTimer();
+  stopTimer();stopLevelClock();
   state.matchEnded=true;
-  $("resultTitle").textContent=state.mode==="coop"?"Team Level Complete! 🤝":"Versus Results! 🏆";
-  $("resultText").innerHTML=state.mode==="coop"
-    ? `Team completed ${msg.teamServed||finalTeamServedCount()}/${state.goal||4} orders.`
-    : `${msg.winner||"Winner"} finished first.`+finalPlacementHTML(msg.players);
-  if($("unlockText")) $("unlockText").textContent="Vote to continue together.";
+  state.lastWin=(msg.win!==false)&&(msg.passed!==false);
+  if($("vipBanner"))$("vipBanner").classList.remove("show");
+  if(state.mode==="coop"){
+    if(state.lastWin){
+      $("resultTitle").textContent="Team Level Complete! 🤝";
+      $("resultText").innerHTML=`Your team served <b>${msg.teamServed||finalTeamServedCount()}/${msg.goal||state.goal||4}</b> orders in time!`;
+      if($("unlockText")) $("unlockText").textContent="Vote to continue to the next world stage.";
+    } else {
+      $("resultTitle").textContent="⏱ Time's Up — Team Retry";
+      $("resultText").innerHTML=`Time ran out at <b>${msg.teamServed||finalTeamServedCount()}/${msg.goal||state.goal||4}</b> orders. Vote to retry this stage together.`;
+      if($("unlockText")) $("unlockText").textContent="Only correct orders count — serve fast and accurately!";
+    }
+  } else {
+    $("resultTitle").textContent="Versus Results! 🏆";
+    let reason=(msg.win===false)?"Time ran out — highest served wins.":`${msg.winner||"Winner"} reached the goal first.`;
+    $("resultText").innerHTML=reason+finalPlacementHTML(msg.players);
+    if($("unlockText")) $("unlockText").textContent="Vote to play the next stage together.";
+  }
+  // remember whether next is retry (fail) or advance (win) — server mirrors this
+  state.nextIsRetry=!state.lastWin;
   $("result").classList.add("active");
   confetti();
 }
+/* After the upgrade break, ask the SERVER to start the next level (authoritative timer). */
 function finalContinueNextLevel(){
   closeResult();
   finalResetRoundCounters();
-  startLevel(1,state.multiplayer,state.mode,Math.min(199,(state.mapId||0)+1));
+  if(state.multiplayer){
+    sendNet("startNextLevel",{}); // server responds with "start" (retry or advance)
+    // brief safety: if server doesn't respond, fall back locally
+    clearTimeout(state._startFallback);
+    state._startFallback=setTimeout(()=>{
+      if(!state.matchEnded)return;
+      let nextId=state.nextIsRetry?(state.mapId||0):Math.min(199,(state.mapId||0)+1);
+      startLevel(1,state.multiplayer,state.mode,nextId);
+    },2500);
+  } else {
+    startLevel(1,state.multiplayer,state.mode,Math.min(199,(state.mapId||0)+1));
+  }
 }
 function openNextVote(){
   if(!state.multiplayer){finalContinueNextLevel();return;}
@@ -914,10 +1249,15 @@ function openOnlineUpgrades(){
   state.upgradeBreakTimer=setInterval(()=>{t--;$("upgradeTimer").textContent=t;if(t<=0)finishUpgradeBreak()},1000);
 }
 function buyOnlineUpgrade(k,price){
-  if(accountCoins<price)return toast("Need more coins");
+  if(accountCoins<price)return toast("Need more account coins");
+  let lv=finalGetOnlineUpgradeLevel(k);
+  if(lv>=5)return toast("That upgrade is maxed ⭐");
   accountCoins-=price;
   localStorage.ssss_account_coins=accountCoins;
-  finalSetOnlineUpgradeLevel(k,finalGetOnlineUpgradeLevel(k)+1);
+  finalSetOnlineUpgradeLevel(k,lv+1);
+  // tell the server so co-op teammates share the strongest level
+  sendNet("teamUpgradeBuy",{key:k,level:lv+1});
+  toast("Upgrade bought ✓");
   openOnlineUpgrades();
 }
 function finishUpgradeBreak(){
@@ -941,7 +1281,7 @@ function renderScoreboard(){
 function shortOrder(order){return order.map(item=>food(item.id).emoji+" "+cap(food(item.id).name)).join(" · ")}
 function renderCategories(){let c=cfg(state.level,state.mapId),cats=[...new Set(c.foods.map(f=>f.station))];$("categoryTabs").innerHTML=cats.map(cat=>`<button class="tab ${state.category===cat?"active":""}" onclick="pickCategory('${cat}')">${CAT_ICON[cat]} ${cat}</button>`).join("")}
 function pickCategory(cat){state.category=cat;renderCategories();renderFoods()}
-function renderFoods(){let foods=cfg(state.level,state.mapId).foods.filter(f=>f.station===state.category);$("stationHint").textContent=`${foods.length} ${state.category} choices`;$("foods").innerHTML=foods.map(f=>`<button class="foodbtn" onclick="startBuild('${f.id}')"><b>${f.emoji}</b>${cap(f.name)}</button>`).join("")}
+function renderFoods(){let c=cfg(state.level,state.mapId);let foods=c.foods.filter(f=>f.station===state.category);let sig=c.signatureHints||[];$("stationHint").textContent=`${foods.length} ${state.category} choices`;$("foods").innerHTML=foods.map(f=>`<button class="foodbtn ${sig.includes(f.id)?'signature':''}" onclick="startBuild('${f.id}')"><b>${f.emoji}</b>${cap(f.name)}</button>`).join("")}
 
 function _countOrderItems(list){
   let out={};
@@ -964,7 +1304,7 @@ function _showDoneBanner(name,score){
 function food(id){return FOODS.find(f=>f.id===id)||FOODS[0]}function cap(s){return s.replace(/\b\w/g,m=>m.toUpperCase())}
 function randomFood(){let c=cfg(state.level,state.mapId),f=c.foods[Math.floor(Math.random()*c.foods.length)],it={id:f.id};f.fields.forEach(([field,vals])=>it[field]=vals[Math.floor(Math.random()*vals.length)]);return it}
 function itemText(item){let f=food(item.id);return `${f.emoji} ${cap(f.name)}: ${f.fields.map(([x])=>item[x]).join(", ")}`}
-function applySharedOrder(order,customerName){
+function applySharedOrder(order,customerName,custEmoji,vip){
   if(!Array.isArray(order)||!order.length)return;
   state.order=order.map(o=>{
     let f=food(o.id), item={id:o.id};
@@ -972,19 +1312,132 @@ function applySharedOrder(order,customerName){
     return item;
   });
   state.customerName=customerName||state.customerName||"Team Combo";
-  if($("custName"))$("custName").textContent=state.customerName;
+  state.currentVip=!!vip;
+  if($("custName")) $("custName").innerHTML=state.customerName+(vip?'<span class="vipTag">VIP</span>':'');
+  if(custEmoji&&$("custEmoji")) $("custEmoji").textContent=custEmoji;
+  updateVipUI(!!vip && false); // banner stays off in MP (name tag shows VIP)
+  let stage=document.querySelector(".dual-stage"); if(stage) stage.classList.toggle("vipActive",!!vip);
+  state.patience=100; if($("patience"))$("patience").style.width="100%";
+  startCustomerTimer();
   renderTicket();renderScoreboard();finalUpdateTop();
 }
 function applySharedTray(tray){if(!Array.isArray(tray))return;state.sharedTray=tray;if(state.multiplayer&&state.mode==="coop")state.tray=tray.map(x=>({...x}));renderTray();renderBelts();renderScoreboard();}
-function showOrderDone(name,score){let b=$("doneBanner");if(b){b.textContent=`${name||"Chef"} completed an order! +${score||0}`;b.classList.remove("show");void b.offsetWidth;b.classList.add("show");}}
-function newCustomer(){stopTimer();let c=cfg(state.level,state.mapId);state.tray=[];savedBuild=null;renderTray();renderBelts();let itemCount=2+Math.floor(Math.random()*c.combo);state.order=Array.from({length:itemCount},randomFood);
+function showOrderDone(name,score,correct){let b=$("doneBanner");if(b){b.textContent=(correct===false)?`${name||"Chef"} served a wrong order (+${score||0} coins, no point)`:`${name||"Chef"} completed an order! +${score||0}`;b.classList.remove("show");void b.offsetWidth;b.classList.add("show");}}
+function pickCustomer(mapId){
+  const m=MAPS[mapId||0];
+  const vipChance=m.vip?0.5:0.12;               // VIP maps have frequent VIPs; others occasional
+  const isVip=Math.random()<vipChance;
+  if(isVip){
+    return {vip:true,
+      face:VIP_FACES[Math.floor(Math.random()*VIP_FACES.length)],
+      name:VIP_NAMES[Math.floor(Math.random()*VIP_NAMES.length)]};
+  }
+  const faces=WORLD_FACES[m.worldKey]||CUSTOMERS;
+  const names=WORLD_CUSTOMERS[m.worldKey]||NAMES;
+  return {vip:false,
+    face:faces[Math.floor(Math.random()*faces.length)],
+    name:names[Math.floor(Math.random()*names.length)]};
+}
+function newCustomer(){
+  stopTimer();
+  let c=cfg(state.level,state.mapId);
+  state.tray=[];savedBuild=null;renderTray();renderBelts();
+  // VIP orders are larger (more items) for bigger reward
+  let cust=pickCustomer(state.mapId);
+  state.currentVip=cust.vip;
+  let itemCount=(2+Math.floor(Math.random()*c.combo))+(cust.vip?1:0);
+  state.order=Array.from({length:itemCount},randomFood);
   if(state.multiplayer&&state.mode==="coop"){
-    state.customerName=$("custName") ? $("custName").textContent : "Team Combo";
-    sendNet("newSharedOrder",{order:state.order,customerName:state.customerName});
-  }state.patience=Math.min(130,100+finalBestTeamTimeUpgrade()*6);$("patience").style.width="100%";$("custEmoji").textContent=CUSTOMERS[Math.floor(Math.random()*CUSTOMERS.length)];$("custName").textContent=NAMES[Math.floor(Math.random()*NAMES.length)]+"'s Combo";renderTicket();startTimer();sendNet("progress",progressPayload());renderScoreboard()}
+    state.customerName=cust.name+(cust.vip?" ⭐":"")+"'s Order";
+    sendNet("newSharedOrder",{order:state.order,customerName:state.customerName,custEmoji:cust.face,vip:cust.vip});
+  }
+  state.patience=100;
+  $("patience").style.width="100%";
+  $("custEmoji").textContent=cust.face;
+  $("custName").innerHTML=(cust.name+"'s Order")+(cust.vip?'<span class="vipTag">VIP</span>':'');
+  updateVipUI(cust.vip);
+  renderTicket();startCustomerTimer();sendNet("progress",progressPayload());renderScoreboard();
+}
+function updateVipUI(isVip){
+  let b=$("vipBanner"), stage=document.querySelector(".dual-stage");
+  if(b) b.classList.toggle("show",!!isVip && !state.multiplayer);
+  if(stage) stage.classList.toggle("vipActive",!!isVip);
+}
 function renderTicket(){$("ticketItems").innerHTML=state.order.map(i=>`<div class="ticket-item">${itemText(i)}</div>`).join("")}
-function startTimer(){let total=cfg(state.level,state.mapId).patience,start=Date.now();state.timer=setInterval(()=>{if(state.paused)return;let e=(Date.now()-start)/1000;state.patience=Math.max(0,100-(e/total)*100);$("patience").style.width=state.patience+"%";if(state.patience<=0){stopTimer();toast("Customer left!");setTimeout(newCustomer,800)}},120)}
+/* Per-customer patience bar. Customer leaving = new customer, NO progress (like a wrong order). */
+function startCustomerTimer(){
+  let total=cfg(state.level,state.mapId).patience;
+  total=Math.min(60,total+finalBestTeamTimeUpgrade()*3); // time upgrades add a little patience
+  let start=Date.now();
+  state.timer=setInterval(()=>{
+    if(state.paused)return;
+    let e=(Date.now()-start)/1000;
+    state.patience=Math.max(0,100-(e/total)*100);
+    $("patience").style.width=state.patience+"%";
+    if(state.patience<=0){
+      stopTimer();
+      toast("Customer left! No point — next up.");
+      if(state.multiplayer&&state.mode==="coop") sendNet("newSharedOrder",{}); // let server hand next
+      setTimeout(newCustomer,700);
+    }
+  },120);
+}
+function startTimer(){startCustomerTimer();} // back-compat alias
 function stopTimer(){if(state.timer)clearInterval(state.timer);state.timer=null}
+
+/* ===== Level clock: whole-level countdown. Time up -> level fails. ===== */
+function fmtClock(s){s=Math.max(0,Math.ceil(s));let m=Math.floor(s/60);let ss=s%60;return m+":"+(ss<10?"0":"")+ss;}
+function startLevelClock(){
+  stopLevelClock();
+  // In multiplayer the SERVER owns the authoritative end; we mirror endsAt if provided.
+  let secs=(state.multiplayer&&state.levelEndsAt)
+    ? Math.max(0,(state.levelEndsAt-Date.now())/1000)
+    : baseSecondsForMap(state.mapId)+(state.multiplayer?0:finalBestTeamTimeUpgrade()*4);
+  state.levelSeconds=secs;
+  state.levelClockStart=Date.now();
+  state.levelClockDur=secs;
+  let clock=$("levelClock");
+  const tick=()=>{
+    if(state.paused){return;}
+    let left;
+    if(state.multiplayer&&state.levelEndsAt) left=(state.levelEndsAt-Date.now())/1000;
+    else left=state.levelClockDur-(Date.now()-state.levelClockStart)/1000;
+    left=Math.max(0,left);
+    if(clock){
+      clock.textContent="⏱ "+fmtClock(left);
+      clock.classList.toggle("warn",left<=20&&left>10);
+      clock.classList.toggle("danger",left<=10);
+    }
+    if(left<=0){
+      stopLevelClock();
+      onLevelTimeUp();
+    }
+  };
+  tick();
+  state.levelClockTimer=setInterval(tick,250);
+}
+function stopLevelClock(){if(state.levelClockTimer)clearInterval(state.levelClockTimer);state.levelClockTimer=null;}
+function onLevelTimeUp(){
+  stopTimer();
+  if(state.multiplayer){
+    // Server decides pass/fail and will emit levelResult/matchEnd; show a waiting notice.
+    if(!state.matchEnded){
+      toast("⏱ Time's up! Waiting for team result…");
+    }
+    return;
+  }
+  // Solo: fail unless goal met (goal met already routes to levelDone before this fires)
+  showTimeUp();
+}
+function showTimeUp(){
+  stopTimer();stopLevelClock();
+  $("resultTitle").textContent="⏱ Time's Up!";
+  $("resultText").innerHTML=`You served <b>${state.served}/${state.goal}</b> orders on ${MAPS[state.mapId].emoji} ${MAPS[state.mapId].name}.<br>Try again to beat the clock!`;
+  if($("unlockText")) $("unlockText").textContent="Tip: serve correct orders quickly — only correct orders count toward the goal.";
+  // In solo, offer retry/next-map via the standard result modal
+  let modal=$("result"); modal.classList.add("active","timeUpModal");
+  confetti();
+}
 function startBuild(id){builder=savedBuild&&savedBuild.type===id?JSON.parse(JSON.stringify(savedBuild)):{type:id,selections:{}};let f=food(id);$("builder").classList.add("active");$("builderTitle").textContent="Make "+cap(f.name);$("preview").textContent=f.emoji;setMachine(f.station);renderBuilder()}
 function renderBuilder(){let f=food(builder.type);$("builderBody").innerHTML=f.fields.map(([field,vals])=>`<div class="field-title">${cap(field)}</div><div class="choices">${vals.map(v=>`<button class="choice ${builder.selections[field]===v?"selected":""}" onclick="pick('${field}','${v}')">${v}</button>`).join("")}</div>`).join("")}
 function pick(field,val){builder.selections[field]=val;savedBuild=JSON.parse(JSON.stringify(builder));beep(720,.035);renderBuilder();renderTray();renderBelts()}
@@ -1042,19 +1495,72 @@ function renderBelts(){
   });
 }
 function viewOrder(){$("orderFull").innerHTML=state.order.map(i=>`<div class="ticket-item" style="font-size:14px;text-align:left">${itemText(i)}</div>`).join("")+(savedBuild?`<p class="sub">Saved build: ${food(savedBuild.type).emoji} ${cap(food(savedBuild.type).name)}</p>`:"");$("orderModal").classList.add("active")}function closeOrder(){$("orderModal").classList.remove("active")}
-function serveTray(){if(!state.tray.length)return toast("Make the order first");stopTimer();let acc=scoreOrder(state.order,state.tray);let bonus=state.mode==="coop"?Math.round(acc/(8-(Math.min(4,upgrades.team||0)))):0;state.coopBonus+=bonus;let coins=Math.max(1,Math.round(acc*.8+state.patience*.2+bonus+(upgrades.prep||0)*2));state.coins+=coins;accountCoins+=Math.max(1,Math.round(coins*(1+(upgrades.tips||0)*0.1)));localStorage.ssss_account_coins=accountCoins;state.served++;$("uiCoins").textContent=state.coins;updateServedUI();burst((acc>=90?"Perfect Combo! ":"Served Combo! ")+"+"+coins+" 🪙");sendNet("orderComplete",{score:coins,total:state.coins,served:state.served,mode:state.mode});sendNet("progress",progressPayload());if(state.multiplayer){setTimeout(newCustomer,850)}else if(state.multiplayer){setTimeout(newCustomer,850)}else if(state.served>=state.goal)setTimeout(levelDone,800);else setTimeout(newCustomer,850);}
+const CORRECT_THRESHOLD=60; // accuracy >= this counts as a correct order (progress toward goal)
+function serveTray(){
+  if(!state.tray.length)return toast("Make the order first");
+  stopTimer();
+  let acc=scoreOrder(state.order,state.tray);
+  let isCorrect=acc>=CORRECT_THRESHOLD;
+  let vip=!!state.currentVip;
+
+  // team bonus (online co-op uses team upgrade; solo uses offline upgrade)
+  let teamLvl=state.multiplayer?finalOnlineTeamBonusLevel():(upgrades.team||0);
+  let bonus=state.mode==="coop"?Math.round(acc/(8-Math.min(4,teamLvl))):0;
+  state.coopBonus+=bonus;
+
+  // coins: always earned (even wrong), VIP pays extra, correct pays a completion bump
+  let vipMult=vip?1.6:1;
+  let prepBonus=state.multiplayer?finalOnlinePrepLevel()*2:(upgrades.prep||0)*2;
+  let coins=Math.max(1,Math.round((acc*.8+state.patience*.2+bonus+prepBonus)*vipMult+(isCorrect?12:0)));
+  state.coins+=coins;
+  let tipLvl=state.multiplayer?0:(upgrades.tips||0); // offline tip jar only affects solo bank
+  accountCoins+=Math.max(1,Math.round(coins*(1+tipLvl*0.1)));
+  localStorage.ssss_account_coins=accountCoins;
+  $("uiCoins").textContent=state.coins;
+
+  if(isCorrect){
+    state.served++;                       // only correct orders advance the goal
+    updateServedUI();
+    burst((vip?"⭐ VIP served! ":(acc>=95?"Perfect! ":"Correct! "))+"+"+coins+" 🪙");
+  } else {
+    flashWrong();
+    burst("Wrong order — coins only, no point. +"+coins+" 🪙");
+  }
+
+  // Report to server: served count is the goal-progress count (correct only)
+  sendNet("orderComplete",{score:coins,total:state.coins,served:state.served,mode:state.mode,correct:isCorrect,vip:vip,timeUpgrade:finalGetOnlineUpgradeLevel("time")});
+  sendNet("progress",progressPayload());
+
+  if(state.multiplayer){
+    // server drives next order / level end; still request next customer locally as fallback
+    setTimeout(()=>{ if(!state.matchEnded) newCustomer(); },850);
+  } else if(state.served>=state.goal){
+    setTimeout(levelDone,700);
+  } else {
+    setTimeout(newCustomer,750);
+  }
+}
+function flashWrong(){
+  let stage=document.querySelector(".dual-stage");
+  if(stage){stage.classList.remove("wrongFlash");void stage.offsetWidth;stage.classList.add("wrongFlash");}
+  beep(200,.12);
+}
 function scoreOrder(order,tray){let used=new Set(),earned=0,total=order.length*100;order.forEach(w=>{let best=0,bi=-1;tray.forEach((m,i)=>{if(used.has(i))return;let s=0;if(m.id===w.id){let fields=food(w.id).fields.map(x=>x[0]);s+=25;fields.forEach(f=>{if(m[f]===w[f])s+=75/fields.length})}if(s>best){best=s;bi=i}});if(bi>=0)used.add(bi);earned+=best});return Math.max(0,Math.round((earned/total)*100-Math.max(0,tray.length-order.length)*10))}
 function levelDone(){
-  stopTimer();
+  stopTimer();stopLevelClock();
+  if($("vipBanner"))$("vipBanner").classList.remove("show");
   let unlockedNew=markLevelComplete();
-  $("resultTitle").textContent=state.mode==="versus"?"Round Finished! 🏆":"Kitchen Complete! 🤝";
-  $("resultText").innerHTML=`${MAPS[state.mapId].emoji} ${MAPS[state.mapId].fullName}<br>Score: <b>${state.coins}</b><br>${state.mode==="coop"?"Team bonus: +"+state.coopBonus:"Check scoreboard for winner."}`;
-  $("unlockText").textContent=unlockedNew?`New themes unlocked! You now have ${unlockedThemeCount}/100 themes.`:`Completed levels: ${completedLevels}. Unlock 3 more themes every 3 completions.`;
+  $("resultTitle").textContent="Kitchen Complete! 🤝";
+  $("resultText").innerHTML=`${MAPS[state.mapId].emoji} ${MAPS[state.mapId].fullName}<br>Served <b>${state.served}/${state.goal}</b> · Coins: <b>${state.coins}</b> 🪙`;
+  $("unlockText").textContent=unlockedNew?`New world unlocked! You now have ${unlockedThemeCount}/200 stages.`:`Completed levels: ${completedLevels}. Unlock 10 more stages every 4 completions.`;
   $("result").classList.add("active");
   renderMapJourney();
   confetti();
 }
-function closeResult(){$("result").classList.remove("active")}function restartLevel(){startLevel(1,state.multiplayer,state.mode,state.mapId)}function pauseGame(){state.paused=true;show("pause")}function resumeGame(){state.paused=false;show("play");if(!state.timer)startTimer()}
+function closeResult(){$("result").classList.remove("active","timeUpModal")}
+function restartLevel(){closeResult();startLevel(1,state.multiplayer,state.mode,state.mapId)}
+function pauseGame(){if(state.multiplayer)return toast("Can't pause online — the team keeps cooking!");state.paused=true;show("pause")}
+function resumeGame(){state.paused=false;show("play");if(!state.timer)startCustomerTimer();}
 function setMachine(st){clearMachines();let id=st==="Drink"?"machDrink":(st==="Grill"||st==="Fry"?"machCook":"machPack");$(id).classList.add("active")}function clearMachines(){["machDrink","machCook","machPack"].forEach(id=>$(id).classList.remove("active"))}
 function showTutorialVote(votes={}){
   closeVote(); closeRoom();
@@ -1105,8 +1611,59 @@ function showSpinner(candidates=[],duration=1800){
 function closeSpin(){$("spinModal").classList.remove("active");}
 function connectOnline(){if(net.connected)return toast("Already connected");let name=$("playerName").value.trim();if(!name)return toast("Enter your chef name first");let proto=location.protocol==="https:"?"wss":"ws",url=(location.protocol==="file:")?"ws://localhost:3000":`${proto}://${location.host}`;try{let ws=new WebSocket(url);net.ws=ws;ws.onopen=()=>{net.connected=true;localStorage.ssss_name=name;$("netDot").classList.add("on");$("netText").textContent="Connected";sendNet("hello",{name});toast("Connected 🎮")};ws.onmessage=e=>handleNet(JSON.parse(e.data));ws.onclose=()=>{net.connected=false;$("netDot").classList.remove("on");$("netText").textContent="Not Connected";renderRooms()};ws.onerror=()=>toast("Connection failed. Deploy/run server.")}catch(e){toast("Connection blocked")}}
 function sendNet(type,data={}){if(net.ws&&net.ws.readyState===1)net.ws.send(JSON.stringify({type,...data}))}
-function handleNet(msg){if(msg.type==="welcome"){net.id=msg.id;net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="rooms"){net.rooms=msg.rooms||[];renderRooms()}if(msg.type==="room"){net.room=msg.room;net.players=msg.room.players||[];showRoom(msg.room)}if(msg.type==="players"){net.players=msg.players||[];renderRoomPlayers();renderScoreboard();renderOtherOrder()}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);finalUpdateTop();renderScoreboard();}if(msg.type==="matchEnd"){net.players=msg.players||net.players;finalShowMatchEnd(msg);}if(msg.type==="nextVoteState"){if($("nextVoteInfo"))$("nextVoteInfo").textContent=`Vote next level: ${msg.count}/${msg.total} · 15s max`;}if(msg.type==="openUpgradeBreak"){openOnlineUpgrades();}if(msg.type==="forceHome"){goHome();}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="matchEnd"){net.players=msg.players||net.players;showMatchResults(msg);}if(msg.type==="sharedState"){state.teamServed=Number(msg.teamServed||0);updateServedUI();renderScoreboard();}if(msg.type==="sharedOrder"){if(state.multiplayer&&state.mode==="coop"){applySharedOrder(msg.order||[],msg.customerName)}}if(msg.type==="sharedTray"){if(state.multiplayer&&state.mode==="coop"){applySharedTray(msg.tray||[])}}if(msg.type==="orderDone"){showOrderDone(msg.name,msg.score);if(state.mode==="coop"){if(msg.order)applySharedOrder(msg.order);applySharedTray([])}}if(msg.type==="votes"){net.votes=msg.votes||{};renderVoteMaps()}if(msg.type==="tutorialVote"){showTutorialVote(msg.votes||{})}if(msg.type==="tutorialStart"){runTutorial(msg.show!==false)}if(msg.type==="spin"){showSpinner(msg.candidates||[],msg.duration||1800)}if(msg.type==="start"){setTimeout(()=>{closeSpin();closeRoom();closeVote();startLevel(1,true,msg.mode||"coop",msg.mapId||0)}, msg.delay||0)}if(msg.type==="error")toast(msg.message||"Server error")}
-function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[],timeUpgrade:finalGetOnlineUpgradeLevel("time")}}
+function handleNet(msg){
+  switch(msg.type){
+    case "welcome": net.id=msg.id; net.rooms=msg.rooms||[]; renderRooms(); break;
+    case "rooms": net.rooms=msg.rooms||[]; renderRooms(); break;
+    case "room": net.room=msg.room; net.players=msg.room.players||[]; showRoom(msg.room); break;
+    case "players": net.players=msg.players||[]; renderRoomPlayers(); renderScoreboard(); renderOtherOrder(); break;
+    case "votes": net.votes=msg.votes||{}; renderVoteMaps(); break;
+    case "tutorialVote": showTutorialVote(msg.votes||{}); break;
+    case "tutorialStart": runTutorial(msg.show!==false); break;
+    case "spin": showSpinner(msg.candidates||[],msg.duration||1800); break;
+    case "start":
+      clearTimeout(state._startFallback);
+      setTimeout(()=>{
+        closeSpin();closeRoom();closeVote();
+        $("nextVoteModal").classList.remove("active");
+        $("onlineUpgradeModal").classList.remove("active");
+        closeResult();
+        startLevel(1,true,msg.mode||"coop",msg.mapId||0,{endsAt:msg.endsAt,goal:msg.goal});
+      }, msg.delay||0);
+      break;
+    case "sharedOrder":
+      if(state.multiplayer&&state.mode==="coop") applySharedOrder(msg.order||[],msg.customerName,msg.custEmoji,msg.vip);
+      break;
+    case "sharedTray":
+      if(state.multiplayer&&state.mode==="coop") applySharedTray(msg.tray||[]);
+      break;
+    case "sharedState":
+      state.teamServed=Number(msg.teamServed||0);
+      if(msg.goal) state.goal=msg.goal;
+      finalUpdateTop(); renderScoreboard();
+      break;
+    case "orderDone":
+      showOrderDone(msg.name,msg.score,msg.correct);
+      if(state.mode==="coop"){ applySharedTray([]); }
+      break;
+    case "matchEnd":
+      net.players=msg.players||net.players;
+      finalShowMatchEnd(msg);
+      break;
+    case "nextVoteState":
+      if($("nextVoteInfo")) $("nextVoteInfo").textContent=`Chefs ready: ${msg.count}/${msg.total} · vote within 15s`;
+      break;
+    case "openUpgradeBreak": openOnlineUpgrades(); break;
+    case "playerLeft":
+      toast((msg.name||"A chef")+" left the game");
+      net.players=(net.players||[]).filter(p=>p.id!==msg.id);
+      renderRoomPlayers(); renderScoreboard(); renderOtherOrder();
+      break;
+    case "forceHome": goHome(); break;
+    case "error": toast(msg.message||"Server error"); break;
+  }
+}
+function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[],timeUpgrade:finalGetOnlineUpgradeLevel("time"),teamBonus:finalGetOnlineUpgradeLevel("team"),prepLevel:finalGetOnlineUpgradeLevel("sync")}}
 function requireName(){let name=$("playerName").value.trim();if(!name){toast("Enter your chef name first");return null}localStorage.ssss_name=name;return name}
 function createRoom(mode){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first for real multiplayer");sendNet("createRoom",{mode,name})}
 function joinByCode(){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first");let code=$("joinCode").value.trim().toUpperCase();if(!code)return toast("Enter code");sendNet("joinRoom",{code,name})}
@@ -1136,7 +1693,7 @@ function renderVoteMaps(){
 function voteMap(id){net.votes=net.votes||{};net.votes[net.id]=id;renderVoteMaps();sendNet("vote",{mapId:id});toast("Map vote saved ✓")}function readyVote(){if(!net.votes||net.votes[net.id]===undefined){voteMap(0);}sendNet("ready",{});toast("Ready — waiting for other chefs ✓")}function closeVote(){$("voteModal").classList.remove("active")}
 function backToRoom(){closeVote(); if(net.room){$("roomModal").classList.add("active"); renderRoomPlayers();}}
 function closeRoom(){$("roomModal").classList.remove("active")}
-function goHome(){closeResult(); stopTimer(); state.multiplayer=false; state.mode="solo"; show("menu");}
+function goHome(){closeResult(); stopTimer(); stopLevelClock(); if($("vipBanner"))$("vipBanner").classList.remove("show"); clearInterval(state.nextVoteTimer); clearInterval(state.upgradeBreakTimer); $("nextVoteModal").classList.remove("active"); $("onlineUpgradeModal").classList.remove("active"); state.multiplayer=false; state.mode="solo"; state.levelEndsAt=0; show("menu");}
 function nextEarnedLevel(){openNextVote()}
 function leaveRoom(){sendNet("leaveRoom",{});net.room=null;net.players=[];closeRoom();closeVote();renderRooms()}
 function renderOtherOrder(){let other=(net.players||[]).find(p=>p.id!==net.id);$("otherEmoji").textContent=other?other.face||"👩‍🍳":"👀";$("otherOrder").innerHTML=other&&other.order&&other.order.length?other.order.map(i=>`<div class="ticket-item">${food(i.id).emoji} ${cap(food(i.id).name)}</div>`).join(""):'<div class="ticket-item">Waiting for real player...</div>'}
