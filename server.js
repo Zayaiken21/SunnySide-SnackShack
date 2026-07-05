@@ -398,6 +398,19 @@ wss.on("connection", ws => {
       startRoomLevel(room, next, { delay: 250 });
     }
 
+
+    if (msg.type === "roundTimeout") {
+      const room = rooms.get(c.room);
+      if (!room || room.ended) return;
+      room.ended = true;
+      const players=[...room.players].sort((a,b)=>(Number(b.served||0)-Number(a.served||0))||(Number(b.score||0)-Number(a.score||0)));
+      const winner=players[0] ? players[0].name : "Chef";
+      for(const p of room.players){
+        send(clientSocket(p.id),{type:"matchEnd",winner,reason:"timeout",completed:false,teamServed:room.teamServed||0,players});
+      }
+      broadcastRooms();
+    }
+
     if (msg.type === "progress") {
       const room = rooms.get(c.room); if (!room) return;
       const player = room.players.find(p => p.id === c.id); if (!player) return;

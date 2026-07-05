@@ -748,6 +748,142 @@ button,input{pointer-events:auto!important}
   .statChip{font-size:11px;padding:6px 4px}
 }
 
+
+/* V12 MINOR PATCH: compact menu + readable ticket + small tray */
+.foodMenu,
+.food-panel,
+.foodBrowser,
+.food-menu,
+.foodShelf,
+#foodMenu,
+#foodPanel,
+#foodBrowser{
+  transform:none!important;
+  position:relative!important;
+  margin-top:8px!important;
+  max-height:30dvh!important;
+  min-height:190px!important;
+  overflow:auto!important;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom))!important;
+  scroll-behavior:smooth!important;
+}
+.foodMenu .foodGrid,
+.food-panel .foodGrid,
+.foodBrowser .foodGrid,
+.food-menu .foodGrid,
+.foodShelf .foodGrid,
+.foodGrid,
+.foods,
+.foodCards,
+.itemGrid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:7px!important;
+}
+.foodCard,
+.foodBtn,
+.foodItem,
+.menuItem,
+.food-choice{
+  min-height:72px!important;
+  max-height:88px!important;
+  padding:6px!important;
+}
+.foodCard .emoji,
+.foodBtn .emoji,
+.foodItem .emoji,
+.menuItem .emoji,
+.food-choice .emoji{
+  font-size:24px!important;
+}
+.tray,
+.trayBox,
+#tray{
+  min-height:76px!important;
+  max-height:96px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+}
+.made,
+.trayItem,
+.trayFood{
+  min-width:74px!important;
+  width:74px!important;
+  max-width:74px!important;
+  min-height:64px!important;
+  max-height:74px!important;
+  padding:5px!important;
+  font-size:10px!important;
+  border-radius:16px!important;
+}
+.made img,.trayItem img,.trayFood img,
+.made .emoji,.trayItem .emoji,.trayFood .emoji{
+  max-width:26px!important;
+  max-height:26px!important;
+  font-size:22px!important;
+}
+.made small,.trayItem small,.trayFood small{
+  font-size:8.5px!important;
+  line-height:1.05!important;
+}
+.ticket,
+.orderTicket,
+.customerTicket,
+#ticket,
+.ticketBody,
+.orderItems{
+  max-height:145px!important;
+  overflow:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+.ticket *,
+.orderTicket *,
+.customerTicket *,
+#ticket *,
+.ticketBody *,
+.orderItems *{
+  white-space:normal!important;
+}
+.orderLine,
+.ticket-item,
+.ticketRow,
+.orderItem{
+  line-height:1.15!important;
+  min-height:auto!important;
+  word-break:normal!important;
+}
+.voteDelayNote{
+  background:#fff7d7;
+  border:2px solid #fff;
+  border-radius:16px;
+  padding:8px;
+  margin:8px 0;
+  font-weight:1000;
+}
+@media(max-width:430px){
+  .foodMenu,.food-panel,.foodBrowser,.food-menu,.foodShelf,#foodMenu,#foodPanel,#foodBrowser{
+    max-height:28dvh!important;
+    min-height:176px!important;
+    margin-top:6px!important;
+  }
+  .foodGrid,.foods,.foodCards,.itemGrid{gap:6px!important}
+  .foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{
+    min-height:68px!important;
+    max-height:82px!important;
+  }
+  .ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
+    max-height:132px!important;
+  }
+  .made,.trayItem,.trayFood{
+    min-width:68px!important;
+    width:68px!important;
+    max-width:68px!important;
+  }
+}
+
 </style>
 
 <script>
@@ -1249,6 +1385,7 @@ function showMatchResults(msg){
     : `${msg.winner||"Winner"} finished first.`+placementHTML(msg.players);
   if($("unlockText"))$("unlockText").textContent="Progress saved. Continue to the next level.";
   $("result").classList.add("active");
+  const completed=!!(msg&&msg.completed)||v12RoundComplete();v12PrepareResultButtons(completed);
   confetti();
 }
 function continueNextLevel(){
@@ -1341,6 +1478,7 @@ function finalShowMatchEnd(msg){
   // remember whether next is retry (fail) or advance (win) — server mirrors this
   state.nextIsRetry=!state.lastWin;
   $("result").classList.add("active");
+  const completed=!!(msg&&msg.completed)||v12RoundComplete();v12PrepareResultButtons(completed);
   confetti();
 }
 /* After the upgrade break, ask the SERVER to start the next level (authoritative timer). */
@@ -1360,19 +1498,77 @@ function finalContinueNextLevel(){
     startLevel(1,state.multiplayer,state.mode,Math.min(199,(state.mapId||0)+1));
   }
 }
+
+function v12TeamServed(){
+  if(!(state.multiplayer&&state.mode==="coop")) return Number(state.served||0);
+  if(typeof state.teamServed==="number") return Number(state.teamServed||0);
+  return (net.players||[]).reduce((s,p)=>s+Number(p.served||0),0);
+}
+function v12ServedForCompletion(){
+  return (state.multiplayer&&state.mode==="coop") ? v12TeamServed() : Number(state.served||0);
+}
+function v12RoundComplete(){
+  if(state.mode==="versus"&&state.multiplayer) return !!state._winnerComplete || Number(state.served||0) >= Number(state.goal||4);
+  return v12ServedForCompletion() >= Number(state.goal||4);
+}
+function v12UpdateProgressUI(){
+  if($("uiServed")) $("uiServed").textContent = v12ServedForCompletion();
+  if($("uiGoal")) $("uiGoal").textContent = state.goal||4;
+  if(typeof renderScoreboard==="function"){}
+}
+function v12PrepareResultButtons(completed){
+  const result=document.querySelector("#result");
+  if(!result)return;
+  const buttons=[...result.querySelectorAll("button")];
+  const nextBtns=buttons.filter(b=>/Next Level|Next|Retry/i.test((b.textContent||"").trim()));
+  nextBtns.forEach(b=>{
+    if(completed){
+      b.textContent="Next Level";
+      b.onclick=function(){
+        const panel=document.querySelector("#result .panel");
+        if(panel && !panel.querySelector(".voteDelayNote")){
+          const note=document.createElement("div");
+          note.className="voteDelayNote";
+          note.textContent="Score shown — Vote Next opens in 5 seconds.";
+          panel.insertBefore(note,b);
+        }
+        setTimeout(()=>openNextVote(),5000);
+      };
+    }else{
+      b.textContent="Retry";
+      b.onclick=function(){
+        closeResult && closeResult();
+        if(state.multiplayer) sendNet("nextLevelStart",{mapId:state.mapId,mode:state.mode,retry:true});
+        if(typeof finalResetRoundCounters==="function") finalResetRoundCounters();
+        startLevel(1,state.multiplayer,state.mode,state.mapId);
+      };
+    }
+  });
+}
+function v12ShowResultPatch(msg){
+  const completed = !!(msg&&msg.completed) || v12RoundComplete();
+  v12PrepareResultButtons(completed);
+}
+
 function openNextVote(){
-  if(!state.multiplayer){finalContinueNextLevel();return;}
+  if(!v12RoundComplete() && state.multiplayer){toast("Complete the level first");return;}
+  if($("result")) $("result").classList.remove("active");
+  if(!state.multiplayer){
+    if(typeof finalContinueNextLevel==="function") finalContinueNextLevel();
+    else if(typeof continueNextLevel==="function") continueNextLevel();
+    return;
+  }
   $("nextVoteModal").classList.add("active");
   let left=15;
   $("nextVoteInfo").textContent=`Vote next level: 0/${(net.players||[]).length||1} · ${left}s`;
   clearInterval(state.nextVoteTimer);
   state.nextVoteTimer=setInterval(()=>{
     left--;
-    if($("nextVoteInfo"))$("nextVoteInfo").textContent=`Vote next level · ${left}s left`;
+    if($("nextVoteInfo")) $("nextVoteInfo").textContent=`Vote next level · ${left}s left`;
     if(left<=0){
       clearInterval(state.nextVoteTimer);
       sendNet("nextVoteTimeout",{});
-      goHome();
+      if(typeof finalGoHomeClean==="function") finalGoHomeClean(); else goHome();
     }
   },1000);
 }
