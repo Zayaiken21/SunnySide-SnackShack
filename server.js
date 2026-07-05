@@ -81,7 +81,7 @@ function startRoomLevel(room, mapId, opts = {}) {
   room.sharedCustEmoji = null;
   room.sharedVip = false;
   room.transitioningOrder = false;
-  room.nextVotes = {};
+  room.nextVotes = {}; room.retryVotes={};
   for (const p of room.players) {
     p.served = 0; p.order = [];
     if (opts.first) { p.score = 0; p.coopBonus = 0; }
@@ -354,6 +354,30 @@ wss.on("connection", ws => {
     }
 
     /* ===== Next-level vote (all must agree within 15s or go home) ===== */
+
+    if (msg.type === "retryVote") {
+      const room = rooms.get(c.room);
+      if (!room) return;
+      room.retryVotes = room.retryVotes || {};
+      room.retryVotes[c.id] = true;
+      const count = Object.keys(room.retryVotes).length;
+      const total = room.players.length;
+      for (const p of room.players) send(clientSocket(p.id), { type:"nextVoteState", count, total, mode:"retry" });
+      if (count >= 2) {
+        for (const p of room.players) send(clientSocket(p.id), { type:"openUpgradeBreak", retry:true });
+      }
+    }
+    if (msg.type === "retryVoteTimeout") {
+      const room = rooms.get(c.room);
+      if (!room) return;
+      const count = Object.keys(room.retryVotes||{}).length;
+      if (count < 2) {
+        for (const p of room.players) send(clientSocket(p.id), { type:"forceHome" });
+        rooms.delete(room.code);
+        broadcastRooms();
+      }
+    }
+
     if (msg.type === "nextVote") {
       const room = rooms.get(c.room);
       if (!room) return;

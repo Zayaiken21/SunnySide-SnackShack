@@ -1,14 +1,14 @@
-# Sunny Side Snack Shack — Small Final Fixes
+# Sunny Side Snack Shack — Retry Vote + Food Containment Patch
 
-Base: V12 minor UI + sync patch.
+Base: small final fixes.
 
-Small fixes only:
-- Food menu stays inside its space and the Hide button is removed.
-- Customer order/ticket area is scrollable/readable.
-- Result screen shows one Retry button when nobody completes the level.
-- Next Level appears only when the round is actually won/completed.
-- Vote screen shows players and opens safely.
-- Players who leave are removed through room broadcast.
-- Connected button turns green and says Connected.
-- Goals scale upward by map with more time for higher goals.
-- Added culture food items without changing existing maps/levels.
+Patched only:
+- Retry now requires multiplayer voting.
+- If fewer than 2 players vote retry, everyone is sent home.
+- If 2+ vote retry, 30-second upgrade break opens, then fresh retry starts.
+- Retry resets stats, customers, trays, timers, team progress.
+- Food menu is contained and scrollable; cards stop bleeding out bottom.
+- Order ticket stays in a scrollable container.
+- Theme map journey scroll containment improved.
+- Team mode can share best comfy waiting/team upgrades.
+- Added more cultural food/drink entries without replacing existing levels/maps.
