@@ -1173,6 +1173,96 @@ button.connected{
   }
 }
 
+
+/* ORDER/MENU/RETRY FINAL BUGFIX — containment only */
+.customerCard,.customer,.orderBox,.orderPanel{
+  overflow:hidden!important;
+}
+.ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
+  display:block!important;
+  max-height:190px!important;
+  min-height:145px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding:12px 12px 18px!important;
+  box-sizing:border-box!important;
+  scroll-padding-bottom:28px!important;
+}
+.ticket *,.orderTicket *,.customerTicket *,#ticket *,.ticketBody *,.orderItems *{
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  word-break:normal!important;
+}
+.orderLine,.ticketRow,.ticketItem,.orderItem,.orderCard,.orderEntry{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  gap:6px!important;
+  line-height:1.15!important;
+  min-height:auto!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  margin-bottom:6px!important;
+}
+.foodMenu,#foodMenu,.food-panel,#foodPanel,.foodBrowser,#foodBrowser,.food-menu,.foodShelf{
+  position:relative!important;
+  inset:auto!important;
+  transform:none!important;
+  margin:8px auto 0!important;
+  width:calc(100% - 20px)!important;
+  max-width:100%!important;
+  max-height:250px!important;
+  min-height:210px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding:12px 12px 22px!important;
+  box-sizing:border-box!important;
+  border-radius:28px!important;
+  z-index:5!important;
+}
+.foodGrid,.foods,.foodCards,.itemGrid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+  padding-bottom:30px!important;
+}
+.foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{
+  min-height:72px!important;
+  max-height:90px!important;
+  padding:6px!important;
+  border-radius:18px!important;
+  box-sizing:border-box!important;
+}
+.tray,#tray,.trayBox{
+  min-height:76px!important;
+  max-height:98px!important;
+}
+.beltFood{
+  animation-direction:normal!important;
+}
+.beltTrack{
+  overflow:hidden!important;
+}
+@media(max-width:430px){
+  .ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
+    max-height:180px!important;
+    min-height:136px!important;
+  }
+  .foodMenu,#foodMenu,.food-panel,#foodPanel,.foodBrowser,#foodBrowser,.food-menu,.foodShelf{
+    max-height:238px!important;
+    min-height:198px!important;
+    width:calc(100% - 18px)!important;
+  }
+  .foodGrid,.foods,.foodCards,.itemGrid{gap:7px!important}
+  .foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{
+    min-height:68px!important;
+    max-height:84px!important;
+  }
+}
+
 </style>
 
 <script>
@@ -1260,7 +1350,7 @@ window.addEventListener("error", function(e){
 <div class="modal" id="orderModal"><div class="panel"><h2>Customer Ticket 📋</h2><div id="orderFull"></div><button class="btn blue" onclick="closeOrder()">Back to Cooking</button></div></div>
 <div class="modal" id="roomModal"><div class="panel"><h2 id="roomTitle">Room Created</h2><div class="code" id="roomCode">ABC123</div><p id="roomInfo" class="sub"></p><div id="roomPlayers"></div><div class="roomActions"><button class="btn blue" onclick="show('multi');closeRoom()">← Match Center</button><button class="btn green" onclick="openVoting()">Vote Map</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
 <div class="modal" id="nextVoteModal"><div class="panel"><h2>Vote Next Level ➡️</h2><p class="sub">All online players must vote within 15 seconds. If you choose Home, you leave the room.</p><div class="levelVoteInfo" id="nextVoteInfo">Waiting...</div><button class="btn green" onclick="voteNextLevel()">Vote Next</button><button class="btn pink" onclick="voteReturnHome()">Go Home</button></div></div>
-<div class="modal" id="onlineUpgradeModal"><div class="panel"><h2>30 Second Upgrade Break 🛠</h2><p class="sub">Team time upgrades help everyone in co-op. Versus upgrades only help the player who owns them.</p><div class="upgradeTimer" id="upgradeTimer">30</div><div class="upgradeShopGrid" id="onlineUpgradeGrid"></div><button class="btn green" onclick="bugfixUpgradeReady()">Back to Game</button></div></div>
+<div class="modal" id="onlineUpgradeModal"><div class="panel"><h2>30 Second Upgrade Break 🛠</h2><p class="sub">Team time upgrades help everyone in co-op. Versus upgrades only help the player who owns them.</p><div class="upgradeTimer" id="upgradeTimer">30</div><div class="upgradeShopGrid" id="onlineUpgradeGrid"></div><button class="btn green" onclick="omUpgradeReady()">Back to Game</button></div></div>
 <div class="modal" id="result"><div class="panel"><h2 id="resultTitle">Round Complete!</h2><p id="resultText"></p><div class="progressNote" id="unlockText">Progress saved.</div><div class="homeActions"><button class="btn green" onclick="openNextVote()">Next Level</button><button class="btn blue" onclick="restartLevel()">Retry</button></div><button class="btn pink" onclick="goHome()">🏠 Back Home</button></div></div>
 <div class="orderDoneBanner" id="doneBanner">Order completed!</div><div class="toast" id="toast">Nice!</div>
 </main>
@@ -1694,6 +1784,8 @@ function showMatchResults(msg){
 
   bugfixPrepareResult(msg);
 
+  omPatchResultButtons(msg);
+
 }
 function continueNextLevel(){
   closeResult();
@@ -1790,6 +1882,8 @@ function finalShowMatchEnd(msg){
   rvPrepareEndMenu(msg);
 
   bugfixPrepareResult(msg);
+
+  omPatchResultButtons(msg);
 
 }
 /* After the upgrade break, ask the SERVER to start the next level (authoritative timer). */
@@ -2008,8 +2102,7 @@ function bugfixOpenUpgradeBreak(next){
   },1000);
 }
 function bugfixStartAfterUpgrade(){
-  if($("onlineUpgradeModal"))$("onlineUpgradeModal").classList.remove("active");
-  bugfixStartFreshLevel(!!state._upgradeNext);
+  omStartFreshAfterUpgrade(!!state._upgradeNext);
 }
 function bugfixUpgradeReady(){
   state._readyAfterUpgrade=true;
@@ -2052,10 +2145,7 @@ function rvOpenUpgradeThenStartRetry(){
   },1000);
 }
 function rvStartRetryFresh(){
-  if($("onlineUpgradeModal"))$("onlineUpgradeModal").classList.remove("active");
-  rvResetLocal();
-  sendNet("nextLevelStart",{mapId:state.mapId,mode:state.mode,retry:true});
-  startLevel(1,state.multiplayer,state.mode,state.mapId);
+  omStartFreshAfterUpgrade(false);
 }
 function rvBestTeamUpgrade(key){
   let own=0;
@@ -2075,6 +2165,59 @@ function rvAddThemeFoods(){
       foods.forEach((x,i)=>FOODS.push({id:slug(x[0]),name:x[0],emoji:x[1],station:x[2],unlock:1+Math.floor((start+i)/2.5),fields:fieldsFor(x[2])}));
     }
   }catch(e){}
+}
+
+
+function omAddOrderTimeBonus(){
+  const bonus=15;
+  if(typeof state.levelClock==="number"){
+    state.levelClock=Math.min(600,state.levelClock+bonus);
+    if($("clockVal")) $("clockVal").textContent=formatTime?formatTime(state.levelClock):state.levelClock;
+    else if($("levelClock")) $("levelClock").textContent="⏱ "+(formatTime?formatTime(state.levelClock):state.levelClock);
+  }
+}
+function omForceScrollTicketBottomSafe(){
+  setTimeout(()=>{
+    const t=$("ticket")||document.querySelector(".ticket,.orderTicket,.customerTicket,.ticketBody,.orderItems");
+    if(t) t.scrollTop=0;
+  },60);
+}
+function omStartFreshAfterUpgrade(next){
+  const targetMap = next ? Math.min(199,(state.mapId||0)+1) : (state.mapId||0);
+  if($("onlineUpgradeModal")) $("onlineUpgradeModal").classList.remove("active");
+  if($("nextVoteModal")) $("nextVoteModal").classList.remove("active");
+  if(typeof bugfixResetRound==="function") bugfixResetRound(next);
+  else if(typeof rvResetLocal==="function") rvResetLocal();
+  else {
+    state.served=0;state.coins=0;state.teamServed=0;state.tray=[];state.sharedTray=[];state.order=null;state.matchEnded=false;
+  }
+  if(state.multiplayer) sendNet("nextLevelStart",{mapId:targetMap,mode:state.mode,retry:!next});
+  startLevel(1,state.multiplayer,state.mode,targetMap);
+}
+function omUpgradeReady(){
+  sendNet("upgradeReady",{next:!!state._upgradeNext});
+  toast("Ready ✓");
+}
+function omPatchResultButtons(msg){
+  const won = (typeof bugfixDidWin==="function") ? bugfixDidWin(msg) : (!!(msg&&msg.completed));
+  const result=$("result");
+  if(!result)return;
+  [...result.querySelectorAll("button")].forEach(b=>{
+    if(/Next Level|Next/i.test(b.textContent||"")){
+      b.style.display=won?"":"none";
+      b.disabled=!won;
+      b.onclick=function(){
+        if(!won){toast("Beat the level first");return;}
+        setTimeout(()=>openNextVote(),5000);
+      };
+    }
+    if(/Retry/i.test(b.textContent||"")){
+      b.onclick=function(){openRetryVote()};
+    }
+  });
+}
+function omApplyConnectedStay(){
+  state.multiplayer=!!state.multiplayer;
 }
 
 function openNextVote(){
@@ -2129,7 +2272,7 @@ function buyOnlineUpgrade(k,price){
   openOnlineUpgrades();
 }
 function finishUpgradeBreak(){
-  bugfixStartAfterUpgrade();
+  omStartFreshAfterUpgrade(!!state._upgradeNext);
 }
 
 
@@ -2217,6 +2360,8 @@ function sfShowMatchEnd(msg){
   rvPrepareEndMenu(msg);
 
   bugfixPrepareResult(msg);
+
+  omPatchResultButtons(msg);
 
 }
 function sfOpenUpgradeBreak(){
@@ -2321,7 +2466,7 @@ function applySharedOrder(order,customerName,custEmoji,vip){
   updateVipUI(!!vip && false);
   let stage=document.querySelector(".dual-stage"); if(stage) stage.classList.toggle("vipActive",!!vip);
   state.patience=100; if($("patience"))$("patience").style.width="100%";
-  renderTicket();renderScoreboard();finalUpdateTop();
+  renderTicket();omForceScrollTicketBottomSafe();renderScoreboard();finalUpdateTop();
   bugfixApplyTeamUpgrades();startCustomerTimer();
 }
 function applySharedTray(tray){if(!Array.isArray(tray))return;state.sharedTray=tray;if(state.multiplayer&&state.mode==="coop")state.tray=tray.map(x=>({...x}));renderTray();renderBelts();renderScoreboard();}
@@ -2520,7 +2665,7 @@ function renderBelts(){
     e.textContent=f.emoji;
     e.title=f.name;
     e.style.animationDelay=-(i*.42)+"s";
-    e.style.left=(-28-i*22)+"px";
+    e.style.left=(i*22)+"px";
     $(target).appendChild(e);
   });
 }
@@ -2721,7 +2866,7 @@ function handleNet(msg){
     case "error": toast(msg.message||"Server error"); break;
   }
 }
-function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[],timeUpgrade:finalGetOnlineUpgradeLevel("time"),teamBonus:finalGetOnlineUpgradeLevel("team"),prepLevel:finalGetOnlineUpgradeLevel("sync"),upgrades:{patience:rvBestTeamUpgrade("patience"),team:rvBestTeamUpgrade("team"),upgrades:{patience:bugfixBestUpgrade("patience"),wait:bugfixBestUpgrade("wait"),team:bugfixBestUpgrade("team")}}}}
+function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[],timeUpgrade:finalGetOnlineUpgradeLevel("time"),teamBonus:finalGetOnlineUpgradeLevel("team"),prepLevel:finalGetOnlineUpgradeLevel("sync"),upgrades:{patience:rvBestTeamUpgrade("patience"),team:rvBestTeamUpgrade("team"),upgrades:{patience:bugfixBestUpgrade("patience"),wait:bugfixBestUpgrade("wait"),team:bugfixBestUpgrade("team"),clock:state.levelClock}}}}
 function requireName(){let name=$("playerName").value.trim();if(!name){toast("Enter your chef name first");return null}localStorage.ssss_name=name;return name}
 function createRoom(mode){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first for real multiplayer");sendNet("createRoom",{mode,name})}
 function joinByCode(){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first");let code=$("joinCode").value.trim().toUpperCase();if(!code)return toast("Enter code");sendNet("joinRoom",{code,name})}

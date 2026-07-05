@@ -1,13 +1,12 @@
-# Sunny Side Snack Shack — Minor Bug Fix Patch
+# Sunny Side Snack Shack — Order/Menu/Retry Patch
 
-Base: retry vote + food fix.
+Base: minor bugfix patch.
 
 Fixed:
-- Losing no longer allows Next Level.
-- Retry always replays the same level/world.
-- Winning advances to next stage only after vote.
-- Upgrade break starts the next game only after all ready or timer expires.
-- Team mode uses highest shared upgrades from team players.
-- Order ticket and food menu are contained and scrollable.
-- Theme map scroll containment improved.
-- Player leave broadcasting strengthened.
+- Full customer orders can be scrolled/read without cut-off words.
+- Food menu stays inside its panel instead of bleeding into the bottom.
+- Upgrade break no longer sends players home after voting ready.
+- Retry starts the same level fresh; next starts the next level fresh.
+- Conveyor item direction patched to move with food direction.
+- Every completed order adds +15 seconds to the round timer.
+- Existing game modes, levels, themes, multiplayer sync, and styles preserved.

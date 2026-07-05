@@ -316,7 +316,7 @@ wss.on("connection", ws => {
       if (!room || room.ended || room.phase !== "playing") return;
       const player = room.players.find(p => p.id === c.id);
       if (player) {
-        player.score = Number(msg.total || player.score || 0);
+        player.score = Number(msg.total || player.score || 0); player.clock = Number(msg.clock || player.clock || 0);
         player.served = Number(msg.served || player.served || 0);
         if (msg.timeUpgrade != null) player.timeUpgrade = Number(msg.timeUpgrade) || 0;
       }
@@ -373,7 +373,6 @@ wss.on("connection", ws => {
       const count = Object.keys(room.retryVotes||{}).length;
       if (count < 2) {
         for (const p of room.players) send(clientSocket(p.id), { type:"forceHome" });
-        rooms.delete(room.code);
         broadcastRooms();
       }
     }
