@@ -652,6 +652,102 @@ button,input{pointer-events:auto!important}
 .needBar .needLbl{font-size:10px;font-weight:1000;opacity:.7;align-self:center;margin-right:2px}
 .foodbtn.needed{outline:3px solid #6ce183;box-shadow:0 0 0 3px rgba(108,225,131,.35),0 6px 0 rgba(139,89,22,.22)!important;animation:neededPulse 1.6s ease-in-out infinite}
 @keyframes neededPulse{50%{box-shadow:0 0 0 5px rgba(108,225,131,.5),0 6px 0 rgba(139,89,22,.22)!important}}
+
+/* V12 STABILITY FIX: readable two-row game HUD, scrollable map, no conveyor text */
+.playHud{
+  position:relative;
+  z-index:30;
+  margin:10px 12px 6px;
+  border:5px solid rgba(255,255,255,.92);
+  border-radius:24px;
+  background:rgba(255,255,245,.88);
+  box-shadow:var(--soft);
+  padding:6px;
+  display:grid;
+  gap:6px;
+}
+.playHudTop{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 46px;
+  gap:6px;
+  align-items:center;
+}
+.playHud .mapPill{
+  min-width:0!important;
+  width:100%!important;
+  max-width:none!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:12px!important;
+  padding:8px 10px!important;
+}
+.pauseBtn2{
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  min-height:44px!important;
+  padding:0!important;
+  margin:0!important;
+  border-radius:16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:18px!important;
+  box-shadow:0 4px 0 #c95390,0 8px 14px rgba(98,20,65,.16)!important;
+}
+.playStats{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:6px;
+}
+.statChip{
+  background:#fff;
+  border-radius:999px;
+  padding:7px 6px;
+  min-width:0;
+  text-align:center;
+  font-size:12px;
+  font-weight:1000;
+  box-shadow:inset 0 -3px rgba(0,0,0,.04);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:clip;
+}
+.statChip span{font-variant-numeric:tabular-nums}
+.levelClock.warn{background:#fff4bd!important}
+.levelClock.danger{background:#ffd9d9!important;animation:clockPulse .6s ease-in-out infinite alternate}
+@keyframes clockPulse{from{transform:scale(1)}to{transform:scale(1.04)}}
+.machine{
+  font-size:0!important;
+  color:transparent!important;
+  text-shadow:none!important;
+  line-height:0!important;
+}
+.machine > b,.machine > span.steam{display:none!important}
+.machine .beltTrack,.machine .beltTrack *,.machine .beltFood{
+  color:initial!important;
+  text-shadow:none!important;
+  line-height:normal!important;
+}
+#mapJourney.mapJourney,
+.mapJourney.worldMapCompact{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding-bottom:calc(100px + env(safe-area-inset-bottom))!important;
+}
+.worldMapCompact .worldPicker{position:sticky;top:0;z-index:4}
+@media(max-width:430px){
+  .playHud{margin:8px 10px 5px;border-width:4px;border-radius:22px;padding:5px;gap:5px}
+  .playHudTop{grid-template-columns:minmax(0,1fr) 42px}
+  .pauseBtn2{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important}
+  .playHud .mapPill{font-size:11px!important;padding:7px 8px!important}
+  .playStats{gap:5px}
+  .statChip{font-size:11px;padding:6px 4px}
+}
+
 </style>
 
 <script>
@@ -704,7 +800,14 @@ window.addEventListener("error", function(e){
 </section>
 
 <section class="screen play" id="play">
-  <div class="topbar playTopbar"><div class="pill mapPill" id="mapName">Map</div><div class="statGroup"><div class="pill statPill">🪙<span id="uiCoins">0</span></div><div class="pill statPill">✅<span id="uiServed">0</span>/<span id="uiGoal">3</span></div><div class="pill statPill levelClock" id="levelClock">⏱1:00</div></div><button class="btn small pink pauseBtn" onclick="pauseGame()" aria-label="Pause">⏸</button></div>
+  <div class="playHud" id="playHud">
+    <div class="playHudTop"><div class="pill mapPill" id="mapName">Map</div><button class="btn small pink pauseBtn2" onclick="pauseGame()" aria-label="Pause">⏸</button></div>
+    <div class="playStats">
+      <div class="statChip coinsChip">🪙 <span id="uiCoins">0</span></div>
+      <div class="statChip ordersChip">✅ <span id="uiServed">0</span>/<span id="uiGoal">3</span></div>
+      <div class="statChip levelClock" id="levelClock">⏱ <span id="clockVal">1:00</span></div>
+    </div>
+  </div>
   <div class="vipBanner" id="vipBanner">⭐ VIP CUSTOMER — serve fast for bonus coins!</div>
   <div class="area">
     <div class="scoreboard" id="scoreboard"></div>
@@ -1062,11 +1165,11 @@ function renderMapJourney(){
       <small>${locked?'Locked':m.cats.map(c=>CAT_ICON[c]).join(' ')}</small>
     </button>`;
   }).join("");
-  wrap.className="worldMapCompact";
+  wrap.className="mapJourney worldMapCompact";
   wrap.innerHTML=`
     <div class="worldPicker" style="--worldBg:${w.bg}">
       <div class="worldHeader"><div class="worldIcon">${w.emoji}</div>
-        <div style="flex:1"><strong>${w.cuisine}</strong><span>${w.desc}</span></div></div>
+        <div style="flex:1"><strong>${w.cuisine}</strong><span>${w.desc||w.tip||""}</span></div></div>
       <select class="worldSelect" onchange="state.journeyWorld=+this.value;renderMapJourney()">${options}</select>
       <div class="worldMeta"><span class="pill small">${w.decor.slice(0,4).join(' ')}</span><span class="pill small">${MAPS.filter(m=>m.world===state.journeyWorld&&!m.vip).length} stages + ${MAPS.filter(m=>m.world===state.journeyWorld&&m.vip).length} VIP</span></div>
     </div>
@@ -1085,7 +1188,7 @@ function startLevel(level=1,multi=false,mode="solo",mapId=0,opts={}){
   let c=cfg(level,mapId);
   let goal=goalForMap(mapId,mode);
   state={...state,level,mapId,mode,multiplayer:multi,coins:0,served:0,goal:goal,tray:[],sharedTray:[],order:null,patience:100,category:c.map.cats[0],coopBonus:0,paused:false,matchEnded:false,currentVip:false};
-  state._finalStarted=true;state.teamServed=0;state.sharedTray=[];savedBuild=null;
+  state._finalStarted=true;state.teamServed=0;state.sharedTray=[];state._orderSig="";state._generatingSharedOrder=false;savedBuild=null;
   // server-authoritative level end time for multiplayer
   state.levelEndsAt=(multi&&opts.endsAt)?opts.endsAt:0;
   if(multi&&opts.goal) state.goal=opts.goal;
@@ -1380,6 +1483,13 @@ function renderTicket(){
 }
 function applySharedOrder(order,customerName,custEmoji,vip){
   if(!Array.isArray(order)||!order.length)return;
+  const sig=JSON.stringify({order,customerName,custEmoji,vip});
+  if(state._orderSig===sig && state.order && state.order.length){
+    // Duplicate server echo; keep the current timer/order stable.
+    return;
+  }
+  state._orderSig=sig;
+  stopTimer();
   state.order=order.map(o=>{
     let f=food(o.id), item={id:o.id};
     f.fields.forEach(([field,vals])=>item[field]=o[field]||vals[0]);
@@ -1387,13 +1497,14 @@ function applySharedOrder(order,customerName,custEmoji,vip){
   });
   state.customerName=customerName||state.customerName||"Team Combo";
   state.currentVip=!!vip;
+  state.tray=[]; savedBuild=null; renderTray(); renderBelts();
   if($("custName")) $("custName").innerHTML=state.customerName+(vip?'<span class="vipTag">VIP</span>':'');
   if(custEmoji&&$("custEmoji")) $("custEmoji").textContent=custEmoji;
-  updateVipUI(!!vip && false); // banner stays off in MP (name tag shows VIP)
+  updateVipUI(!!vip && false);
   let stage=document.querySelector(".dual-stage"); if(stage) stage.classList.toggle("vipActive",!!vip);
   state.patience=100; if($("patience"))$("patience").style.width="100%";
-  startCustomerTimer();
   renderTicket();renderScoreboard();finalUpdateTop();
+  startCustomerTimer();
 }
 function applySharedTray(tray){if(!Array.isArray(tray))return;state.sharedTray=tray;if(state.multiplayer&&state.mode==="coop")state.tray=tray.map(x=>({...x}));renderTray();renderBelts();renderScoreboard();}
 function showOrderDone(name,score,correct){let b=$("doneBanner");if(b){b.textContent=(correct===false)?`${name||"Chef"} served a wrong order (+${score||0} coins, no point)`:`${name||"Chef"} completed an order! +${score||0}`;b.classList.remove("show");void b.offsetWidth;b.classList.add("show");}}
@@ -1413,8 +1524,13 @@ function pickCustomer(mapId){
     name:names[Math.floor(Math.random()*names.length)]};
 }
 function newCustomer(){
-  // In co-op, the shared order is server-driven — never self-apply here.
-  if(state.multiplayer&&state.mode==="coop"){ generateSharedOrder(); return; }
+  // In co-op, the server owns order assignment. Clients wait for sharedOrder/requestOrder.
+  if(state.multiplayer&&state.mode==="coop"){
+    stopTimer();
+    state.tray=[]; savedBuild=null; renderTray(); renderBelts();
+    if($("ticketItems")) $("ticketItems").innerHTML='<div class="ticket-item">Waiting for team order…</div>';
+    return;
+  }
   stopTimer();
   let c=cfg(state.level,state.mapId);
   state.tray=[];savedBuild=null;renderTray();renderBelts();
@@ -1432,6 +1548,9 @@ function newCustomer(){
 // Co-op: build one order and hand it to the server; it echoes to BOTH players via sharedOrder.
 function generateSharedOrder(){
   if(!(state.multiplayer&&state.mode==="coop")) return;
+  if(state._generatingSharedOrder) return;
+  state._generatingSharedOrder=true;
+  setTimeout(()=>{state._generatingSharedOrder=false;},900);
   let c=cfg(state.level,state.mapId);
   let cust=pickCustomer(state.mapId);
   let itemCount=(2+Math.floor(Math.random()*c.combo))+(cust.vip?1:0);
@@ -1449,19 +1568,26 @@ function updateVipUI(isVip){
 }
 /* Per-customer patience bar. Customer leaving = new customer, NO progress (like a wrong order). */
 function startCustomerTimer(){
+  stopTimer();
   let total=cfg(state.level,state.mapId).patience;
-  total=Math.min(60,total+finalBestTeamTimeUpgrade()*3); // time upgrades add a little patience
+  total=Math.min(60,total+finalBestTeamTimeUpgrade()*3);
   let start=Date.now();
   state.timer=setInterval(()=>{
     if(state.paused)return;
     let e=(Date.now()-start)/1000;
     state.patience=Math.max(0,100-(e/total)*100);
-    $("patience").style.width=state.patience+"%";
+    if($("patience")) $("patience").style.width=state.patience+"%";
     if(state.patience<=0){
       stopTimer();
       toast("Customer left! No point — next up.");
-      if(state.multiplayer&&state.mode==="coop") sendNet("newSharedOrder",{}); // let server hand next
-      setTimeout(newCustomer,700);
+      if(state.multiplayer&&state.mode==="coop"){
+        sendNet("customerLeft",{orderSig:state._orderSig||""});
+        state.order=null; state._orderSig="";
+        state.tray=[]; renderTray(); renderBelts();
+        if($("ticketItems")) $("ticketItems").innerHTML='<div class="ticket-item">Next order coming…</div>';
+      } else {
+        setTimeout(newCustomer,700);
+      }
     }
   },120);
 }
@@ -1472,7 +1598,6 @@ function stopTimer(){if(state.timer)clearInterval(state.timer);state.timer=null}
 function fmtClock(s){s=Math.max(0,Math.ceil(s));let m=Math.floor(s/60);let ss=s%60;return m+":"+(ss<10?"0":"")+ss;}
 function startLevelClock(){
   stopLevelClock();
-  // In multiplayer the SERVER owns the authoritative end; we mirror endsAt if provided.
   let secs=(state.multiplayer&&state.levelEndsAt)
     ? Math.max(0,(state.levelEndsAt-Date.now())/1000)
     : baseSecondsForMap(state.mapId)+(state.multiplayer?0:finalBestTeamTimeUpgrade()*4);
@@ -1480,14 +1605,16 @@ function startLevelClock(){
   state.levelClockStart=Date.now();
   state.levelClockDur=secs;
   let clock=$("levelClock");
+  let clockVal=$("clockVal");
   const tick=()=>{
     if(state.paused){return;}
     let left;
     if(state.multiplayer&&state.levelEndsAt) left=(state.levelEndsAt-Date.now())/1000;
     else left=state.levelClockDur-(Date.now()-state.levelClockStart)/1000;
     left=Math.max(0,left);
+    if(clockVal) clockVal.textContent=fmtClock(left);
+    else if(clock) clock.textContent="⏱ "+fmtClock(left);
     if(clock){
-      clock.textContent="⏱ "+fmtClock(left);
       clock.classList.toggle("warn",left<=20&&left>10);
       clock.classList.toggle("danger",left<=10);
     }
@@ -1620,7 +1747,7 @@ function serveTray(){
     if(state.mode==="coop"){
       // Do NOT self-generate — the server assigns the next shared order to one client.
       // Clear our view so the stale customer doesn't linger.
-      state.order=null; state.tray=[]; renderTray(); renderBelts();
+      state.order=null; state._orderSig=""; state.tray=[]; renderTray(); renderBelts();
       if($("ticketItems")) $("ticketItems").innerHTML='<div class="ticket-item">Next order coming…</div>';
     } else {
       // Versus: independent orders, advance locally.
@@ -1652,20 +1779,11 @@ function levelDone(){
 function closeResult(){$("result").classList.remove("active","timeUpModal")}
 function restartLevel(){closeResult();startLevel(1,state.multiplayer,state.mode,state.mapId)}
 function pauseGame(){
-  if(state.multiplayer){
-    // Online: personal menu overlay. The shared game keeps running on the server,
-    // so we don't set state.paused (which would freeze this client's rendering desync).
-    $("pauseHeading").textContent="Menu ⏸";
-    $("pauseNote").textContent="Your team keeps cooking online — resume quickly! Restart isn't available in multiplayer.";
-    let rb=$("pauseRestartBtn"); if(rb){ rb.style.display="none"; }
-    show("pause");
-  } else {
-    state.paused=true;
-    $("pauseHeading").textContent="Paused ☀️";
-    $("pauseNote").textContent="";
-    let rb=$("pauseRestartBtn"); if(rb){ rb.style.display=""; }
-    show("pause");
-  }
+  state.paused=!state.multiplayer;
+  if($("pauseHeading")) $("pauseHeading").textContent=state.multiplayer?"Menu ⏸":"Paused ☀️";
+  if($("pauseNote")) $("pauseNote").textContent=state.multiplayer?"Your online match keeps running — resume quickly!":"";
+  let rb=$("pauseRestartBtn"); if(rb) rb.style.display=state.multiplayer?"none":"";
+  show("pause");
 }
 function confirmLeaveMatch(){
   if(state.multiplayer){
@@ -1759,6 +1877,10 @@ function handleNet(msg){
       state.teamServed=Number(msg.teamServed||0);
       if(msg.goal) state.goal=msg.goal;
       finalUpdateTop(); renderScoreboard();
+      break;
+    case "customerLeft":
+      toast("Customer left for the team — next order coming.");
+      state.order=null; state._orderSig=""; state.tray=[]; renderTray(); renderBelts(); if($("ticketItems"))$("ticketItems").innerHTML='<div class="ticket-item">Next order coming…</div>';
       break;
     case "orderDone":
       showOrderDone(msg.name,msg.score,msg.correct);

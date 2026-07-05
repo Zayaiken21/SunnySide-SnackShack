@@ -80,6 +80,7 @@ function startRoomLevel(room, mapId, opts = {}) {
   room.sharedCustomerName = null;
   room.sharedCustEmoji = null;
   room.sharedVip = false;
+  room.transitioningOrder = false;
   room.nextVotes = {};
   for (const p of room.players) {
     p.served = 0; p.order = [];
@@ -259,6 +260,30 @@ wss.on("connection", ws => {
       }
     }
 
+
+    if (msg.type === "customerLeft") {
+      const room = rooms.get(c.room);
+      if (!room || room.mode !== "coop" || room.ended || room.phase !== "playing") return;
+      if (room.transitioningOrder) return;
+      room.transitioningOrder = true;
+      room.sharedOrder = null;
+      room.sharedTray = [];
+      room.sharedCustomerName = null;
+      room.sharedCustEmoji = null;
+      room.sharedVip = false;
+      for (const p of room.players) {
+        send(clientSocket(p.id), { type: "sharedTray", tray: [] });
+        send(clientSocket(p.id), { type: "customerLeft", name: "Customer" });
+      }
+      const gen = room.players[0];
+      setTimeout(() => {
+        if (rooms.has(room.code) && !room.ended && room.phase === "playing" && !room.sharedOrder && gen) {
+          send(clientSocket(gen.id), { type: "requestOrder" });
+        }
+        if (rooms.has(room.code)) room.transitioningOrder = false;
+      }, 650);
+    }
+
     if (msg.type === "newSharedOrder") {
       const room = rooms.get(c.room);
       if (!room || room.mode !== "coop" || room.ended || room.phase !== "playing") return;
@@ -266,8 +291,8 @@ wss.on("connection", ws => {
         send(ws, { type: "sharedOrder", order: room.sharedOrder, customerName: room.sharedCustomerName, custEmoji: room.sharedCustEmoji, vip: room.sharedVip });
         return;
       }
-      // empty payload = "customer left / please assign next" — clear so next serve creates fresh
-      if (!Array.isArray(msg.order) || !msg.order.length) { room.sharedOrder = null; return; }
+      if (!Array.isArray(msg.order) || !msg.order.length) { return; }
+      room.transitioningOrder = false;
       room.sharedOrder = msg.order.slice(0, 8);
       room.sharedCustomerName = String(msg.customerName || "Team Order").slice(0, 40);
       room.sharedCustEmoji = String(msg.custEmoji || "🙂").slice(0, 8);
@@ -305,6 +330,7 @@ wss.on("connection", ws => {
         room.sharedCustomerName = null;
         room.sharedCustEmoji = null;
         room.sharedVip = false;
+        room.transitioningOrder = false;
         for (const p of room.players) {
           send(clientSocket(p.id), { type: "orderDone", name: player ? player.name : "Chef", score: Number(msg.score || 0), correct: wasCorrect, tray: [] });
           send(clientSocket(p.id), { type: "sharedTray", tray: [] });
