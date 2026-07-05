@@ -1174,92 +1174,189 @@ button.connected{
 }
 
 
-/* ORDER/MENU/RETRY FINAL BUGFIX — containment only */
-.customerCard,.customer,.orderBox,.orderPanel{
+/* PRODUCTION FIX — order visibility + contained food menu + consistent layout */
+:root{
+  --foodPanelH: clamp(245px, 32dvh, 360px);
+  --ticketH: clamp(180px, 24dvh, 300px);
+}
+#play{
   overflow:hidden!important;
 }
-.ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
-  display:block!important;
-  max-height:190px!important;
-  min-height:145px!important;
+.playMain,.gameArea,.area{
   overflow-y:auto!important;
   overflow-x:hidden!important;
   -webkit-overflow-scrolling:touch!important;
-  padding:12px 12px 18px!important;
+  padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;
+}
+/* Customer/order ticket must be a real scroll box with bottom breathing room */
+.customerCard,.customer,.orderBox,.orderPanel{
+  overflow:visible!important;
+}
+.ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
+  height:var(--ticketH)!important;
+  max-height:var(--ticketH)!important;
+  min-height:165px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding:12px 14px 52px!important;
   box-sizing:border-box!important;
-  scroll-padding-bottom:28px!important;
+  scroll-padding-bottom:70px!important;
+  overscroll-behavior:contain!important;
+}
+.ticket::after,.orderTicket::after,.customerTicket::after,#ticket::after,.ticketBody::after,.orderItems::after{
+  content:"";
+  display:block;
+  height:42px;
+  flex:0 0 42px;
 }
 .ticket *,.orderTicket *,.customerTicket *,#ticket *,.ticketBody *,.orderItems *{
   white-space:normal!important;
   overflow:visible!important;
   text-overflow:clip!important;
-  word-break:normal!important;
 }
 .orderLine,.ticketRow,.ticketItem,.orderItem,.orderCard,.orderEntry{
-  display:flex!important;
-  flex-wrap:wrap!important;
-  align-items:center!important;
-  gap:6px!important;
-  line-height:1.15!important;
-  min-height:auto!important;
+  width:100%!important;
   max-width:100%!important;
+  min-height:auto!important;
+  line-height:1.16!important;
+  word-break:normal!important;
   box-sizing:border-box!important;
-  margin-bottom:6px!important;
+  margin-bottom:7px!important;
 }
+/* Food menu stays inside its rounded box. Drinks/food/snacks live side-by-side tabs. */
 .foodMenu,#foodMenu,.food-panel,#foodPanel,.foodBrowser,#foodBrowser,.food-menu,.foodShelf{
   position:relative!important;
   inset:auto!important;
   transform:none!important;
-  margin:8px auto 0!important;
-  width:calc(100% - 20px)!important;
-  max-width:100%!important;
-  max-height:250px!important;
-  min-height:210px!important;
+  height:var(--foodPanelH)!important;
+  max-height:var(--foodPanelH)!important;
+  min-height:245px!important;
   overflow-y:auto!important;
   overflow-x:hidden!important;
   -webkit-overflow-scrolling:touch!important;
-  padding:12px 12px 22px!important;
+  padding:12px 12px 74px!important;
+  margin-top:8px!important;
   box-sizing:border-box!important;
-  border-radius:28px!important;
   z-index:5!important;
+  scroll-padding-bottom:82px!important;
+  overscroll-behavior:contain!important;
+}
+.foodMenu::after,#foodMenu::after,.food-panel::after,#foodPanel::after,.foodBrowser::after,#foodBrowser::after,.food-menu::after,.foodShelf::after{
+  content:"";
+  display:block;
+  height:70px;
+  grid-column:1/-1;
+}
+.foodTabs,.stationTabs,.tabs,.catTabs{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:8px!important;
+  align-items:center!important;
+  margin-bottom:10px!important;
+}
+.foodTabs button,.stationTabs button,.tabs button,.catTabs button{
+  flex:1 1 30%!important;
+  min-width:92px!important;
 }
 .foodGrid,.foods,.foodCards,.itemGrid{
   display:grid!important;
   grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:8px!important;
-  padding-bottom:30px!important;
+  gap:9px!important;
+  padding-bottom:70px!important;
+  align-items:start!important;
 }
 .foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{
-  min-height:72px!important;
-  max-height:90px!important;
-  padding:6px!important;
+  min-height:86px!important;
+  max-height:none!important;
+  padding:8px!important;
   border-radius:18px!important;
   box-sizing:border-box!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
 }
+.foodCard .emoji,.foodBtn .emoji,.foodItem .emoji,.menuItem .emoji,.food-choice .emoji{
+  font-size:26px!important;
+  line-height:1!important;
+}
+.foodCard span,.foodBtn span,.foodItem span,.menuItem span,.food-choice span{
+  white-space:normal!important;
+  line-height:1.08!important;
+}
+/* Tray keeps detail but doesn't swallow the screen */
 .tray,#tray,.trayBox{
-  min-height:76px!important;
-  max-height:98px!important;
+  min-height:82px!important;
+  max-height:110px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
 }
-.beltFood{
-  animation-direction:normal!important;
+.made,.trayItem,.trayFood{
+  min-width:74px!important;
+  width:74px!important;
+  max-width:74px!important;
+  min-height:64px!important;
+  max-height:78px!important;
+  padding:6px!important;
+  font-size:9.5px!important;
+  border-radius:16px!important;
+  box-sizing:border-box!important;
 }
+.made img,.trayItem img,.trayFood img,.made .emoji,.trayItem .emoji,.trayFood .emoji{
+  max-width:26px!important;
+  max-height:26px!important;
+  font-size:22px!important;
+}
+/* Conveyor items move right -> left, same as food flow */
 .beltTrack{
   overflow:hidden!important;
+  position:relative!important;
+}
+.beltFood{
+  animation-name:beltMoveLeft!important;
+  animation-duration:4.5s!important;
+  animation-timing-function:linear!important;
+  animation-iteration-count:infinite!important;
+}
+@keyframes beltMoveLeft{
+  0%{transform:translateX(170px)}
+  100%{transform:translateX(-60px)}
+}
+/* Connected button and result/vote consistency */
+#connectBtn.connected,button.connected,.connectedBtn,.statusConnected{
+  background:linear-gradient(#b9ffd1,#62dd83)!important;
+  color:#24462b!important;
+}
+.retryDuplicate{display:none!important}
+.voteRoster,.prodVoteRoster{
+  background:#fff7d7;
+  border:2px solid #fff;
+  border-radius:14px;
+  padding:8px;
+  margin:8px 0;
+  font-weight:1000;
 }
 @media(max-width:430px){
-  .ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
-    max-height:180px!important;
-    min-height:136px!important;
+  :root{
+    --foodPanelH: clamp(250px, 34dvh, 355px);
+    --ticketH: clamp(185px, 25dvh, 285px);
   }
-  .foodMenu,#foodMenu,.food-panel,#foodPanel,.foodBrowser,#foodBrowser,.food-menu,.foodShelf{
-    max-height:238px!important;
-    min-height:198px!important;
-    width:calc(100% - 18px)!important;
+  .foodGrid,.foods,.foodCards,.itemGrid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:7px!important;
   }
-  .foodGrid,.foods,.foodCards,.itemGrid{gap:7px!important}
   .foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{
-    min-height:68px!important;
-    max-height:84px!important;
+    min-height:80px!important;
+    padding:7px!important;
+  }
+  .ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
+    padding-bottom:58px!important;
   }
 }
 
@@ -1350,7 +1447,7 @@ window.addEventListener("error", function(e){
 <div class="modal" id="orderModal"><div class="panel"><h2>Customer Ticket 📋</h2><div id="orderFull"></div><button class="btn blue" onclick="closeOrder()">Back to Cooking</button></div></div>
 <div class="modal" id="roomModal"><div class="panel"><h2 id="roomTitle">Room Created</h2><div class="code" id="roomCode">ABC123</div><p id="roomInfo" class="sub"></p><div id="roomPlayers"></div><div class="roomActions"><button class="btn blue" onclick="show('multi');closeRoom()">← Match Center</button><button class="btn green" onclick="openVoting()">Vote Map</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
 <div class="modal" id="nextVoteModal"><div class="panel"><h2>Vote Next Level ➡️</h2><p class="sub">All online players must vote within 15 seconds. If you choose Home, you leave the room.</p><div class="levelVoteInfo" id="nextVoteInfo">Waiting...</div><button class="btn green" onclick="voteNextLevel()">Vote Next</button><button class="btn pink" onclick="voteReturnHome()">Go Home</button></div></div>
-<div class="modal" id="onlineUpgradeModal"><div class="panel"><h2>30 Second Upgrade Break 🛠</h2><p class="sub">Team time upgrades help everyone in co-op. Versus upgrades only help the player who owns them.</p><div class="upgradeTimer" id="upgradeTimer">30</div><div class="upgradeShopGrid" id="onlineUpgradeGrid"></div><button class="btn green" onclick="omUpgradeReady()">Back to Game</button></div></div>
+<div class="modal" id="onlineUpgradeModal"><div class="panel"><h2>30 Second Upgrade Break 🛠</h2><p class="sub">Team time upgrades help everyone in co-op. Versus upgrades only help the player who owns them.</p><div class="upgradeTimer" id="upgradeTimer">30</div><div class="upgradeShopGrid" id="onlineUpgradeGrid"></div><button class="btn green" onclick="prodUpgradeBackToGame()">Back to Game</button></div></div>
 <div class="modal" id="result"><div class="panel"><h2 id="resultTitle">Round Complete!</h2><p id="resultText"></p><div class="progressNote" id="unlockText">Progress saved.</div><div class="homeActions"><button class="btn green" onclick="openNextVote()">Next Level</button><button class="btn blue" onclick="restartLevel()">Retry</button></div><button class="btn pink" onclick="goHome()">🏠 Back Home</button></div></div>
 <div class="orderDoneBanner" id="doneBanner">Order completed!</div><div class="toast" id="toast">Nice!</div>
 </main>
@@ -1652,7 +1749,22 @@ function sfAddCultureFoods(){
   }catch(e){}
 }
 
-function init(){rvAddThemeFoods();sfAddCultureFoods(); $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
+
+function prodEnsureMenuTabs(){
+  try{
+    const labels=[...document.querySelectorAll("button")].map(b=>b.textContent.trim()).join("|");
+    const drinkBtn=[...document.querySelectorAll("button")].find(b=>/^🥤?\s*Drink$|^Drink$/i.test(b.textContent.trim()));
+    if(drinkBtn && !labels.includes("Snack")){
+      const parent=drinkBtn.parentElement;
+      if(parent){
+        const make=(txt,cat)=>{const b=drinkBtn.cloneNode(true);b.textContent=txt;b.onclick=()=>{if(typeof setStation==="function")setStation(cat);else if(typeof showCategory==="function")showCategory(cat);else drinkBtn.click();};parent.appendChild(b);};
+        make("🍔 Food","Grill"); make("🍿 Snack","Snack");
+      }
+    }
+  }catch(e){}
+}
+
+function init(){setTimeout(prodEnsureMenuTabs,500);prodAddCultureFoods();rvAddThemeFoods();sfAddCultureFoods(); $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
 function applyWorld(mapId){
   let m=MAPS[mapId];
   document.documentElement.style.setProperty("--mapBg",m.bg);
@@ -1784,7 +1896,7 @@ function showMatchResults(msg){
 
   bugfixPrepareResult(msg);
 
-  omPatchResultButtons(msg);
+  prodPrepareResult(msg);
 
 }
 function continueNextLevel(){
@@ -1883,7 +1995,7 @@ function finalShowMatchEnd(msg){
 
   bugfixPrepareResult(msg);
 
-  omPatchResultButtons(msg);
+  prodPrepareResult(msg);
 
 }
 /* After the upgrade break, ask the SERVER to start the next level (authoritative timer). */
@@ -2102,7 +2214,8 @@ function bugfixOpenUpgradeBreak(next){
   },1000);
 }
 function bugfixStartAfterUpgrade(){
-  omStartFreshAfterUpgrade(!!state._upgradeNext);
+  if($("onlineUpgradeModal"))$("onlineUpgradeModal").classList.remove("active");
+  bugfixStartFreshLevel(!!state._upgradeNext);
 }
 function bugfixUpgradeReady(){
   state._readyAfterUpgrade=true;
@@ -2110,10 +2223,133 @@ function bugfixUpgradeReady(){
   toast("Ready ✓");
 }
 
+
+function prodGoal(){return Number(state.goal||4)}
+function prodTeamServed(){
+  if(!(state.multiplayer&&state.mode==="coop")) return Number(state.served||0);
+  if(typeof state.teamServed==="number") return Number(state.teamServed||0);
+  return (net.players||[]).reduce((s,p)=>s+Number(p.served||0),0);
+}
+function prodDidWin(msg){
+  if(msg && msg.completed===true) return true;
+  if(msg && msg.completed===false) return false;
+  if(state.multiplayer && state.mode==="coop") return prodTeamServed()>=prodGoal();
+  if(state.multiplayer && state.mode==="versus") return !!(msg && msg.reason==="winner");
+  return Number(state.served||0)>=prodGoal();
+}
+function prodBestUpgrade(key){
+  let own=0;
+  try{own=Math.max(own,Number((JSON.parse(localStorage.ssss_upgrades||"{}")[key])||0));}catch(e){}
+  try{own=Math.max(own,Number((JSON.parse(localStorage.ssss_online_upgrades||"{}")[key])||0));}catch(e){}
+  if(!(state.multiplayer&&state.mode==="coop")) return own;
+  return Math.max(own,...(net.players||[]).map(p=>Number((p.upgrades&&p.upgrades[key])||p[key]||0)),0);
+}
+function prodAddTime(seconds){
+  seconds=Number(seconds||15);
+  if(typeof state.levelClock==="number"){
+    state.levelClock=Math.min(600,state.levelClock+seconds);
+    if($("clockVal")) $("clockVal").textContent=formatTime(state.levelClock);
+    if($("levelClock") && !$("clockVal")) $("levelClock").textContent="⏱ "+formatTime(state.levelClock);
+  }
+}
+function prodSyncTimer(seconds){
+  if(typeof seconds==="number"){
+    state.levelClock=seconds;
+    if($("clockVal")) $("clockVal").textContent=formatTime(state.levelClock);
+    if($("levelClock") && !$("clockVal")) $("levelClock").textContent="⏱ "+formatTime(state.levelClock);
+  }
+}
+function prodResetRound(next){
+  state.served=0; state.coins=0; state.teamServed=0; state.tray=[]; state.sharedTray=[];
+  state.order=null; state.customerName=""; state.matchEnded=false; state._winnerComplete=false;
+  savedBuild=null;
+  if($("uiCoins"))$("uiCoins").textContent=0;
+  if($("uiServed"))$("uiServed").textContent=0;
+  if($("uiGoal"))$("uiGoal").textContent=state.goal||4;
+  if(typeof renderTray==="function")renderTray();
+  if(typeof renderBelts==="function")renderBelts();
+}
+function prodStartLevelAfterUpgrade(next){
+  const targetMap=next?Math.min(199,(state.mapId||0)+1):(state.mapId||0);
+  if($("onlineUpgradeModal"))$("onlineUpgradeModal").classList.remove("active");
+  prodResetRound(next);
+  if(state.multiplayer) sendNet("nextLevelStart",{mapId:targetMap,mode:state.mode,retry:!next});
+  startLevel(1,state.multiplayer,state.mode,targetMap);
+}
+function prodPrepareResult(msg){
+  const won=prodDidWin(msg);
+  const result=$("result");
+  if(!result)return;
+  const btns=[...result.querySelectorAll("button")];
+  btns.forEach(b=>{
+    const t=(b.textContent||"").trim();
+    if(/Next Level|Next/i.test(t)){
+      b.style.display=won?"":"none";
+      b.disabled=!won;
+      b.onclick=function(){
+        if(!won){toast("You must beat the level first");return;}
+        setTimeout(()=>openNextVote(),5000);
+      };
+    }
+    if(/Retry/i.test(t)){
+      b.style.display="";
+      b.disabled=false;
+      b.onclick=function(){openRetryVote();};
+    }
+  });
+  btns.filter(b=>/Retry/i.test(b.textContent||"")).forEach((b,i)=>{if(i>0){b.style.display="none";b.classList.add("retryDuplicate");}});
+}
+function prodOpenUpgradeBreak(next){
+  state._upgradeNext=!!next;
+  if($("nextVoteModal"))$("nextVoteModal").classList.remove("active");
+  if($("result"))$("result").classList.remove("active");
+  if($("onlineUpgradeModal"))$("onlineUpgradeModal").classList.add("active");
+  let t=30;
+  if($("upgradeTimer"))$("upgradeTimer").textContent=t;
+  clearInterval(state.upgradeBreakTimer);
+  state.upgradeBreakTimer=setInterval(()=>{
+    t--;
+    if($("upgradeTimer"))$("upgradeTimer").textContent=t;
+    if(t<=0){
+      clearInterval(state.upgradeBreakTimer);
+      prodStartLevelAfterUpgrade(!!state._upgradeNext);
+    }
+  },1000);
+}
+function prodUpgradeReady(){
+  sendNet("upgradeReady",{next:!!state._upgradeNext});
+  toast("Ready ✓");
+}
+function prodUpgradeBackToGame(){
+  prodUpgradeReady();
+}
+function prodApplyTeamUpgrades(){
+  if(!(state.multiplayer&&state.mode==="coop"))return;
+  const wait=Math.max(prodBestUpgrade("patience"),prodBestUpgrade("wait"));
+  if(typeof state.patience==="number") state.patience=Math.min(160,state.patience+wait*5);
+}
+function prodAddCultureFoods(){
+  try{
+    const foods=[
+      ["sushi snack box","🍣","Snack"],["dumpling cup","🥟","Snack"],["arepa pocket","🫓","Grill"],["falafel wrap","🧆","Grill"],
+      ["gyro pita","🥙","Grill"],["plantain bites","🍌","Fry"],["jerk veggie slider","🍔","Grill"],["rice bowl","🍚","Fresh"],
+      ["matcha smoothie","🍵","Drink"],["horchata cup","🥛","Drink"],["baklava bite","🍯","Dessert"],["mochi cup","🍡","Dessert"],
+      ["churro bites","🥨","Dessert"],["tropical tea","🧋","Drink"],["empanada bites","🥟","Snack"],["curry puff","🥟","Snack"],
+      ["mezze plate","🫒","Fresh"],["ramen cup","🍜","Fresh"],["taco trio","🌮","Grill"],["bao bun","🥟","Snack"],
+      ["island kebab","🍢","Grill"],["kimchi rice cup","🍚","Fresh"],["mango lassi","🥭","Drink"],["coconut curry bowl","🥥","Fresh"]
+    ];
+    if(typeof BASE_FOODS!=="undefined"&&!BASE_FOODS.some(x=>x[0]==="sushi snack box"))foods.forEach(x=>BASE_FOODS.push(x));
+    if(typeof FOODS!=="undefined"&&!FOODS.some(f=>f.id==="sushi_snack_box")){
+      const start=FOODS.length;
+      foods.forEach((x,i)=>FOODS.push({id:slug(x[0]),name:x[0],emoji:x[1],station:x[2],unlock:1+Math.floor((start+i)/2.25),fields:fieldsFor(x[2])}));
+    }
+  }catch(e){}
+}
+
 function openRetryVote(){
   if(!state.multiplayer){
     if($("result"))$("result").classList.remove("active");
-    bugfixStartFreshLevel(false);
+    prodStartLevelAfterUpgrade(false);
     return;
   }
   if($("result"))$("result").classList.remove("active");
@@ -2145,7 +2381,10 @@ function rvOpenUpgradeThenStartRetry(){
   },1000);
 }
 function rvStartRetryFresh(){
-  omStartFreshAfterUpgrade(false);
+  if($("onlineUpgradeModal"))$("onlineUpgradeModal").classList.remove("active");
+  rvResetLocal();
+  sendNet("nextLevelStart",{mapId:state.mapId,mode:state.mode,retry:true});
+  startLevel(1,state.multiplayer,state.mode,state.mapId);
 }
 function rvBestTeamUpgrade(key){
   let own=0;
@@ -2167,63 +2406,10 @@ function rvAddThemeFoods(){
   }catch(e){}
 }
 
-
-function omAddOrderTimeBonus(){
-  const bonus=15;
-  if(typeof state.levelClock==="number"){
-    state.levelClock=Math.min(600,state.levelClock+bonus);
-    if($("clockVal")) $("clockVal").textContent=formatTime?formatTime(state.levelClock):state.levelClock;
-    else if($("levelClock")) $("levelClock").textContent="⏱ "+(formatTime?formatTime(state.levelClock):state.levelClock);
-  }
-}
-function omForceScrollTicketBottomSafe(){
-  setTimeout(()=>{
-    const t=$("ticket")||document.querySelector(".ticket,.orderTicket,.customerTicket,.ticketBody,.orderItems");
-    if(t) t.scrollTop=0;
-  },60);
-}
-function omStartFreshAfterUpgrade(next){
-  const targetMap = next ? Math.min(199,(state.mapId||0)+1) : (state.mapId||0);
-  if($("onlineUpgradeModal")) $("onlineUpgradeModal").classList.remove("active");
-  if($("nextVoteModal")) $("nextVoteModal").classList.remove("active");
-  if(typeof bugfixResetRound==="function") bugfixResetRound(next);
-  else if(typeof rvResetLocal==="function") rvResetLocal();
-  else {
-    state.served=0;state.coins=0;state.teamServed=0;state.tray=[];state.sharedTray=[];state.order=null;state.matchEnded=false;
-  }
-  if(state.multiplayer) sendNet("nextLevelStart",{mapId:targetMap,mode:state.mode,retry:!next});
-  startLevel(1,state.multiplayer,state.mode,targetMap);
-}
-function omUpgradeReady(){
-  sendNet("upgradeReady",{next:!!state._upgradeNext});
-  toast("Ready ✓");
-}
-function omPatchResultButtons(msg){
-  const won = (typeof bugfixDidWin==="function") ? bugfixDidWin(msg) : (!!(msg&&msg.completed));
-  const result=$("result");
-  if(!result)return;
-  [...result.querySelectorAll("button")].forEach(b=>{
-    if(/Next Level|Next/i.test(b.textContent||"")){
-      b.style.display=won?"":"none";
-      b.disabled=!won;
-      b.onclick=function(){
-        if(!won){toast("Beat the level first");return;}
-        setTimeout(()=>openNextVote(),5000);
-      };
-    }
-    if(/Retry/i.test(b.textContent||"")){
-      b.onclick=function(){openRetryVote()};
-    }
-  });
-}
-function omApplyConnectedStay(){
-  state.multiplayer=!!state.multiplayer;
-}
-
 function openNextVote(){
-  if(!bugfixDidWin({completed:true}) && state.multiplayer){toast("You must beat the level first");return;}
+  if(!prodDidWin({completed:true}) && state.multiplayer){toast("You must beat the level first");return;}
   if($("result"))$("result").classList.remove("active");
-  if(!state.multiplayer){bugfixStartFreshLevel(true);return;}
+  if(!state.multiplayer){prodStartLevelAfterUpgrade(true);return;}
   if($("nextVoteModal"))$("nextVoteModal").classList.add("active");
   let left=15;
   const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||"Chef"}`).join(" · ");
@@ -2272,7 +2458,7 @@ function buyOnlineUpgrade(k,price){
   openOnlineUpgrades();
 }
 function finishUpgradeBreak(){
-  omStartFreshAfterUpgrade(!!state._upgradeNext);
+  bugfixStartAfterUpgrade();
 }
 
 
@@ -2361,7 +2547,7 @@ function sfShowMatchEnd(msg){
 
   bugfixPrepareResult(msg);
 
-  omPatchResultButtons(msg);
+  prodPrepareResult(msg);
 
 }
 function sfOpenUpgradeBreak(){
@@ -2466,8 +2652,8 @@ function applySharedOrder(order,customerName,custEmoji,vip){
   updateVipUI(!!vip && false);
   let stage=document.querySelector(".dual-stage"); if(stage) stage.classList.toggle("vipActive",!!vip);
   state.patience=100; if($("patience"))$("patience").style.width="100%";
-  renderTicket();omForceScrollTicketBottomSafe();renderScoreboard();finalUpdateTop();
-  bugfixApplyTeamUpgrades();startCustomerTimer();
+  renderTicket();renderScoreboard();finalUpdateTop();
+  prodApplyTeamUpgrades();prodApplyTeamUpgrades();startCustomerTimer();
 }
 function applySharedTray(tray){if(!Array.isArray(tray))return;state.sharedTray=tray;if(state.multiplayer&&state.mode==="coop")state.tray=tray.map(x=>({...x}));renderTray();renderBelts();renderScoreboard();}
 function showOrderDone(name,score,correct){let b=$("doneBanner");if(b){b.textContent=(correct===false)?`${name||"Chef"} served a wrong order (+${score||0} coins, no point)`:`${name||"Chef"} completed an order! +${score||0}`;b.classList.remove("show");void b.offsetWidth;b.classList.add("show");}}
@@ -2506,7 +2692,7 @@ function newCustomer(){
   $("custEmoji").textContent=cust.face;
   $("custName").innerHTML=(cust.name+"'s Order")+(cust.vip?'<span class="vipTag">VIP</span>':'');
   updateVipUI(cust.vip);
-  renderTicket();bugfixApplyTeamUpgrades();startCustomerTimer();sendNet("progress",progressPayload());renderScoreboard();
+  renderTicket();prodApplyTeamUpgrades();prodApplyTeamUpgrades();startCustomerTimer();sendNet("progress",progressPayload());renderScoreboard();
 }
 // Co-op: build one order and hand it to the server; it echoes to BOTH players via sharedOrder.
 function generateSharedOrder(){
@@ -2554,7 +2740,7 @@ function startCustomerTimer(){
     }
   },120);
 }
-function startTimer(){bugfixApplyTeamUpgrades();startCustomerTimer();} // back-compat alias
+function startTimer(){prodApplyTeamUpgrades();prodApplyTeamUpgrades();startCustomerTimer();} // back-compat alias
 function stopTimer(){if(state.timer)clearInterval(state.timer);state.timer=null}
 
 /* ===== Level clock: whole-level countdown. Time up -> level fails. ===== */
@@ -2665,7 +2851,7 @@ function renderBelts(){
     e.textContent=f.emoji;
     e.title=f.name;
     e.style.animationDelay=-(i*.42)+"s";
-    e.style.left=(i*22)+"px";
+    e.style.left=(-28-i*22)+"px";
     $(target).appendChild(e);
   });
 }
@@ -2755,7 +2941,7 @@ function confirmLeaveMatch(){
     goHome();
   }
 }
-function resumeGame(){state.paused=false;show("play");if(state.multiplayer){updateLaneLayout();}else if(!state.timer){bugfixApplyTeamUpgrades();startCustomerTimer();}}
+function resumeGame(){state.paused=false;show("play");if(state.multiplayer){updateLaneLayout();}else if(!state.timer){prodApplyTeamUpgrades();prodApplyTeamUpgrades();startCustomerTimer();}}
 function setMachine(st){clearMachines();let id=st==="Drink"?"machDrink":(st==="Grill"||st==="Fry"?"machCook":"machPack");$(id).classList.add("active")}function clearMachines(){["machDrink","machCook","machPack"].forEach(id=>$(id).classList.remove("active"))}
 function showTutorialVote(votes={}){
   closeVote(); closeRoom();
@@ -2866,7 +3052,7 @@ function handleNet(msg){
     case "error": toast(msg.message||"Server error"); break;
   }
 }
-function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[],timeUpgrade:finalGetOnlineUpgradeLevel("time"),teamBonus:finalGetOnlineUpgradeLevel("team"),prepLevel:finalGetOnlineUpgradeLevel("sync"),upgrades:{patience:rvBestTeamUpgrade("patience"),team:rvBestTeamUpgrade("team"),upgrades:{patience:bugfixBestUpgrade("patience"),wait:bugfixBestUpgrade("wait"),team:bugfixBestUpgrade("team"),clock:state.levelClock}}}}
+function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[],timeUpgrade:finalGetOnlineUpgradeLevel("time"),teamBonus:finalGetOnlineUpgradeLevel("team"),prepLevel:finalGetOnlineUpgradeLevel("sync"),upgrades:{patience:rvBestTeamUpgrade("patience"),team:rvBestTeamUpgrade("team"),upgrades:{patience:bugfixBestUpgrade("patience"),wait:bugfixBestUpgrade("wait"),team:bugfixBestUpgrade("team"),upgrades:{patience:prodBestUpgrade("patience"),wait:prodBestUpgrade("wait"),team:prodBestUpgrade("team"),prep:prodBestUpgrade("prep")}}}}}
 function requireName(){let name=$("playerName").value.trim();if(!name){toast("Enter your chef name first");return null}localStorage.ssss_name=name;return name}
 function createRoom(mode){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first for real multiplayer");sendNet("createRoom",{mode,name})}
 function joinByCode(){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first");let code=$("joinCode").value.trim().toUpperCase();if(!code)return toast("Enter code");sendNet("joinRoom",{code,name})}

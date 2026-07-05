@@ -81,7 +81,7 @@ function startRoomLevel(room, mapId, opts = {}) {
   room.sharedCustEmoji = null;
   room.sharedVip = false;
   room.transitioningOrder = false;
-  room.nextVotes = {}; room.retryVotes={}; room.upgradeReady={};
+  room.nextVotes = {}; room.retryVotes={}; room.upgradeReady={}; room.timer=0; room.retryVotes={}; room.upgradeReady={};
   for (const p of room.players) {
     p.served = 0; p.order = [];
     if (opts.first) { p.score = 0; p.coopBonus = 0; }
@@ -97,7 +97,9 @@ function startRoomLevel(room, mapId, opts = {}) {
   broadcastRooms();
   room.levelTimer = setTimeout(() => onLevelTimeout(room), room.seconds * 1000 + 400);
   // Co-op: after the start settles, ask ONE client to generate the first shared order.
-  if (room.mode === "coop") {
+  room.timer = Math.min(600, Number(msg.timer || room.timer || 0) + 15);
+      for (const p of room.players) send(clientSocket(p.id), { type:"timerSync", timer:room.timer });
+      if (room.mode === "coop") {
     const gen = room.players[0];
     if (gen) setTimeout(() => {
       if (rooms.has(room.code) && !room.ended && room.phase === "playing" && !room.sharedOrder)
@@ -316,7 +318,7 @@ wss.on("connection", ws => {
       if (!room || room.ended || room.phase !== "playing") return;
       const player = room.players.find(p => p.id === c.id);
       if (player) {
-        player.score = Number(msg.total || player.score || 0); player.clock = Number(msg.clock || player.clock || 0);
+        player.score = Number(msg.total || player.score || 0);
         player.served = Number(msg.served || player.served || 0);
         if (msg.timeUpgrade != null) player.timeUpgrade = Number(msg.timeUpgrade) || 0;
       }
@@ -373,6 +375,7 @@ wss.on("connection", ws => {
       const count = Object.keys(room.retryVotes||{}).length;
       if (count < 2) {
         for (const p of room.players) send(clientSocket(p.id), { type:"forceHome" });
+        rooms.delete(room.code);
         broadcastRooms();
       }
     }
