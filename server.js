@@ -320,7 +320,7 @@ wss.on("connection", ws => {
         player.served = Number(msg.served || player.served || 0);
         if (msg.timeUpgrade != null) player.timeUpgrade = Number(msg.timeUpgrade) || 0;
       }
-      const goal = Number(room.goal || 4);
+      const goal = Number(room.goal || Math.min(24,4+Math.floor((room.mapId||0)/6)*2));
       const wasCorrect = msg.correct !== false; // default true for back-compat
       if (room.mode === "coop") {
         // Only correct orders advance the shared team goal.

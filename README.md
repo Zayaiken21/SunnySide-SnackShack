@@ -1,13 +1,14 @@
-# Sunny Side Snack Shack — V12 Minor UI + Sync Patch
+# Sunny Side Snack Shack — Small Final Fixes
 
-Base: uploaded V12 stability build.
+Base: V12 minor UI + sync patch.
 
-Only patched:
-- Compact old-style food menu positioning/sizing.
-- Smaller detailed tray cards.
-- Readable/scrollable order tickets.
-- Player and team served count sync after order completion.
-- Timeout means retry unless the level was completed.
-- Vote Next appears only after score screen and a 5-second delay.
-- Vote Next only applies to completed levels or a versus winner.
-- No level/theme content was changed.
+Small fixes only:
+- Food menu stays inside its space and the Hide button is removed.
+- Customer order/ticket area is scrollable/readable.
+- Result screen shows one Retry button when nobody completes the level.
+- Next Level appears only when the round is actually won/completed.
+- Vote screen shows players and opens safely.
+- Players who leave are removed through room broadcast.
+- Connected button turns green and says Connected.
+- Goals scale upward by map with more time for higher goals.
+- Added culture food items without changing existing maps/levels.

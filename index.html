@@ -884,6 +884,131 @@ button,input{pointer-events:auto!important}
   }
 }
 
+
+/* SMALL FINAL PATCH — containment, menu, ticket, connected state */
+#play{
+  overflow:hidden!important;
+}
+.playMain,.gameArea,.area{
+  overflow:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding-bottom:calc(18px + env(safe-area-inset-bottom))!important;
+}
+.foodMenu,
+.food-panel,
+.foodBrowser,
+.food-menu,
+.foodShelf,
+#foodMenu,
+#foodPanel,
+#foodBrowser{
+  position:relative!important;
+  inset:auto!important;
+  transform:none!important;
+  margin-top:6px!important;
+  max-height:24dvh!important;
+  min-height:150px!important;
+  overflow:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding:10px 10px calc(12px + env(safe-area-inset-bottom))!important;
+  z-index:5!important;
+}
+.foodMenu .header button,
+.food-panel .header button,
+.foodBrowser .header button,
+.food-menu .header button,
+.foodShelf .header button,
+button[onclick*="toggleFood"],
+button[onclick*="hideFood"],
+.hideFoodBtn,
+#hideFoodBtn{
+  display:none!important;
+}
+.foodGrid,.foods,.foodCards,.itemGrid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:6px!important;
+  padding-bottom:12px!important;
+}
+.foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{
+  min-height:64px!important;
+  max-height:78px!important;
+  padding:5px!important;
+  border-radius:16px!important;
+}
+.foodCard .emoji,.foodBtn .emoji,.foodItem .emoji,.menuItem .emoji,.food-choice .emoji{
+  font-size:22px!important;
+}
+.tray,#tray,.trayBox{
+  min-height:72px!important;
+  max-height:92px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+}
+.made,.trayItem,.trayFood{
+  min-width:66px!important;
+  width:66px!important;
+  max-width:66px!important;
+  min-height:58px!important;
+  max-height:68px!important;
+  padding:5px!important;
+  font-size:9.5px!important;
+}
+.made img,.trayItem img,.trayFood img,.made .emoji,.trayItem .emoji,.trayFood .emoji{
+  max-width:24px!important;
+  max-height:24px!important;
+  font-size:20px!important;
+}
+.ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
+  max-height:150px!important;
+  overflow:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding-bottom:8px!important;
+}
+.ticket *,.orderTicket *,.customerTicket *,#ticket *,.ticketBody *,.orderItems *{
+  white-space:normal!important;
+}
+.orderCard,.orderEntry,.ticketItem,.orderItem,.orderLine,.ticketRow{
+  min-height:auto!important;
+  line-height:1.15!important;
+}
+.statusConnected,
+.connectedBtn{
+  background:linear-gradient(#b9ffd1,#62dd83)!important;
+  color:#24462b!important;
+}
+#connectBtn.connected,
+button.connected{
+  background:linear-gradient(#b9ffd1,#62dd83)!important;
+  color:#24462b!important;
+}
+.resultActions.compactRetry button.retryDuplicate,
+.retryDuplicate{
+  display:none!important;
+}
+.voteRoster{
+  background:#fff7d7;
+  border:2px solid #fff;
+  border-radius:14px;
+  padding:8px;
+  margin:8px 0;
+  font-weight:1000;
+}
+@media(max-width:430px){
+  .foodMenu,.food-panel,.foodBrowser,.food-menu,.foodShelf,#foodMenu,#foodPanel,#foodBrowser{
+    max-height:22dvh!important;
+    min-height:140px!important;
+  }
+  .foodGrid,.foods,.foodCards,.itemGrid{gap:5px!important}
+  .foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{
+    min-height:60px!important;
+    max-height:74px!important;
+  }
+  .ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
+    max-height:138px!important;
+  }
+}
+
 </style>
 
 <script>
@@ -957,7 +1082,7 @@ window.addEventListener("error", function(e){
     </div>
     <div class="tray" id="tray"><span class="tray-title">Your Tray ➜</span></div>
     <div class="service"><button class="orderbtn" onclick="viewOrder()">📋 View Order</button><button class="servebtn" onclick="serveTray()">🔔 Serve Tray</button></div>
-    <div class="station-box" id="stationBox"><div class="section-title menuHeadRow" onclick="toggleFoodMenu()"><span>🍽 Food Menu <span id="stationHint" class="tiny">Pick a category</span></span><button class="menuCollapseBtn" onclick="event.stopPropagation();toggleFoodMenu()"><span class="chev">▾</span> <span id="menuToggleLabel">Hide</span></button></div><div class="needBar" id="needBar"></div><div class="category-tabs" id="categoryTabs"></div><div class="foods" id="foods"></div></div>
+    <div class="station-box" id="stationBox"><div class="section-title menuHeadRow" onclick="toggleFoodMenu()"><span>🍽 Food Menu <span id="stationHint" class="tiny">Pick a category</span></span></div><div class="needBar" id="needBar"></div><div class="category-tabs" id="categoryTabs"></div><div class="foods" id="foods"></div></div>
   </div>
 </section>
 
@@ -1259,7 +1384,21 @@ function buyUpgrade(id,price){
   localStorage.ssss_account_coins=accountCoins;localStorage.ssss_upgrades=JSON.stringify(upgrades);
   openUpgrades();toast("Upgrade bought ✓");
 }
-function init(){ $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
+
+function sfAddCultureFoods(){
+  try{
+    const more=[
+      ["sushi snack box","🍣","Snack"],["dumpling cup","🥟","Snack"],["arepa pocket","🫓","Grill"],["falafel wrap","🧆","Grill"],["gyro pita","🥙","Grill"],["matcha smoothie","🍵","Drink"],["horchata cup","🥛","Drink"],["baklava bite","🍯","Dessert"],["mochi cup","🍡","Dessert"],["churro bites","🥨","Dessert"],["rice bowl","🍚","Fresh"],["plantain bites","🍌","Fry"]
+    ];
+    if(typeof BASE_FOODS!=="undefined" && !BASE_FOODS.some(x=>x[0]==="sushi snack box")) more.forEach(x=>BASE_FOODS.push(x));
+    if(typeof FOODS!=="undefined" && !FOODS.some(f=>f.id==="sushi_snack_box")){
+      const start=FOODS.length;
+      more.forEach((x,i)=>FOODS.push({id:slug(x[0]),name:x[0],emoji:x[1],station:x[2],unlock:1+Math.floor((start+i)/3),fields:fieldsFor(x[2])}));
+    }
+  }catch(e){}
+}
+
+function init(){sfAddCultureFoods(); $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
 function applyWorld(mapId){
   let m=MAPS[mapId];
   document.documentElement.style.setProperty("--mapBg",m.bg);
@@ -1551,7 +1690,7 @@ function v12ShowResultPatch(msg){
 }
 
 function openNextVote(){
-  if(!v12RoundComplete() && state.multiplayer){toast("Complete the level first");return;}
+  if(!sfHasWinner({completed:true}) && state.multiplayer){toast("Complete the level first");return;}
   if($("result")) $("result").classList.remove("active");
   if(!state.multiplayer){
     if(typeof finalContinueNextLevel==="function") finalContinueNextLevel();
@@ -1560,11 +1699,12 @@ function openNextVote(){
   }
   $("nextVoteModal").classList.add("active");
   let left=15;
-  $("nextVoteInfo").textContent=`Vote next level: 0/${(net.players||[]).length||1} · ${left}s`;
+  const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||"Chef"}`).join(" · ");
+  $("nextVoteInfo").innerHTML=`Vote next level: 0/${(net.players||[]).length||1} · ${left}s<br>${roster()}`;
   clearInterval(state.nextVoteTimer);
   state.nextVoteTimer=setInterval(()=>{
     left--;
-    if($("nextVoteInfo")) $("nextVoteInfo").textContent=`Vote next level · ${left}s left`;
+    if($("nextVoteInfo")) $("nextVoteInfo").innerHTML=`Vote next level · ${left}s left<br>${roster()}`;
     if(left<=0){
       clearInterval(state.nextVoteTimer);
       sendNet("nextVoteTimeout",{});
@@ -1608,6 +1748,102 @@ function finishUpgradeBreak(){
   clearInterval(state.upgradeBreakTimer);
   $("onlineUpgradeModal").classList.remove("active");
   finalContinueNextLevel();
+}
+
+
+function sfGoalForMap(mapId){
+  return Math.min(24, 4 + Math.floor((Number(mapId||0))/6)*2);
+}
+function sfTimeForGoal(goal){
+  return Math.min(300, Math.max(100, 70 + Number(goal||4)*10));
+}
+function sfTeamServed(){
+  if(!(state.multiplayer&&state.mode==="coop")) return Number(state.served||0);
+  if(typeof state.teamServed==="number") return Number(state.teamServed||0);
+  return (net.players||[]).reduce((s,p)=>s+Number(p.served||0),0);
+}
+function sfHasWinner(msg){
+  if(msg && msg.completed) return true;
+  if(state.mode==="coop" && state.multiplayer) return sfTeamServed() >= Number(state.goal||4);
+  if(state.mode==="versus" && state.multiplayer) return !!(msg && msg.reason==="winner");
+  return Number(state.served||0) >= Number(state.goal||4);
+}
+function sfUpdateHud(){
+  if(state.multiplayer) state.goal = sfGoalForMap(state.mapId||0);
+  if($("uiServed")) $("uiServed").textContent = (state.mode==="coop"&&state.multiplayer)?sfTeamServed():Number(state.served||0);
+  if($("uiGoal")) $("uiGoal").textContent = state.goal||4;
+}
+function sfConnectedVisual(isOn){
+  const b=$("connectBtn") || document.querySelector("button[onclick*='connect']");
+  if(b){
+    b.classList.toggle("connected",!!isOn);
+    b.textContent=isOn?"Connected":"Connect";
+  }
+  const s=document.querySelector(".netStatus,.connectionStatus,#netStatus,#connStatus");
+  if(s){
+    s.classList.toggle("statusConnected",!!isOn);
+    s.textContent=isOn?"🟢 Connected":"🔴 Not Connected";
+  }
+}
+function sfFixResultButtons(completed){
+  const result=$("result");
+  if(!result)return;
+  const btns=[...result.querySelectorAll("button")];
+  const retryBtns=btns.filter(b=>/Retry/i.test(b.textContent||""));
+  retryBtns.forEach((b,i)=>{if(i>0){b.classList.add("retryDuplicate");b.style.display="none";}});
+  const nextBtns=btns.filter(b=>/Next Level|Next/i.test(b.textContent||""));
+  nextBtns.forEach(b=>{
+    b.style.display=completed?"":"none";
+    b.onclick=function(){
+      if(!sfHasWinner({completed:true})){toast("Complete the level first");return;}
+      const panel=document.querySelector("#result .panel");
+      if(panel && !panel.querySelector(".voteRoster")){
+        const note=document.createElement("div");
+        note.className="voteRoster";
+        note.textContent="Score shown — vote opens in 5 seconds.";
+        panel.insertBefore(note,b);
+      }
+      setTimeout(()=>openNextVote(),5000);
+    };
+  });
+}
+function sfResetRoundLocal(){
+  state.served=0; state.coins=0; state.teamServed=0; state.tray=[]; state.sharedTray=[];
+  state.matchEnded=false; state.order=null; state.customerName="";
+  if($("uiCoins")) $("uiCoins").textContent=0;
+  sfUpdateHud();
+  if(typeof renderTray==="function") renderTray();
+  if(typeof renderBelts==="function") renderBelts();
+}
+function sfPlacement(players){
+  let ps=[...(players||net.players||[])].sort((a,b)=>(Number(b.served||0)-Number(a.served||0))||(Number(b.score||0)-Number(a.score||0)));
+  return ps.map((p,i)=>`${i+1}. ${p.name||"Chef"} — ✅ ${p.served||0}/${state.goal||4} · 🪙 ${p.score||0}`).join("<br>");
+}
+function sfShowMatchEnd(msg){
+  stopTimer&&stopTimer();
+  state.matchEnded=true;
+  const completed=sfHasWinner(msg);
+  if($("resultTitle")) $("resultTitle").textContent = completed ? (state.mode==="coop"?"Team Complete! 🤝":"Versus Results! 🏆") : "Time's Up — Retry";
+  if($("resultText")){
+    $("resultText").innerHTML = completed
+      ? (state.mode==="coop" ? `Team completed ${msg.teamServed||sfTeamServed()}/${state.goal} orders.` : `${msg.winner||"Winner"} finished first.<br>${sfPlacement(msg.players)}`)
+      : (state.mode==="coop" ? `Time ran out at ${msg.teamServed||sfTeamServed()}/${state.goal} orders. Retry this stage together.` : `Time ran out. Nobody reached ${state.goal} orders.<br>${sfPlacement(msg.players)}`);
+  }
+  if($("unlockText")) $("unlockText").textContent = completed ? "Choose Next Level, Retry, or Back Home." : "Only correct completed orders count — retry to advance.";
+  if($("result")) $("result").classList.add("active");
+  sfFixResultButtons(completed);
+}
+function sfOpenUpgradeBreak(){
+  if($("nextVoteModal")) $("nextVoteModal").classList.remove("active");
+  if($("onlineUpgradeModal")) $("onlineUpgradeModal").classList.add("active");
+  if($("upgradeTimer")) $("upgradeTimer").textContent=30;
+  let t=30;
+  clearInterval(state.upgradeBreakTimer);
+  state.upgradeBreakTimer=setInterval(()=>{
+    t--;
+    if($("upgradeTimer")) $("upgradeTimer").textContent=t;
+    if(t<=0) finishUpgradeBreak();
+  },1000);
 }
 
 function renderScoreboard(){
@@ -2037,7 +2273,7 @@ function showSpinner(candidates=[],duration=1800){
   setTimeout(()=>clearInterval(iv),duration);
 }
 function closeSpin(){$("spinModal").classList.remove("active");}
-function connectOnline(){if(net.connected)return toast("Already connected");let name=$("playerName").value.trim();if(!name)return toast("Enter your chef name first");let proto=location.protocol==="https:"?"wss":"ws",url=(location.protocol==="file:")?"ws://localhost:3000":`${proto}://${location.host}`;try{let ws=new WebSocket(url);net.ws=ws;ws.onopen=()=>{net.connected=true;localStorage.ssss_name=name;$("netDot").classList.add("on");$("netText").textContent="Connected";sendNet("hello",{name});toast("Connected 🎮")};ws.onmessage=e=>handleNet(JSON.parse(e.data));ws.onclose=()=>{net.connected=false;$("netDot").classList.remove("on");$("netText").textContent="Not Connected";renderRooms()};ws.onerror=()=>toast("Connection failed. Deploy/run server.")}catch(e){toast("Connection blocked")}}
+function connectOnline(){if(net.connected)return toast("Already connected");let name=$("playerName").value.trim();if(!name)return toast("Enter your chef name first");let proto=location.protocol==="https:"?"wss":"ws",url=(location.protocol==="file:")?"ws://localhost:3000":`${proto}://${location.host}`;try{let ws=new WebSocket(url);net.ws=ws;ws.onopen=()=>{net.connected=true;sfConnectedVisual(true);localStorage.ssss_name=name;$("netDot").classList.add("on");$("netText").textContent="Connected";sendNet("hello",{name});toast("Connected 🎮")};ws.onmessage=e=>handleNet(JSON.parse(e.data));ws.onclose=()=>{net.connected=false;sfConnectedVisual(false);$("netDot").classList.remove("on");$("netText").textContent="Not Connected";renderRooms()};ws.onerror=()=>toast("Connection failed. Deploy/run server.")}catch(e){toast("Connection blocked")}}
 function sendNet(type,data={}){if(net.ws&&net.ws.readyState===1)net.ws.send(JSON.stringify({type,...data}))}
 function handleNet(msg){
   switch(msg.type){
@@ -2084,7 +2320,7 @@ function handleNet(msg){
       break;
     case "matchEnd":
       net.players=msg.players||net.players;
-      finalShowMatchEnd(msg);
+      sfShowMatchEnd(msg);
       break;
     case "nextVoteState":
       if($("nextVoteInfo")) $("nextVoteInfo").textContent=`Chefs ready: ${msg.count}/${msg.total} · vote within 15s`;
