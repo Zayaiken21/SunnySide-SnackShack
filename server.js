@@ -41,11 +41,42 @@ function broadcastRoom(room) {
 function finishRoom(room,winner){
   if(!room || room.ended)return;
   room.ended=true;
+  room.nextVotes={};
   const players=[...room.players].sort((a,b)=>(Number(b.served||0)-Number(a.served||0))||(Number(b.score||0)-Number(a.score||0)));
   for(const p of room.players){
-    send(clientSocket(p.id),{type:"matchEnd",winner,teamServed:room.teamServed||0,players});
+    send(clientSocket(p.id),{type:"matchEnd",winner,reason:"winner",completed:true,teamServed:room.teamServed||0,players});
   }
   broadcastRooms();
+}
+const DRINK_IDS=["lemonade","pink_lemonade","limeade","orange_juice","apple_juice","berry_punch","mango_smoothie","strawberry_smoothie","banana_smoothie","blueberry_smoothie","coconut_shake","vanilla_milkshake","hot_cocoa","mint_cocoa","rainforest_juice"];
+const CUSTOMER_NAMES=["Berry Ben","Burger Bea","Happy Harper","Taco Tia","Mango Max","Lemon Leo","Sunny Sam","Picnic Pip","Cookie Coco","Fries Finn","Smoothie Sky","Noodle Nora"];
+function makeSharedOrder(room){
+  const count=Math.min(5,2+Math.floor(((room.mapId||0)%12)/5));
+  const out=[];
+  for(let i=0;i<count;i++){
+    const id=DRINK_IDS[Math.floor(Math.random()*DRINK_IDS.length)];
+    out.push({
+      id,
+      size:["small","medium","large"][Math.floor(Math.random()*3)],
+      ice:["no ice","light ice","extra ice"][Math.floor(Math.random()*3)],
+      sweet:["low sweet","medium sweet","super sweet"][Math.floor(Math.random()*3)]
+    });
+  }
+  return out;
+}
+function makeCustomerName(){
+  return CUSTOMER_NAMES[Math.floor(Math.random()*CUSTOMER_NAMES.length)]+"'s Combo";
+}
+function broadcastSharedOrder(room){
+  if(!room.sharedOrder || !room.sharedOrder.length){
+    room.sharedOrder=makeSharedOrder(room);
+    room.sharedCustomerName=makeCustomerName();
+    room.sharedTray=[];
+  }
+  for(const p of room.players){
+    send(clientSocket(p.id),{type:"sharedOrder",order:room.sharedOrder,customerName:room.sharedCustomerName});
+    send(clientSocket(p.id),{type:"sharedTray",tray:room.sharedTray||[]});
+  }
 }
 function broadcastVotes(room) {
   const payload = { type: "votes", votes: room.votes || {} };
@@ -124,20 +155,24 @@ wss.on("connection", ws => {
     }
 
 
+
+    if (msg.type === "requestSharedOrder") {
+      const room = rooms.get(c.room);
+      if (!room || room.mode !== "coop" || room.ended) return;
+      broadcastSharedOrder(room);
+    }
+
     if (msg.type === "newSharedOrder") {
       const room = rooms.get(c.room);
       if (!room || room.mode !== "coop" || room.ended) return;
       if (room.sharedOrder && room.sharedOrder.length) {
-        for (const p of room.players) send(clientSocket(p.id), { type: "sharedOrder", order: room.sharedOrder, customerName: room.sharedCustomerName });
+        broadcastSharedOrder(room);
         return;
       }
-      room.sharedOrder = Array.isArray(msg.order) ? msg.order.slice(0, 7) : [];
-      room.sharedCustomerName = String(msg.customerName || "Team Combo").slice(0, 40);
+      room.sharedOrder = Array.isArray(msg.order) ? msg.order.slice(0, 7) : makeSharedOrder(room);
+      room.sharedCustomerName = String(msg.customerName || makeCustomerName()).slice(0, 40);
       room.sharedTray = [];
-      for (const p of room.players) {
-        send(clientSocket(p.id), { type: "sharedOrder", order: room.sharedOrder, customerName: room.sharedCustomerName });
-        send(clientSocket(p.id), { type: "sharedTray", tray: room.sharedTray });
-      }
+      broadcastSharedOrder(room);
     }
 
     if (msg.type === "tutorialVote") {
@@ -153,7 +188,7 @@ wss.on("connection", ws => {
         for (const p of room.players) send(clientSocket(p.id), { type: "spin", candidates: unique, duration: 1800 });
         setTimeout(() => {
           const selected = unique[Math.floor(Math.random() * unique.length)] || 0;
-          room.mapId = selected; room.level = 1; room.started = true; room.ended=false; room.teamServed=0; room.sharedOrder=null; room.sharedTray=[]; room.sharedCustomerName=null; room.nextVotes={}; room.goal=Math.min(30,4+Math.floor((room.mapId||0)/8)*2); room.ended=false; room.teamServed=0; room.teamServed=0;
+          room.mapId = selected; room.level = 1; room.started = true; room.ended=false; room.teamServed=0; room.sharedOrder=null; room.sharedTray=[]; room.sharedCustomerName=null; room.nextVotes={}; room.players.forEach(p=>{p.score=0;p.served=0;p.order=[]}); room.nextVotes={}; room.goal=Math.min(30,4+Math.floor((room.mapId||0)/8)*2); room.ended=false; room.teamServed=0; room.teamServed=0;
           for (const p of room.players) send(clientSocket(p.id), { type: "start", level: 1, mapId: selected, mode: room.mode, delay: 350 });
           broadcastRooms();
         }, 1900);
@@ -219,6 +254,45 @@ wss.on("connection", ws => {
       if (!room) return;
       leave(ws);
       send(ws, { type:"forceHome" });
+    }
+
+
+    if (msg.type === "nextLevelStart") {
+      const room = rooms.get(c.room);
+      if (!room) return;
+      room.mapId = Number(msg.mapId || room.mapId || 0);
+      room.mode = msg.mode || room.mode;
+      room.ended = false;
+      room.started = true;
+      room.teamServed = 0;
+      room.sharedOrder = null;
+      room.sharedTray = [];
+      room.sharedCustomerName = null;
+      room.nextVotes = {};
+      room.goal = Math.min(30,4+Math.floor((room.mapId||0)/8)*2);
+      for(const p of room.players){
+        p.score=0;
+        p.served=0;
+        p.order=[];
+        send(clientSocket(p.id), { type:"sharedState", teamServed:0 });
+      }
+      broadcastRoom(room);
+      if(room.mode==="coop") broadcastSharedOrder(room);
+    }
+
+
+    if (msg.type === "roundTimeout") {
+      const room = rooms.get(c.room);
+      if (!room || room.ended) return;
+      const players=[...room.players].sort((a,b)=>(Number(b.served||0)-Number(a.served||0))||(Number(b.score||0)-Number(a.score||0)));
+      const winner=players[0] ? players[0].name : "Chef";
+      if(room.mode==="versus"){
+        for(const p of room.players) send(clientSocket(p.id),{type:"matchEnd",winner,reason:"timeout",completed:false,teamServed:room.teamServed||0,players});
+      }else{
+        for(const p of room.players) send(clientSocket(p.id),{type:"matchEnd",winner:"Team",reason:"timeout",completed:false,teamServed:room.teamServed||0,players});
+      }
+      room.ended=true;
+      broadcastRooms();
     }
 
     if (msg.type === "progress") {
