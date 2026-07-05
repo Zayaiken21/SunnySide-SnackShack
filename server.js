@@ -95,6 +95,14 @@ function startRoomLevel(room, mapId, opts = {}) {
   broadcastRoom(room);
   broadcastRooms();
   room.levelTimer = setTimeout(() => onLevelTimeout(room), room.seconds * 1000 + 400);
+  // Co-op: after the start settles, ask ONE client to generate the first shared order.
+  if (room.mode === "coop") {
+    const gen = room.players[0];
+    if (gen) setTimeout(() => {
+      if (rooms.has(room.code) && !room.ended && room.phase === "playing" && !room.sharedOrder)
+        send(clientSocket(gen.id), { type: "requestOrder" });
+    }, (opts.delay != null ? opts.delay : 350) + 500);
+  }
 }
 
 function onLevelTimeout(room) {
@@ -145,6 +153,15 @@ function leave(ws, closing = false) {
       if (leaver) roomSend(room, { type: "playerLeft", name: leaver.name || "Chef", id: c.id });
       broadcastRoom(room);
       broadcastVotes(room);
+      // If a co-op level is mid-play and there's no active shared order, the generator may
+      // have been the one who left — re-assign order generation to a remaining player.
+      if (room.mode === "coop" && room.phase === "playing" && !room.ended && !room.sharedOrder) {
+        const gen = room.players[0];
+        if (gen) setTimeout(() => {
+          if (rooms.has(room.code) && !room.ended && room.phase === "playing" && !room.sharedOrder)
+            send(clientSocket(gen.id), { type: "requestOrder" });
+        }, 400);
+      }
       // a leaver must not stall a waiting next-vote
       if (room.phase === "results" && room.nextVotes) {
         const count = Object.keys(room.nextVotes).length;
@@ -294,7 +311,15 @@ wss.on("connection", ws => {
           send(clientSocket(p.id), { type: "sharedState", teamServed: room.teamServed, goal });
         }
         broadcastRoom(room);
-        if (room.teamServed >= goal) finishRoom(room, "Team", true);
+        if (room.teamServed >= goal) { finishRoom(room, "Team", true); }
+        else {
+          // Deterministically pick ONE client to generate the next shared order.
+          const nextGen = room.players[0];
+          if (nextGen) setTimeout(() => {
+            if (rooms.has(room.code) && !room.ended && room.phase === "playing" && !room.sharedOrder)
+              send(clientSocket(nextGen.id), { type: "requestOrder" });
+          }, 700);
+        }
       } else {
         for (const p of room.players) send(clientSocket(p.id), { type: "orderDone", name: player ? player.name : "Chef", score: Number(msg.score || 0), correct: wasCorrect });
         broadcastRoom(room);

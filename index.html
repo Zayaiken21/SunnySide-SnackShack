@@ -13,6 +13,8 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;font-family:"Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:#70ddff;touch-action:manipulation}
+/* Ensure emoji render in color across platforms (fixes boxes on some Windows/Chrome) */
+.foodbtn b,.ticket-badge,.cust,.machine b,.needChip,.optChip,.made,.beltFood,.tab,.score-card .face,.pill,.statPill{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Segoe UI Symbol","Trebuchet MS",system-ui,sans-serif}
 button,input{font-family:inherit}button{border:0;color:var(--ink);font-weight:1000;cursor:pointer}
 input[type=text]{width:100%;min-height:50px;border-radius:18px;border:3px solid #fff;background:#fffaf0;padding:10px 12px;font-weight:900;color:var(--ink);box-shadow:inset 0 -3px rgba(0,0,0,.05)}
 input[type=range]{width:100%;accent-color:#ff7ebc}
@@ -134,7 +136,23 @@ input[type=range]{width:100%;accent-color:#ff7ebc}
   display:flex!important;align-items:center!important;justify-content:center!important;
   box-shadow:0 4px 0 #c95390,0 8px 14px rgba(98,20,65,.16)!important;
 }
-.topbar .pill{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.topbar .pill{min-width:0}
+/* Play-screen HUD: map name flexes+truncates, stat pills stay full width */
+.playTopbar{display:flex!important;align-items:center!important;gap:6px!important;flex-wrap:nowrap!important}
+.playTopbar .mapPill{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:40%}
+.playTopbar .statGroup{display:flex;gap:5px;flex:0 0 auto;align-items:center}
+.playTopbar .statPill{flex:0 0 auto;white-space:nowrap;font-size:12px;padding:8px 10px;display:inline-flex;align-items:center;gap:3px}
+.playTopbar .statPill span{font-variant-numeric:tabular-nums}
+.playTopbar .levelClock{min-width:52px;justify-content:center}
+@media(min-width:760px){
+  .playTopbar .mapPill{max-width:none;flex:1 1 30%}
+  .playTopbar .statPill{font-size:14px;padding:9px 13px}
+  .playTopbar{gap:10px!important}
+}
+@media(max-width:420px){
+  .playTopbar .statPill{font-size:10.5px;padding:7px 8px}
+  .playTopbar .mapPill{max-width:34%;font-size:10.5px}
+}
 .area{
   overflow:auto!important;
   padding-bottom:calc(18px + var(--safeBottom))!important;
@@ -567,6 +585,11 @@ button,input{pointer-events:auto!important}
 .vipBanner.show{display:block;animation:vipIn .4s ease}
 @keyframes vipIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 .dual-stage.vipActive .lane:first-child{outline:3px solid #ffd166;box-shadow:0 0 0 3px rgba(255,209,102,.4),var(--soft)}
+/* Solo mode: one full-width lane (no empty "other player" slot) */
+.dual-stage.solo{grid-template-columns:1fr!important}
+.dual-stage.solo #otherLane{display:none!important}
+.dual-stage:not(.solo) #otherLane{display:grid!important}
+@media(max-width:430px){.dual-stage:not(.solo){grid-template-columns:1fr 1fr!important}.dual-stage:not(.solo) .lane:nth-child(2){display:grid!important}}
 .vipTag{display:inline-block;background:#ffd166;border:2px solid #fff;border-radius:99px;padding:1px 7px;font-size:9px;font-weight:1000;margin-left:4px}
 .foodbtn.signature{outline:2px solid #ffcf63;position:relative}
 .foodbtn.signature:after{content:"★";position:absolute;top:3px;right:5px;font-size:10px;color:#ff9a3d}
@@ -607,6 +630,28 @@ button,input{pointer-events:auto!important}
 @keyframes weatherFall{from{background-position-y:0}to{background-position-y:120px}}
 @keyframes sandBlow{from{background-position-x:0}to{background-position-x:200px}}
 @keyframes twinkle{0%,100%{opacity:.4}50%{opacity:.9}}
+/* ===== Clearer customer tickets ===== */
+.ticket-row{display:grid;grid-template-columns:22px 34px 1fr;gap:7px;align-items:center;background:#fff8e6;border:2px solid #fff;border-radius:14px;padding:6px 8px;margin:5px 0;box-shadow:0 2px 5px rgba(0,0,0,.05)}
+.ticket-num{width:22px;height:22px;border-radius:50%;background:#ffd166;color:#6a4a10;font-weight:1000;font-size:12px;display:flex;align-items:center;justify-content:center}
+.ticket-badge{width:34px;height:34px;border-radius:11px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:inset 0 -3px rgba(0,0,0,.05)}
+.ticket-body{min-width:0}
+.ticket-name{font-size:14px;font-weight:1000;color:#4a3520;line-height:1.1;margin-bottom:3px}
+.ticket-opts{display:flex;flex-wrap:wrap;gap:4px}
+.optChip{font-size:10.5px;font-weight:900;background:#eaf4ff;color:#2a5b8f;border-radius:99px;padding:2px 8px;white-space:nowrap}
+.ticket{max-height:none!important}
+@media(max-width:430px){.ticket-name{font-size:12.5px}.optChip{font-size:9.5px;padding:2px 6px}.ticket-badge{width:28px;height:28px;font-size:18px}}
+/* ===== Collapsible food menu ===== */
+.menuHeadRow{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;user-select:none}
+.menuCollapseBtn{background:#fff;border:3px solid #fff0bd;border-radius:14px;padding:6px 12px;font-weight:1000;font-size:13px;box-shadow:var(--soft);cursor:pointer;display:flex;align-items:center;gap:6px}
+.menuCollapseBtn .chev{transition:transform .2s}
+.station-box.collapsed .category-tabs,.station-box.collapsed .foods{display:none!important}
+.station-box.collapsed .menuCollapseBtn .chev{transform:rotate(-90deg)}
+.station-box.collapsed{min-height:0!important;max-height:none!important;flex:0 0 auto!important}
+.needChip{display:inline-block;background:linear-gradient(#eaffef,#a9f5c4);border:2px solid #fff;border-radius:99px;padding:3px 9px;font-size:10.5px;font-weight:1000;color:#1c6b3a;margin:2px}
+.needBar{display:flex;flex-wrap:wrap;gap:4px;margin:4px 4px 8px;padding:6px;background:rgba(255,255,255,.6);border-radius:14px}
+.needBar .needLbl{font-size:10px;font-weight:1000;opacity:.7;align-self:center;margin-right:2px}
+.foodbtn.needed{outline:3px solid #6ce183;box-shadow:0 0 0 3px rgba(108,225,131,.35),0 6px 0 rgba(139,89,22,.22)!important;animation:neededPulse 1.6s ease-in-out infinite}
+@keyframes neededPulse{50%{box-shadow:0 0 0 5px rgba(108,225,131,.5),0 6px 0 rgba(139,89,22,.22)!important}}
 </style>
 
 <script>
@@ -659,13 +704,12 @@ window.addEventListener("error", function(e){
 </section>
 
 <section class="screen play" id="play">
-  <div class="topbar"><div class="pill" id="mapName">Map</div><div class="pill">🪙 <span id="uiCoins">0</span></div><div class="pill">✅ <span id="uiServed">0</span>/<span id="uiGoal">3</span></div><div class="pill levelClock" id="levelClock">⏱ 1:00</div><button class="btn small pink pauseBtn" onclick="pauseGame()" aria-label="Pause">⏸</button></div>
+  <div class="topbar playTopbar"><div class="pill mapPill" id="mapName">Map</div><div class="statGroup"><div class="pill statPill">🪙<span id="uiCoins">0</span></div><div class="pill statPill">✅<span id="uiServed">0</span>/<span id="uiGoal">3</span></div><div class="pill statPill levelClock" id="levelClock">⏱1:00</div></div><button class="btn small pink pauseBtn" onclick="pauseGame()" aria-label="Pause">⏸</button></div>
   <div class="vipBanner" id="vipBanner">⭐ VIP CUSTOMER — serve fast for bonus coins!</div>
   <div class="area">
     <div class="scoreboard" id="scoreboard"></div>
-    <div class="dual-stage">
-      <div class="lane"><div class="cust" id="custEmoji">🙂</div><div class="ticket"><h3 id="custName">Your Customer</h3><div class="pat-wrap"><div class="pat" id="patience"></div></div><div id="ticketItems"></div></div></div>
-      <div class="lane"><div class="cust" id="otherEmoji">👀</div><div class="ticket"><h3>Other Player</h3><div id="otherOrder"><div class="ticket-item">Waiting for real player...</div></div></div></div>
+    <div class="dual-stage solo" id="dualStage">
+      <div class="lane" id="selfLane"><div class="cust" id="custEmoji">🙂</div><div class="ticket"><h3 id="custName">Your Customer</h3><div class="pat-wrap"><div class="pat" id="patience"></div></div><div id="ticketItems"></div></div></div>
     </div>
     <div class="kitchen">
       <div class="machine" id="machDrink" data-label="Drink Mixer"><span class="steam">☁️</span><b>🥤</b><div class="beltTrack" id="beltDrink"></div></div>
@@ -674,11 +718,11 @@ window.addEventListener("error", function(e){
     </div>
     <div class="tray" id="tray"><span class="tray-title">Your Tray ➜</span></div>
     <div class="service"><button class="orderbtn" onclick="viewOrder()">📋 View Order</button><button class="servebtn" onclick="serveTray()">🔔 Serve Tray</button></div>
-    <div class="station-box"><div class="section-title"><span>Food Menu For This Theme</span><span id="stationHint">Pick a category</span></div><div class="category-tabs" id="categoryTabs"></div><div class="foods" id="foods"></div></div>
+    <div class="station-box" id="stationBox"><div class="section-title menuHeadRow" onclick="toggleFoodMenu()"><span>🍽 Food Menu <span id="stationHint" class="tiny">Pick a category</span></span><button class="menuCollapseBtn" onclick="event.stopPropagation();toggleFoodMenu()"><span class="chev">▾</span> <span id="menuToggleLabel">Hide</span></button></div><div class="needBar" id="needBar"></div><div class="category-tabs" id="categoryTabs"></div><div class="foods" id="foods"></div></div>
   </div>
 </section>
 
-<section class="screen" id="pause"><div class="card menu-card"><h1>Paused ☀️</h1><button class="btn green" onclick="resumeGame()">Resume</button><button class="btn blue" onclick="restartLevel()">Restart</button><button class="btn purple" onclick="show('levels')">Map Select</button><button class="btn pink" onclick="goHome()">🏠 Home</button></div></section>
+<section class="screen" id="pause"><div class="card menu-card"><h1 id="pauseHeading">Paused ☀️</h1><p class="sub" id="pauseNote"></p><button class="btn green" onclick="resumeGame()">▶ Resume</button><button class="btn blue" id="pauseRestartBtn" onclick="restartLevel()">🔄 Restart Level</button><button class="btn pink" onclick="confirmLeaveMatch()">🚪 Leave Match</button></div></section>
 
 <div class="modal" id="voteModal"><div class="panel"><h2>Vote For A Map 🌍</h2><p class="sub">Pick a theme together. When everyone is ready, the match starts at Level 1.</p><div class="voteGrid" id="voteMaps"></div><div class="voteActions"><button class="btn blue" onclick="backToRoom()">← Back Room</button><button class="btn green" onclick="readyVote()">Ready ✓</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
 <div class="modal" id="upgradeModal"><div class="panel"><h2>Snack Shack Upgrades 🛠</h2><p class="sub">Account Coins: 🪙 <span id="accountCoins">0</span></p><div class="upgradePanel" id="upgradePanel"></div><button class="btn pink" onclick="$('upgradeModal').classList.remove('active')">Close</button></div></div>
@@ -707,12 +751,12 @@ function unlockAudio(){
 
 /*===CONTENT-PACK-V10-BEGIN===*/
 const BASE_FOODS=[
-["lemonade","🍋","Drink"],["pink lemonade","🌸","Drink"],["limeade","🟢","Drink"],["orange juice","🍊","Drink"],["apple juice","🍎","Drink"],["berry punch","🫐","Drink"],["mango smoothie","🥭","Drink"],["strawberry smoothie","🍓","Drink"],["banana smoothie","🍌","Drink"],["blueberry smoothie","🫐","Drink"],["coconut shake","🥥","Drink"],["vanilla milkshake","🥛","Drink"],["hot cocoa","☕","Drink"],["mint cocoa","🌿","Drink"],["pineapple cooler","🍍","Drink"],["matcha latte","🍵","Drink"],["thai iced tea","🧋","Drink"],["bubble tea","🧋","Drink"],["horchata","🥛","Drink"],["mango lassi","🥭","Drink"],["espresso","☕","Drink"],["galaxy shake","🌌","Drink"],["watermelon agua","🍉","Drink"],["hibiscus tea","🌺","Drink"],["kelp smoothie","🥬","Drink"],
-["classic burger","🍔","Grill"],["cheese burger","🧀","Grill"],["double burger","🍔","Grill"],["veggie burger","🥕","Grill"],["mushroom burger","🍄","Grill"],["avocado burger","🥑","Grill"],["classic hot dog","🌭","Grill"],["mustard hot dog","🌭","Grill"],["grilled cheese","🧀","Grill"],["toastie sandwich","🥪","Grill"],["street taco","🌮","Grill"],["wood-fired pizza","🍕","Grill"],["fish sandwich","🐟","Grill"],["campfire melt","🥪","Grill"],["sushi roll","🍣","Grill"],["ramen bowl","🍜","Grill"],["takoyaki","🐙","Grill"],["bbq rack","🍖","Grill"],["kebab skewer","🍢","Grill"],["bulgogi plate","🥩","Grill"],["corn dog","🌭","Grill"],["poke bowl","🍲","Grill"],["turkey leg","🍗","Grill"],["hot wings","🍗","Grill"],["quesadilla","🫓","Grill"],["naan wrap","🫓","Grill"],
+["lemonade","🍋","Drink"],["pink lemonade","🌸","Drink"],["limeade","🟢","Drink"],["orange juice","🍊","Drink"],["apple juice","🍎","Drink"],["berry punch","🍒","Drink"],["mango smoothie","🥭","Drink"],["strawberry smoothie","🍓","Drink"],["banana smoothie","🍌","Drink"],["blueberry smoothie","🟣","Drink"],["coconut shake","🥥","Drink"],["vanilla milkshake","🥛","Drink"],["hot cocoa","☕","Drink"],["mint cocoa","🌿","Drink"],["pineapple cooler","🍍","Drink"],["matcha latte","🍵","Drink"],["thai iced tea","🧡","Drink"],["bubble tea","🥤","Drink"],["horchata","🍚","Drink"],["mango lassi","🟠","Drink"],["espresso","🤎","Drink"],["galaxy shake","🌌","Drink"],["watermelon agua","🍉","Drink"],["hibiscus tea","🌺","Drink"],["kelp smoothie","🥗","Drink"],
+["classic burger","🍔","Grill"],["cheese burger","🧀","Grill"],["double burger","🍔","Grill"],["veggie burger","🥕","Grill"],["mushroom burger","🍄","Grill"],["avocado burger","🥑","Grill"],["classic hot dog","🌭","Grill"],["mustard hot dog","🌭","Grill"],["grilled cheese","🧀","Grill"],["toastie sandwich","🥪","Grill"],["street taco","🌮","Grill"],["wood-fired pizza","🍕","Grill"],["fish sandwich","🐟","Grill"],["campfire melt","🥪","Grill"],["sushi roll","🍣","Grill"],["ramen bowl","🍜","Grill"],["takoyaki","🐙","Grill"],["bbq rack","🍖","Grill"],["kebab skewer","🍢","Grill"],["bulgogi plate","🥩","Grill"],["corn dog","🌭","Grill"],["poke bowl","🍲","Grill"],["turkey leg","🍗","Grill"],["hot wings","🍗","Grill"],["quesadilla","🌯","Grill"],["naan wrap","🌯","Grill"],
 ["small fries","🍟","Fry"],["large fries","🍟","Fry"],["curly fries","🍟","Fry"],["waffle fries","🧇","Fry"],["sweet potato fries","🍠","Fry"],["tater tots","🥔","Fry"],["onion rings","🧅","Fry"],["corn fritters","🌽","Fry"],["potato wedges","🥔","Fry"],["pretzel bites","🥨","Fry"],["tempura","🍤","Fry"],["spring roll","🥟","Fry"],["churros","🥖","Fry"],["samosa","🥟","Fry"],["mozzarella sticks","🧀","Fry"],["crispy stars","⭐","Fry"],["hush puppies","🟤","Fry"],["plantain chips","🍌","Fry"],
 ["chocolate chip cookie","🍪","Dessert"],["sugar cookie","🍪","Dessert"],["sprinkle cookie","🍪","Dessert"],["brownie bite","🟫","Dessert"],["cupcake","🧁","Dessert"],["donut","🍩","Dessert"],["ice cream cup","🍨","Dessert"],["fruit cup","🍓","Dessert"],["mini pie","🥧","Dessert"],["pudding cup","🍮","Dessert"],["snow cone","🍧","Dessert"],["castle cake","🍰","Dessert"],["mochi","🍡","Dessert"],["macaron","🌈","Dessert"],["gelato","🍦","Dessert"],["jalebi","🟠","Dessert"],["bingsu","🍧","Dessert"],["flan","🍮","Dessert"],["rainbow sundae","🍨","Dessert"],["cannoli","🥐","Dessert"],
-["apple slices","🍎","Fresh"],["orange wedges","🍊","Fresh"],["melon bowl","🍉","Fresh"],["pineapple sticks","🍍","Fresh"],["mango cubes","🥭","Fresh"],["berry bowl","🫐","Fresh"],["banana bites","🍌","Fresh"],["garden salad","🥗","Fresh"],["carrot sticks","🥕","Fresh"],["fruit skewer","🍡","Fresh"],["caprese cup","🍅","Fresh"],["seaweed salad","🥬","Fresh"],["poke cup","🐟","Fresh"],["guac cup","🥑","Fresh"],["mint yogurt","🥛","Fresh"],["tropical bowl","🥭","Fresh"],
-["popcorn","🍿","Snack"],["pretzel","🥨","Snack"],["nacho cup","🧀","Snack"],["bagel bite","🥯","Snack"],["rice ball","🍙","Snack"],["waffle stack","🧇","Snack"],["pancake stack","🥞","Snack"],["cheese plate","🧀","Snack"],["party platter","🍱","Snack"],["trail mix","🥜","Snack"],["edamame","🫛","Snack"],["dumplings","🥟","Snack"],["cotton candy","🍬","Snack"],["gumball cup","🔴","Snack"],["astronaut bites","🛰️","Snack"],["polar treats","🐾","Snack"],["nachos supreme","🌶️","Snack"],["soft pretzel","🥨","Snack"]
+["apple slices","🍎","Fresh"],["orange wedges","🍊","Fresh"],["melon bowl","🍉","Fresh"],["pineapple sticks","🍍","Fresh"],["mango cubes","🥭","Fresh"],["berry bowl","🔵","Fresh"],["banana bites","🍌","Fresh"],["garden salad","🥗","Fresh"],["carrot sticks","🥕","Fresh"],["fruit skewer","🍡","Fresh"],["caprese cup","🍅","Fresh"],["seaweed salad","🥗","Fresh"],["poke cup","🐟","Fresh"],["guac cup","🥑","Fresh"],["mint yogurt","🥛","Fresh"],["tropical bowl","🥭","Fresh"],
+["popcorn","🍿","Snack"],["pretzel","🥨","Snack"],["nacho cup","🧀","Snack"],["bagel bite","🥯","Snack"],["rice ball","🍙","Snack"],["waffle stack","🧇","Snack"],["pancake stack","🥞","Snack"],["cheese plate","🧀","Snack"],["party platter","🍱","Snack"],["trail mix","🥜","Snack"],["edamame","🟢","Snack"],["dumplings","🥟","Snack"],["cotton candy","🍬","Snack"],["gumball cup","🔴","Snack"],["astronaut bites","🛰️","Snack"],["polar treats","🐾","Snack"],["nachos supreme","🌶️","Snack"],["soft pretzel","🥨","Snack"]
 ];
 
 /* Culture routing: which foods each world prefers to surface.
@@ -1050,6 +1094,7 @@ function startLevel(level=1,multi=false,mode="solo",mapId=0,opts={}){
   $("mapName").textContent=`${c.map.emoji} ${MAPS[mapId].shortName} · ${MAPS[mapId].name}`;
   $("uiCoins").textContent=0;$("uiServed").textContent=0;$("uiGoal").textContent=state.goal;
   updateVipUI(false);
+  updateLaneLayout();
   renderScoreboard();renderCategories();renderFoods();renderTray();renderBelts();
   show("play");
   startLevelClock();
@@ -1279,9 +1324,29 @@ function renderScoreboard(){
   finalUpdateTop();
 }
 function shortOrder(order){return order.map(item=>food(item.id).emoji+" "+cap(food(item.id).name)).join(" · ")}
-function renderCategories(){let c=cfg(state.level,state.mapId),cats=[...new Set(c.foods.map(f=>f.station))];$("categoryTabs").innerHTML=cats.map(cat=>`<button class="tab ${state.category===cat?"active":""}" onclick="pickCategory('${cat}')">${CAT_ICON[cat]} ${cat}</button>`).join("")}
+function toggleFoodMenu(){
+  let box=$("stationBox"); if(!box) return;
+  box.classList.toggle("collapsed");
+  let lbl=$("menuToggleLabel"); if(lbl) lbl.textContent=box.classList.contains("collapsed")?"Show":"Hide";
+}
+function orderNeeds(){
+  if(!state.order) return [];
+  let need={};
+  state.order.forEach(o=>{ need[o.id]=(need[o.id]||0)+1; });
+  (state.tray||[]).forEach(t=>{ if(need[t.id]) need[t.id]--; });
+  return Object.keys(need).filter(id=>need[id]>0);
+}
+function renderNeedBar(){
+  let bar=$("needBar"); if(!bar) return;
+  let needs=orderNeeds();
+  if(!needs.length){ bar.style.display="none"; return; }
+  bar.style.display="flex";
+  bar.innerHTML=`<span class="needLbl">Still needed:</span>`+needs.map(id=>{let f=food(id);return `<button class="needChip" onclick="jumpToFood('${id}')">${f.emoji} ${cap(f.name)}</button>`;}).join("");
+}
+function jumpToFood(id){let f=food(id); if(!f) return; if(state.category!==f.station){ pickCategory(f.station); } startBuild(id);}
+function renderCategories(){let c=cfg(state.level,state.mapId),cats=[...new Set(c.foods.map(f=>f.station))];$("categoryTabs").innerHTML=cats.map(cat=>`<button class="tab ${state.category===cat?"active":""}" onclick="pickCategory('${cat}')">${CAT_ICON[cat]} ${cat}</button>`).join("");renderNeedBar();}
 function pickCategory(cat){state.category=cat;renderCategories();renderFoods()}
-function renderFoods(){let c=cfg(state.level,state.mapId);let foods=c.foods.filter(f=>f.station===state.category);let sig=c.signatureHints||[];$("stationHint").textContent=`${foods.length} ${state.category} choices`;$("foods").innerHTML=foods.map(f=>`<button class="foodbtn ${sig.includes(f.id)?'signature':''}" onclick="startBuild('${f.id}')"><b>${f.emoji}</b>${cap(f.name)}</button>`).join("")}
+function renderFoods(){let c=cfg(state.level,state.mapId);let foods=c.foods.filter(f=>f.station===state.category);let sig=c.signatureHints||[];let needs=orderNeeds();$("stationHint").textContent=`${foods.length} ${state.category}`;$("foods").innerHTML=foods.map(f=>`<button class="foodbtn ${sig.includes(f.id)?'signature':''} ${needs.includes(f.id)?'needed':''}" onclick="startBuild('${f.id}')"><b>${f.emoji}</b>${cap(f.name)}</button>`).join("")}
 
 function _countOrderItems(list){
   let out={};
@@ -1304,6 +1369,15 @@ function _showDoneBanner(name,score){
 function food(id){return FOODS.find(f=>f.id===id)||FOODS[0]}function cap(s){return s.replace(/\b\w/g,m=>m.toUpperCase())}
 function randomFood(){let c=cfg(state.level,state.mapId),f=c.foods[Math.floor(Math.random()*c.foods.length)],it={id:f.id};f.fields.forEach(([field,vals])=>it[field]=vals[Math.floor(Math.random()*vals.length)]);return it}
 function itemText(item){let f=food(item.id);return `${f.emoji} ${cap(f.name)}: ${f.fields.map(([x])=>item[x]).join(", ")}`}
+function itemRowHTML(item,idx){
+  let f=food(item.id);
+  let chips=f.fields.map(([x])=>`<span class="optChip">${item[x]}</span>`).join("");
+  return `<div class="ticket-row"><div class="ticket-num">${idx+1}</div><div class="ticket-badge">${f.emoji}</div><div class="ticket-body"><div class="ticket-name">${cap(f.name)}</div><div class="ticket-opts">${chips}</div></div></div>`;
+}
+function renderTicket(){
+  if(!state.order){ $("ticketItems").innerHTML=""; return; }
+  $("ticketItems").innerHTML=state.order.map((i,idx)=>itemRowHTML(i,idx)).join("");
+}
 function applySharedOrder(order,customerName,custEmoji,vip){
   if(!Array.isArray(order)||!order.length)return;
   state.order=order.map(o=>{
@@ -1339,18 +1413,15 @@ function pickCustomer(mapId){
     name:names[Math.floor(Math.random()*names.length)]};
 }
 function newCustomer(){
+  // In co-op, the shared order is server-driven — never self-apply here.
+  if(state.multiplayer&&state.mode==="coop"){ generateSharedOrder(); return; }
   stopTimer();
   let c=cfg(state.level,state.mapId);
   state.tray=[];savedBuild=null;renderTray();renderBelts();
-  // VIP orders are larger (more items) for bigger reward
   let cust=pickCustomer(state.mapId);
   state.currentVip=cust.vip;
   let itemCount=(2+Math.floor(Math.random()*c.combo))+(cust.vip?1:0);
   state.order=Array.from({length:itemCount},randomFood);
-  if(state.multiplayer&&state.mode==="coop"){
-    state.customerName=cust.name+(cust.vip?" ⭐":"")+"'s Order";
-    sendNet("newSharedOrder",{order:state.order,customerName:state.customerName,custEmoji:cust.face,vip:cust.vip});
-  }
   state.patience=100;
   $("patience").style.width="100%";
   $("custEmoji").textContent=cust.face;
@@ -1358,12 +1429,24 @@ function newCustomer(){
   updateVipUI(cust.vip);
   renderTicket();startCustomerTimer();sendNet("progress",progressPayload());renderScoreboard();
 }
+// Co-op: build one order and hand it to the server; it echoes to BOTH players via sharedOrder.
+function generateSharedOrder(){
+  if(!(state.multiplayer&&state.mode==="coop")) return;
+  let c=cfg(state.level,state.mapId);
+  let cust=pickCustomer(state.mapId);
+  let itemCount=(2+Math.floor(Math.random()*c.combo))+(cust.vip?1:0);
+  let order=Array.from({length:itemCount},randomFood);
+  sendNet("newSharedOrder",{
+    order:order.map(i=>({...i})),
+    customerName:cust.name+(cust.vip?" ⭐":"")+"'s Order",
+    custEmoji:cust.face, vip:cust.vip
+  });
+}
 function updateVipUI(isVip){
   let b=$("vipBanner"), stage=document.querySelector(".dual-stage");
   if(b) b.classList.toggle("show",!!isVip && !state.multiplayer);
   if(stage) stage.classList.toggle("vipActive",!!isVip);
 }
-function renderTicket(){$("ticketItems").innerHTML=state.order.map(i=>`<div class="ticket-item">${itemText(i)}</div>`).join("")}
 /* Per-customer patience bar. Customer leaving = new customer, NO progress (like a wrong order). */
 function startCustomerTimer(){
   let total=cfg(state.level,state.mapId).patience;
@@ -1476,6 +1559,8 @@ function renderTray(){
     d.onclick=()=>startBuild(savedBuild.type);
     t.appendChild(d);
   }
+  renderNeedBar();
+  if($("foods")&&$("foods").innerHTML) renderFoods();
 }
 function renderBelts(){
   ["beltDrink","beltCook","beltPack"].forEach(id=>{ if($(id)) $(id).innerHTML=""; });
@@ -1494,7 +1579,7 @@ function renderBelts(){
     $(target).appendChild(e);
   });
 }
-function viewOrder(){$("orderFull").innerHTML=state.order.map(i=>`<div class="ticket-item" style="font-size:14px;text-align:left">${itemText(i)}</div>`).join("")+(savedBuild?`<p class="sub">Saved build: ${food(savedBuild.type).emoji} ${cap(food(savedBuild.type).name)}</p>`:"");$("orderModal").classList.add("active")}function closeOrder(){$("orderModal").classList.remove("active")}
+function viewOrder(){$("orderFull").innerHTML=(state.order||[]).map((i,idx)=>itemRowHTML(i,idx)).join("")+(savedBuild?`<p class="sub">Saved build: ${food(savedBuild.type).emoji} ${cap(food(savedBuild.type).name)}</p>`:"");$("orderModal").classList.add("active")}function closeOrder(){$("orderModal").classList.remove("active")}
 const CORRECT_THRESHOLD=60; // accuracy >= this counts as a correct order (progress toward goal)
 function serveTray(){
   if(!state.tray.length)return toast("Make the order first");
@@ -1532,8 +1617,15 @@ function serveTray(){
   sendNet("progress",progressPayload());
 
   if(state.multiplayer){
-    // server drives next order / level end; still request next customer locally as fallback
-    setTimeout(()=>{ if(!state.matchEnded) newCustomer(); },850);
+    if(state.mode==="coop"){
+      // Do NOT self-generate — the server assigns the next shared order to one client.
+      // Clear our view so the stale customer doesn't linger.
+      state.order=null; state.tray=[]; renderTray(); renderBelts();
+      if($("ticketItems")) $("ticketItems").innerHTML='<div class="ticket-item">Next order coming…</div>';
+    } else {
+      // Versus: independent orders, advance locally.
+      setTimeout(()=>{ if(!state.matchEnded) newCustomer(); },700);
+    }
   } else if(state.served>=state.goal){
     setTimeout(levelDone,700);
   } else {
@@ -1559,8 +1651,30 @@ function levelDone(){
 }
 function closeResult(){$("result").classList.remove("active","timeUpModal")}
 function restartLevel(){closeResult();startLevel(1,state.multiplayer,state.mode,state.mapId)}
-function pauseGame(){if(state.multiplayer)return toast("Can't pause online — the team keeps cooking!");state.paused=true;show("pause")}
-function resumeGame(){state.paused=false;show("play");if(!state.timer)startCustomerTimer();}
+function pauseGame(){
+  if(state.multiplayer){
+    // Online: personal menu overlay. The shared game keeps running on the server,
+    // so we don't set state.paused (which would freeze this client's rendering desync).
+    $("pauseHeading").textContent="Menu ⏸";
+    $("pauseNote").textContent="Your team keeps cooking online — resume quickly! Restart isn't available in multiplayer.";
+    let rb=$("pauseRestartBtn"); if(rb){ rb.style.display="none"; }
+    show("pause");
+  } else {
+    state.paused=true;
+    $("pauseHeading").textContent="Paused ☀️";
+    $("pauseNote").textContent="";
+    let rb=$("pauseRestartBtn"); if(rb){ rb.style.display=""; }
+    show("pause");
+  }
+}
+function confirmLeaveMatch(){
+  if(state.multiplayer){
+    if(confirm("Leave the match? Your teammates will keep playing without you.")){ goHome(); }
+  } else {
+    goHome();
+  }
+}
+function resumeGame(){state.paused=false;show("play");if(state.multiplayer){updateLaneLayout();}else if(!state.timer){startCustomerTimer();}}
 function setMachine(st){clearMachines();let id=st==="Drink"?"machDrink":(st==="Grill"||st==="Fry"?"machCook":"machPack");$(id).classList.add("active")}function clearMachines(){["machDrink","machCook","machPack"].forEach(id=>$(id).classList.remove("active"))}
 function showTutorialVote(votes={}){
   closeVote(); closeRoom();
@@ -1634,6 +1748,10 @@ function handleNet(msg){
     case "sharedOrder":
       if(state.multiplayer&&state.mode==="coop") applySharedOrder(msg.order||[],msg.customerName,msg.custEmoji,msg.vip);
       break;
+    case "requestOrder":
+      // Server designated THIS client to create the next shared co-op order.
+      if(state.multiplayer&&state.mode==="coop"&&!state.matchEnded) generateSharedOrder();
+      break;
     case "sharedTray":
       if(state.multiplayer&&state.mode==="coop") applySharedTray(msg.tray||[]);
       break;
@@ -1693,10 +1811,36 @@ function renderVoteMaps(){
 function voteMap(id){net.votes=net.votes||{};net.votes[net.id]=id;renderVoteMaps();sendNet("vote",{mapId:id});toast("Map vote saved ✓")}function readyVote(){if(!net.votes||net.votes[net.id]===undefined){voteMap(0);}sendNet("ready",{});toast("Ready — waiting for other chefs ✓")}function closeVote(){$("voteModal").classList.remove("active")}
 function backToRoom(){closeVote(); if(net.room){$("roomModal").classList.add("active"); renderRoomPlayers();}}
 function closeRoom(){$("roomModal").classList.remove("active")}
-function goHome(){closeResult(); stopTimer(); stopLevelClock(); if($("vipBanner"))$("vipBanner").classList.remove("show"); clearInterval(state.nextVoteTimer); clearInterval(state.upgradeBreakTimer); $("nextVoteModal").classList.remove("active"); $("onlineUpgradeModal").classList.remove("active"); state.multiplayer=false; state.mode="solo"; state.levelEndsAt=0; show("menu");}
+function goHome(){
+  // If we're in an online room, tell the server so our character is removed for everyone.
+  if(net.ws&&net.ws.readyState===1&&(state.multiplayer||net.room)){
+    sendNet("leaveRoom",{});
+  }
+  net.room=null; net.players=[];
+  closeResult(); stopTimer(); stopLevelClock();
+  if($("vipBanner"))$("vipBanner").classList.remove("show");
+  clearInterval(state.nextVoteTimer); clearInterval(state.upgradeBreakTimer);
+  clearTimeout(state._startFallback);
+  $("nextVoteModal").classList.remove("active"); $("onlineUpgradeModal").classList.remove("active");
+  if($("pauseRestartBtn")) $("pauseRestartBtn").style.display="";
+  state.multiplayer=false; state.mode="solo"; state.levelEndsAt=0; state.matchEnded=false;
+  show("menu");
+}
 function nextEarnedLevel(){openNextVote()}
 function leaveRoom(){sendNet("leaveRoom",{});net.room=null;net.players=[];closeRoom();closeVote();renderRooms()}
-function renderOtherOrder(){let other=(net.players||[]).find(p=>p.id!==net.id);$("otherEmoji").textContent=other?other.face||"👩‍🍳":"👀";$("otherOrder").innerHTML=other&&other.order&&other.order.length?other.order.map(i=>`<div class="ticket-item">${food(i.id).emoji} ${cap(food(i.id).name)}</div>`).join(""):'<div class="ticket-item">Waiting for real player...</div>'}
+function updateLaneLayout(){
+  // The order is shown ONCE. In co-op both players share the same order (no separate lane).
+  // In versus each player has their own game. Rival/teammate status lives in the scoreboard.
+  let dual=$("dualStage"), other=$("otherLane"), self=$("selfLane");
+  if(other) other.style.display="none";
+  if(dual) dual.classList.add("solo");
+  if(self) self.style.flex="1 1 100%";
+}
+function renderOtherOrder(){
+  // Second lane removed by design. Keep scoreboard fresh instead.
+  updateLaneLayout();
+  renderScoreboard();
+}
 
 /* peaceful music override */
 function startMusic(){
