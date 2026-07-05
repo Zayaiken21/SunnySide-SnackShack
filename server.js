@@ -50,7 +50,8 @@ function roomPayload(room) {
     players: room.players.map(p => ({
       id: p.id, name: p.name, face: p.face, score: p.score || 0, served: p.served || 0,
       order: p.order || [], coopBonus: p.coopBonus || 0,
-      timeUpgrade: p.timeUpgrade || 0, teamBonus: p.teamBonus || 0, prepLevel: p.prepLevel || 0
+      timeUpgrade: p.timeUpgrade || 0, teamBonus: p.teamBonus || 0, prepLevel: p.prepLevel || 0,
+      upgrades: p.upgrades || {}
     }))
   };
 }
@@ -456,6 +457,9 @@ wss.on("connection", ws => {
       player.order = Array.isArray(msg.order) ? msg.order.slice(0, 8) : [];
       player.coopBonus = Number(msg.coopBonus || 0);
       if (msg.timeUpgrade != null) player.timeUpgrade = Number(msg.timeUpgrade) || 0;
+      if (msg.teamBonus != null) player.teamBonus = Number(msg.teamBonus) || 0;
+      if (msg.prepLevel != null) player.prepLevel = Number(msg.prepLevel) || 0;
+      if (msg.upgrades && typeof msg.upgrades === "object") player.upgrades = msg.upgrades;
       broadcastRoom(room);
     }
 

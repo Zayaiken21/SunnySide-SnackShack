@@ -1736,16 +1736,6 @@ function startLevel(level=1,multi=false,mode="solo",mapId=0,opts={}){
 
 function teamServedCount(){
   if(!(state.multiplayer&&state.mode==="coop")) return state.served||0;
-  if(typeof state.teamServed === "number") return state.teamServed;
-  return (net.players||[]).reduce((sum,p)=>sum+(Number(p.served)||0),0);
-}
-function updateServedUI(){
-  if($("uiServed")) $("uiServed").textContent = (state.multiplayer&&state.mode==="coop") ? teamServedCount() : (state.served||0);
-}
-
-
-function teamServedCount(){
-  if(!(state.multiplayer&&state.mode==="coop")) return state.served||0;
   if(typeof state.teamServed==="number") return state.teamServed;
   return (net.players||[]).reduce((sum,p)=>sum+(Number(p.served)||0),0);
 }
@@ -2866,7 +2856,22 @@ function handleNet(msg){
     case "error": toast(msg.message||"Server error"); break;
   }
 }
-function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[],timeUpgrade:finalGetOnlineUpgradeLevel("time"),teamBonus:finalGetOnlineUpgradeLevel("team"),prepLevel:finalGetOnlineUpgradeLevel("sync"),upgrades:{patience:rvBestTeamUpgrade("patience"),team:rvBestTeamUpgrade("team"),upgrades:{patience:bugfixBestUpgrade("patience"),wait:bugfixBestUpgrade("wait"),team:bugfixBestUpgrade("team"),clock:state.levelClock}}}}
+function progressPayload(){
+  return {
+    level:state.level, mapId:state.mapId, mode:state.mode,
+    coins:state.coins, served:state.served, coopBonus:state.coopBonus,
+    order:state.order?state.order.map(i=>({id:i.id})):[],
+    timeUpgrade:finalGetOnlineUpgradeLevel("time"),
+    teamBonus:finalGetOnlineUpgradeLevel("team"),
+    prepLevel:finalGetOnlineUpgradeLevel("sync"),
+    upgrades:{
+      patience:finalGetOnlineUpgradeLevel("time"),
+      team:finalGetOnlineUpgradeLevel("team"),
+      sync:finalGetOnlineUpgradeLevel("sync"),
+      wait:finalGetOnlineUpgradeLevel("time")
+    }
+  };
+}
 function requireName(){let name=$("playerName").value.trim();if(!name){toast("Enter your chef name first");return null}localStorage.ssss_name=name;return name}
 function createRoom(mode){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first for real multiplayer");sendNet("createRoom",{mode,name})}
 function joinByCode(){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first");let code=$("joinCode").value.trim().toUpperCase();if(!code)return toast("Enter code");sendNet("joinRoom",{code,name})}
