@@ -1097,6 +1097,82 @@ button.connected{
   .ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{max-height:142px!important}
 }
 
+
+/* BUGFIX PATCH — contain order + food menu, no redesign */
+#play{
+  overflow:hidden!important;
+}
+.customerCard,.customer,.orderBox,.orderPanel{
+  overflow:hidden!important;
+}
+.ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
+  max-height:165px!important;
+  min-height:118px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding:10px 12px 16px!important;
+  box-sizing:border-box!important;
+}
+.ticket *,.orderTicket *,.customerTicket *,#ticket *,.ticketBody *,.orderItems *{
+  white-space:normal!important;
+  overflow:visible!important;
+}
+.orderLine,.ticketRow,.ticketItem,.orderItem,.orderCard,.orderEntry{
+  line-height:1.12!important;
+  min-height:auto!important;
+  max-width:100%!important;
+  word-break:normal!important;
+  box-sizing:border-box!important;
+}
+.foodMenu,#foodMenu,.food-panel,#foodPanel,.foodBrowser,#foodBrowser,.food-menu,.foodShelf{
+  position:relative!important;
+  transform:none!important;
+  inset:auto!important;
+  margin-top:6px!important;
+  max-height:26dvh!important;
+  min-height:170px!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding:10px 10px calc(22px + env(safe-area-inset-bottom))!important;
+  box-sizing:border-box!important;
+  z-index:5!important;
+}
+.foodGrid,.foods,.foodCards,.itemGrid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:7px!important;
+  padding-bottom:26px!important;
+}
+.foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{
+  min-height:66px!important;
+  max-height:82px!important;
+  padding:6px!important;
+  border-radius:17px!important;
+  box-sizing:border-box!important;
+}
+.themeMap,.mapJourney,.worldMapCompact,#levels .panel,#levels .mapJourney{
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  padding-bottom:calc(95px + env(safe-area-inset-bottom))!important;
+}
+@media(max-width:430px){
+  .ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
+    max-height:155px!important;
+    min-height:112px!important;
+  }
+  .foodMenu,#foodMenu,.food-panel,#foodPanel,.foodBrowser,#foodBrowser,.food-menu,.foodShelf{
+    max-height:25dvh!important;
+    min-height:162px!important;
+  }
+  .foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{
+    min-height:62px!important;
+    max-height:78px!important;
+  }
+}
+
 </style>
 
 <script>
@@ -1184,7 +1260,7 @@ window.addEventListener("error", function(e){
 <div class="modal" id="orderModal"><div class="panel"><h2>Customer Ticket 📋</h2><div id="orderFull"></div><button class="btn blue" onclick="closeOrder()">Back to Cooking</button></div></div>
 <div class="modal" id="roomModal"><div class="panel"><h2 id="roomTitle">Room Created</h2><div class="code" id="roomCode">ABC123</div><p id="roomInfo" class="sub"></p><div id="roomPlayers"></div><div class="roomActions"><button class="btn blue" onclick="show('multi');closeRoom()">← Match Center</button><button class="btn green" onclick="openVoting()">Vote Map</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
 <div class="modal" id="nextVoteModal"><div class="panel"><h2>Vote Next Level ➡️</h2><p class="sub">All online players must vote within 15 seconds. If you choose Home, you leave the room.</p><div class="levelVoteInfo" id="nextVoteInfo">Waiting...</div><button class="btn green" onclick="voteNextLevel()">Vote Next</button><button class="btn pink" onclick="voteReturnHome()">Go Home</button></div></div>
-<div class="modal" id="onlineUpgradeModal"><div class="panel"><h2>30 Second Upgrade Break 🛠</h2><p class="sub">Team time upgrades help everyone in co-op. Versus upgrades only help the player who owns them.</p><div class="upgradeTimer" id="upgradeTimer">30</div><div class="upgradeShopGrid" id="onlineUpgradeGrid"></div><button class="btn green" onclick="finishUpgradeBreak()">Ready Now</button></div></div>
+<div class="modal" id="onlineUpgradeModal"><div class="panel"><h2>30 Second Upgrade Break 🛠</h2><p class="sub">Team time upgrades help everyone in co-op. Versus upgrades only help the player who owns them.</p><div class="upgradeTimer" id="upgradeTimer">30</div><div class="upgradeShopGrid" id="onlineUpgradeGrid"></div><button class="btn green" onclick="bugfixUpgradeReady()">Back to Game</button></div></div>
 <div class="modal" id="result"><div class="panel"><h2 id="resultTitle">Round Complete!</h2><p id="resultText"></p><div class="progressNote" id="unlockText">Progress saved.</div><div class="homeActions"><button class="btn green" onclick="openNextVote()">Next Level</button><button class="btn blue" onclick="restartLevel()">Retry</button></div><button class="btn pink" onclick="goHome()">🏠 Back Home</button></div></div>
 <div class="orderDoneBanner" id="doneBanner">Order completed!</div><div class="toast" id="toast">Nice!</div>
 </main>
@@ -1616,6 +1692,8 @@ function showMatchResults(msg){
   confetti();
   rvPrepareEndMenu(msg);
 
+  bugfixPrepareResult(msg);
+
 }
 function continueNextLevel(){
   closeResult();
@@ -1710,6 +1788,8 @@ function finalShowMatchEnd(msg){
   const completed=!!(msg&&msg.completed)||v12RoundComplete();v12PrepareResultButtons(completed);rvPrepareEndMenu(msg);
   confetti();
   rvPrepareEndMenu(msg);
+
+  bugfixPrepareResult(msg);
 
 }
 /* After the upgrade break, ask the SERVER to start the next level (authoritative timer). */
@@ -1835,15 +1915,117 @@ function rvPrepareEndMenu(msg){
     }
   });
 }
+
+function bugfixGoal(){
+  return Number(state.goal||4);
+}
+function bugfixTeamServed(){
+  if(!(state.multiplayer&&state.mode==="coop")) return Number(state.served||0);
+  if(typeof state.teamServed==="number") return Number(state.teamServed||0);
+  return (net.players||[]).reduce((s,p)=>s+Number(p.served||0),0);
+}
+function bugfixDidWin(msg){
+  if(msg && msg.completed===true) return true;
+  if(msg && msg.completed===false) return false;
+  if(state.multiplayer && state.mode==="coop") return bugfixTeamServed()>=bugfixGoal();
+  if(state.multiplayer && state.mode==="versus") return !!(msg && msg.reason==="winner");
+  return Number(state.served||0)>=bugfixGoal();
+}
+function bugfixResetRound(toNext){
+  state.served=0;
+  state.coins=0;
+  state.teamServed=0;
+  state.tray=[];
+  state.sharedTray=[];
+  state.order=null;
+  state.customerName="";
+  state.matchEnded=false;
+  state._winnerComplete=false;
+  savedBuild=null;
+  if($("uiCoins"))$("uiCoins").textContent=0;
+  if($("uiServed"))$("uiServed").textContent=0;
+  if($("uiGoal"))$("uiGoal").textContent=state.goal||4;
+  if(typeof renderTray==="function")renderTray();
+  if(typeof renderBelts==="function")renderBelts();
+}
+function bugfixBestUpgrade(key){
+  let own=0;
+  try{own=Math.max(own,Number((JSON.parse(localStorage.ssss_upgrades||"{}")[key])||0));}catch(e){}
+  try{own=Math.max(own,Number((JSON.parse(localStorage.ssss_online_upgrades||"{}")[key])||0));}catch(e){}
+  if(!(state.multiplayer&&state.mode==="coop")) return own;
+  return Math.max(own,...(net.players||[]).map(p=>Number((p.upgrades&&p.upgrades[key])||p[key]||0)),0);
+}
+function bugfixApplyTeamUpgrades(){
+  if(!(state.multiplayer&&state.mode==="coop"))return;
+  const wait=bugfixBestUpgrade("patience")||bugfixBestUpgrade("wait")||0;
+  if(typeof state.patience==="number") state.patience=Math.min(150,state.patience + wait*4);
+}
+function bugfixPrepareResult(msg){
+  const won=bugfixDidWin(msg);
+  const result=$("result");
+  if(!result)return;
+  const buttons=[...result.querySelectorAll("button")];
+  buttons.forEach(b=>{
+    const txt=(b.textContent||"").trim();
+    if(/Next Level|Next/i.test(txt)){
+      b.style.display=won?"":"none";
+      b.disabled=!won;
+      b.onclick=function(){
+        if(!won){toast("You must beat the level first");return;}
+        setTimeout(()=>openNextVote(),5000);
+      };
+    }
+    if(/Retry/i.test(txt)){
+      b.style.display="";
+      b.disabled=false;
+      b.onclick=function(){openRetryVote();};
+    }
+  });
+  const retryBtns=buttons.filter(b=>/Retry/i.test(b.textContent||""));
+  retryBtns.forEach((b,i)=>{if(i>0){b.style.display="none";b.classList.add("retryDuplicate");}});
+}
+function bugfixStartFreshLevel(next){
+  const targetMap = next ? Math.min(199,(state.mapId||0)+1) : (state.mapId||0);
+  if(state.multiplayer) sendNet("nextLevelStart",{mapId:targetMap,mode:state.mode,retry:!next});
+  bugfixResetRound(next);
+  startLevel(1,state.multiplayer,state.mode,targetMap);
+}
+function bugfixOpenUpgradeBreak(next){
+  state._upgradeNext = !!next;
+  if($("nextVoteModal"))$("nextVoteModal").classList.remove("active");
+  if($("onlineUpgradeModal"))$("onlineUpgradeModal").classList.add("active");
+  let t=30;
+  if($("upgradeTimer"))$("upgradeTimer").textContent=t;
+  clearInterval(state.upgradeBreakTimer);
+  state._readyAfterUpgrade=false;
+  state.upgradeBreakTimer=setInterval(()=>{
+    t--;
+    if($("upgradeTimer"))$("upgradeTimer").textContent=t;
+    if(t<=0){
+      clearInterval(state.upgradeBreakTimer);
+      bugfixStartAfterUpgrade();
+    }
+  },1000);
+}
+function bugfixStartAfterUpgrade(){
+  if($("onlineUpgradeModal"))$("onlineUpgradeModal").classList.remove("active");
+  bugfixStartFreshLevel(!!state._upgradeNext);
+}
+function bugfixUpgradeReady(){
+  state._readyAfterUpgrade=true;
+  sendNet("upgradeReady",{next:!!state._upgradeNext});
+  toast("Ready ✓");
+}
+
 function openRetryVote(){
   if(!state.multiplayer){
     if($("result"))$("result").classList.remove("active");
-    rvResetLocal();
-    startLevel(1,false,"solo",state.mapId);
+    bugfixStartFreshLevel(false);
     return;
   }
   if($("result"))$("result").classList.remove("active");
-  if($("nextVoteModal"))$("nextVoteModal").classList.add("active");[...document.querySelectorAll("#nextVoteModal button")].forEach(b=>{if(/Vote Next/i.test(b.textContent||"")){b.textContent="Vote Retry";b.onclick=voteRetry;}});
+  if($("nextVoteModal"))$("nextVoteModal").classList.add("active");
+  [...document.querySelectorAll("#nextVoteModal button")].forEach(b=>{if(/Vote Next|Vote Retry/i.test(b.textContent||"")){b.textContent="Vote Retry";b.onclick=voteRetry;}});
   let left=15;
   const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||"Chef"}`).join(" · ");
   if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote retry: 0/${(net.players||[]).length||1} · ${left}s<br>${roster()}`;
@@ -1896,25 +2078,21 @@ function rvAddThemeFoods(){
 }
 
 function openNextVote(){
-  if(!sfHasWinner({completed:true}) && state.multiplayer){toast("Complete the level first");return;}
-  if($("result")) $("result").classList.remove("active");
-  if(!state.multiplayer){
-    if(typeof finalContinueNextLevel==="function") finalContinueNextLevel();
-    else if(typeof continueNextLevel==="function") continueNextLevel();
-    return;
-  }
-  $("nextVoteModal").classList.add("active");
+  if(!bugfixDidWin({completed:true}) && state.multiplayer){toast("You must beat the level first");return;}
+  if($("result"))$("result").classList.remove("active");
+  if(!state.multiplayer){bugfixStartFreshLevel(true);return;}
+  if($("nextVoteModal"))$("nextVoteModal").classList.add("active");
   let left=15;
   const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||"Chef"}`).join(" · ");
-  $("nextVoteInfo").innerHTML=`Vote next level: 0/${(net.players||[]).length||1} · ${left}s<br>${roster()}`;
+  if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote next level: 0/${(net.players||[]).length||1} · ${left}s<br>${roster()}`;
   clearInterval(state.nextVoteTimer);
   state.nextVoteTimer=setInterval(()=>{
     left--;
-    if($("nextVoteInfo")) $("nextVoteInfo").innerHTML=`Vote next level · ${left}s left<br>${roster()}`;
+    if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote next level · ${left}s left<br>${roster()}`;
     if(left<=0){
       clearInterval(state.nextVoteTimer);
       sendNet("nextVoteTimeout",{});
-      if(typeof finalGoHomeClean==="function") finalGoHomeClean(); else goHome();
+      if(typeof finalGoHomeClean==="function")finalGoHomeClean();else goHome();
     }
   },1000);
 }
@@ -1951,9 +2129,7 @@ function buyOnlineUpgrade(k,price){
   openOnlineUpgrades();
 }
 function finishUpgradeBreak(){
-  clearInterval(state.upgradeBreakTimer);
-  $("onlineUpgradeModal").classList.remove("active");
-  finalContinueNextLevel();
+  bugfixStartAfterUpgrade();
 }
 
 
@@ -2039,6 +2215,8 @@ function sfShowMatchEnd(msg){
   if($("result")) $("result").classList.add("active");
   sfFixResultButtons(completed);rvPrepareEndMenu(msg);
   rvPrepareEndMenu(msg);
+
+  bugfixPrepareResult(msg);
 
 }
 function sfOpenUpgradeBreak(){
@@ -2144,7 +2322,7 @@ function applySharedOrder(order,customerName,custEmoji,vip){
   let stage=document.querySelector(".dual-stage"); if(stage) stage.classList.toggle("vipActive",!!vip);
   state.patience=100; if($("patience"))$("patience").style.width="100%";
   renderTicket();renderScoreboard();finalUpdateTop();
-  startCustomerTimer();
+  bugfixApplyTeamUpgrades();startCustomerTimer();
 }
 function applySharedTray(tray){if(!Array.isArray(tray))return;state.sharedTray=tray;if(state.multiplayer&&state.mode==="coop")state.tray=tray.map(x=>({...x}));renderTray();renderBelts();renderScoreboard();}
 function showOrderDone(name,score,correct){let b=$("doneBanner");if(b){b.textContent=(correct===false)?`${name||"Chef"} served a wrong order (+${score||0} coins, no point)`:`${name||"Chef"} completed an order! +${score||0}`;b.classList.remove("show");void b.offsetWidth;b.classList.add("show");}}
@@ -2183,7 +2361,7 @@ function newCustomer(){
   $("custEmoji").textContent=cust.face;
   $("custName").innerHTML=(cust.name+"'s Order")+(cust.vip?'<span class="vipTag">VIP</span>':'');
   updateVipUI(cust.vip);
-  renderTicket();startCustomerTimer();sendNet("progress",progressPayload());renderScoreboard();
+  renderTicket();bugfixApplyTeamUpgrades();startCustomerTimer();sendNet("progress",progressPayload());renderScoreboard();
 }
 // Co-op: build one order and hand it to the server; it echoes to BOTH players via sharedOrder.
 function generateSharedOrder(){
@@ -2231,7 +2409,7 @@ function startCustomerTimer(){
     }
   },120);
 }
-function startTimer(){startCustomerTimer();} // back-compat alias
+function startTimer(){bugfixApplyTeamUpgrades();startCustomerTimer();} // back-compat alias
 function stopTimer(){if(state.timer)clearInterval(state.timer);state.timer=null}
 
 /* ===== Level clock: whole-level countdown. Time up -> level fails. ===== */
@@ -2432,7 +2610,7 @@ function confirmLeaveMatch(){
     goHome();
   }
 }
-function resumeGame(){state.paused=false;show("play");if(state.multiplayer){updateLaneLayout();}else if(!state.timer){startCustomerTimer();}}
+function resumeGame(){state.paused=false;show("play");if(state.multiplayer){updateLaneLayout();}else if(!state.timer){bugfixApplyTeamUpgrades();startCustomerTimer();}}
 function setMachine(st){clearMachines();let id=st==="Drink"?"machDrink":(st==="Grill"||st==="Fry"?"machCook":"machPack");$(id).classList.add("active")}function clearMachines(){["machDrink","machCook","machPack"].forEach(id=>$(id).classList.remove("active"))}
 function showTutorialVote(votes={}){
   closeVote(); closeRoom();
@@ -2543,7 +2721,7 @@ function handleNet(msg){
     case "error": toast(msg.message||"Server error"); break;
   }
 }
-function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[],timeUpgrade:finalGetOnlineUpgradeLevel("time"),teamBonus:finalGetOnlineUpgradeLevel("team"),prepLevel:finalGetOnlineUpgradeLevel("sync"),upgrades:{patience:rvBestTeamUpgrade("patience"),team:rvBestTeamUpgrade("team")}}}
+function progressPayload(){return{level:state.level,mapId:state.mapId,mode:state.mode,coins:state.coins,served:state.served,coopBonus:state.coopBonus,order:state.order?state.order.map(i=>({id:i.id})):[],timeUpgrade:finalGetOnlineUpgradeLevel("time"),teamBonus:finalGetOnlineUpgradeLevel("team"),prepLevel:finalGetOnlineUpgradeLevel("sync"),upgrades:{patience:rvBestTeamUpgrade("patience"),team:rvBestTeamUpgrade("team"),upgrades:{patience:bugfixBestUpgrade("patience"),wait:bugfixBestUpgrade("wait"),team:bugfixBestUpgrade("team")}}}}
 function requireName(){let name=$("playerName").value.trim();if(!name){toast("Enter your chef name first");return null}localStorage.ssss_name=name;return name}
 function createRoom(mode){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first for real multiplayer");sendNet("createRoom",{mode,name})}
 function joinByCode(){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first");let code=$("joinCode").value.trim().toUpperCase();if(!code)return toast("Enter code");sendNet("joinRoom",{code,name})}

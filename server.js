@@ -81,7 +81,7 @@ function startRoomLevel(room, mapId, opts = {}) {
   room.sharedCustEmoji = null;
   room.sharedVip = false;
   room.transitioningOrder = false;
-  room.nextVotes = {}; room.retryVotes={};
+  room.nextVotes = {}; room.retryVotes={}; room.upgradeReady={};
   for (const p of room.players) {
     p.served = 0; p.order = [];
     if (opts.first) { p.score = 0; p.coopBonus = 0; }
@@ -433,6 +433,21 @@ wss.on("connection", ws => {
         send(clientSocket(p.id),{type:"matchEnd",winner,reason:"timeout",completed:false,teamServed:room.teamServed||0,players});
       }
       broadcastRooms();
+    }
+
+
+    if (msg.type === "upgradeReady") {
+      const room = rooms.get(c.room);
+      if (!room) return;
+      room.upgradeReady = room.upgradeReady || {};
+      room.upgradeReady[c.id] = true;
+      room.upgradeNext = !!msg.next;
+      const count = Object.keys(room.upgradeReady).length;
+      const total = room.players.length;
+      if (count >= total) {
+        for (const p of room.players) send(clientSocket(p.id), { type:"startAfterUpgrade", next:room.upgradeNext });
+        room.upgradeReady = {};
+      }
     }
 
     if (msg.type === "progress") {
