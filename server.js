@@ -364,7 +364,7 @@ wss.on("connection", ws => {
       const count = Object.keys(room.retryVotes).length;
       const total = room.players.length;
       for (const p of room.players) send(clientSocket(p.id), { type:"nextVoteState", count, total, mode:"retry" });
-      if (count >= 2) {
+      if (count >= Math.min(2,total)) {
         for (const p of room.players) send(clientSocket(p.id), { type:"openUpgradeBreak", retry:true });
       }
     }
@@ -372,7 +372,7 @@ wss.on("connection", ws => {
       const room = rooms.get(c.room);
       if (!room) return;
       const count = Object.keys(room.retryVotes||{}).length;
-      if (count < 2) {
+      if (count < Math.min(2, room.players.length)) {
         for (const p of room.players) send(clientSocket(p.id), { type:"forceHome" });
         broadcastRooms();
       }
@@ -392,14 +392,19 @@ wss.on("connection", ws => {
       const total = room.players.length;
       for (const p of room.players) send(clientSocket(p.id), { type: "nextVoteState", count, total });
       if (count >= total && total > 0) {
-        for (const p of room.players) send(clientSocket(p.id), { type: "openUpgradeBreak" });
+        for (const p of room.players) send(clientSocket(p.id), { type: "openUpgradeBreak", retry:false });
       }
     }
     if (msg.type === "nextVoteTimeout") {
       const room = rooms.get(c.room);
       if (!room) return;
-      leave(ws);
-      send(ws, { type: "forceHome" });
+      const count = Object.keys(room.nextVotes||{}).length;
+      if (count >= room.players.length && room.players.length > 0) {
+        for (const p of room.players) send(clientSocket(p.id), { type: "openUpgradeBreak", retry:false });
+      } else {
+        leave(ws);
+        send(ws, { type: "forceHome" });
+      }
     }
 
     /* ===== Team upgrade purchase during the 30s break (co-op shares levels) ===== */
@@ -447,6 +452,18 @@ wss.on("connection", ws => {
       if (count >= total) {
         for (const p of room.players) send(clientSocket(p.id), { type:"startAfterUpgrade", next:room.upgradeNext });
         room.upgradeReady = {};
+      }
+    }
+
+
+    if (msg.type === "addTime") {
+      const room = rooms.get(c.room); if (!room) return;
+      const seconds = Math.max(0, Math.min(60, Number(msg.seconds||30)));
+      if (room.mode === "coop") {
+        room.levelEndsAt = (room.levelEndsAt||Date.now()) + seconds*1000;
+        roomSend(room, { type:"timerSync", endsAt:room.levelEndsAt });
+      } else {
+        send(ws, { type:"timerSync", endsAt:(Date.now()+seconds*1000) });
       }
     }
 

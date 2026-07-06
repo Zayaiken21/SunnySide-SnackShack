@@ -1280,6 +1280,7 @@ window.addEventListener("error", function(e){
 });
 </script>
 
+<link rel="stylesheet" href="sunny-fixes.css">
 </head>
 <body>
 <main class="game" id="game">
@@ -2965,6 +2966,131 @@ function stopMusic(){if(audio.beat)clearInterval(audio.beat);audio.beat=null;if(
 function setVolume(v){volume=Number(v)/100;localStorage.ssss_volume=String(v);if(audio.master)audio.master.gain.value=volume*.08}
 function beep(freq=520,dur=.05){if(muted)return;try{if(!audio.ctx)startMusic();let c=audio.ctx,o=c.createOscillator(),g=c.createGain();o.frequency.value=freq;g.gain.setValueAtTime(volume*.08,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur)}catch(e){}}
 function toast(m){let t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1300)}function burst(m){toast(m);beep(800,.08);for(let i=0;i<8;i++)spawn(70+Math.random()*520,190+Math.random()*90)}function confetti(){for(let i=0;i<36;i++)setTimeout(()=>spawn(Math.random()*innerWidth,430+Math.random()*160),i*22)}function spawn(x,y){let e=document.createElement("div");e.className="confetti";e.textContent=["✨","🍋","⭐","💛","🌸"][Math.floor(Math.random()*5)];e.style.left=x+"px";e.style.top=y+"px";$("game").appendChild(e);setTimeout(()=>e.remove(),1000)}
+
+/* ===== FINAL USER TEST7 PATCH: targeted behavior fixes ===== */
+(function(){
+  const GROUPS={Drink:['Drink'],Food:['Grill','Fry','Fresh'],Snack:['Snack','Dessert']};
+  const GROUP_ICON={Drink:'🥤',Food:'🍔',Snack:'🍿'};
+  window.fixCompleted=()=>Number(localStorage.ssss_completed_levels||0);
+  window.fixWin=()=>Number(state.served||0)>=Number(state.goal||4) || (state.multiplayer&&state.mode==='coop'&&teamServedCount()>=Number(state.goal||4));
+  window.renderNeedBar=function(){const b=$('needBar'); if(b){b.style.display='none'; b.innerHTML='';}};
+  window.renderCategories=function(){
+    const c=cfg(state.level,state.mapId); const available=new Set(c.foods.map(f=>f.station));
+    const groups=Object.keys(GROUPS).filter(g=>GROUPS[g].some(s=>available.has(s)));
+    if(!groups.includes(state.menuGroup)) state.menuGroup=groups[0]||'Drink';
+    state.category=state.menuGroup;
+    $('categoryTabs').innerHTML=groups.map(g=>`<button class="tab ${state.menuGroup===g?'active':''}" onclick="pickCategory('${g}')">${GROUP_ICON[g]} ${g}</button>`).join('');
+    renderNeedBar();
+  };
+  window.pickCategory=function(g){state.menuGroup=g;state.category=g;renderCategories();renderFoods();};
+  window.renderFoods=function(){
+    const c=cfg(state.level,state.mapId); const group=state.menuGroup||state.category||'Drink'; const stations=GROUPS[group]||[group];
+    const foods=c.foods.filter(f=>stations.includes(f.station)); const sig=c.signatureHints||[];
+    $('stationHint').textContent=`${foods.length} ${group}`;
+    $('foods').innerHTML=foods.map(f=>`<button class="foodbtn ${sig.includes(f.id)?'signature':''}" onclick="startBuild('${f.id}')"><b>${f.emoji}</b>${cap(f.name)}</button>`).join('');
+  };
+  window.jumpToFood=function(id){let f=food(id); if(!f)return; let group=Object.keys(GROUPS).find(g=>GROUPS[g].includes(f.station))||f.station; if(state.menuGroup!==group)pickCategory(group); startBuild(id);};
+  const oldItemRow=window.itemRowHTML;
+  if(oldItemRow){window.itemRowHTML=function(i,idx){return oldItemRow(i,idx).replace('<div class="ticket-item">','<div class="ticket-item" tabindex="0">');};}
+  window.showTimeUp=function(){
+    stopTimer();stopLevelClock();
+    $('resultTitle').textContent='⏱ Time\'s Up!';
+    $('resultText').innerHTML=`You served <b>${state.served}/${state.goal}</b> orders on ${MAPS[state.mapId].emoji} ${MAPS[state.mapId].name}.<br>Try again to beat the clock!`;
+    if($('unlockText')) $('unlockText').textContent='Tip: serve correct orders quickly — only correct orders count toward the goal.';
+    const r=$('result'); r.classList.add('active','timeUpModal','result-lost'); r.classList.remove('result-win');
+    [...r.querySelectorAll('button')].forEach(b=>{if(/Next Level|Next/i.test(b.textContent||'')){b.style.display='none';b.disabled=true;} if(/Retry/i.test(b.textContent||'')){b.style.display='';b.disabled=false;b.onclick=()=>restartLevel();}});
+  };
+  const oldLevelDone=window.levelDone;
+  window.levelDone=function(){
+    oldLevelDone();
+    const r=$('result'); r.classList.add('result-win'); r.classList.remove('result-lost','timeUpModal');
+    [...r.querySelectorAll('button')].forEach(b=>{if(/Next Level|Next/i.test(b.textContent||'')){b.style.display='';b.disabled=false;b.onclick=()=>openNextVote();} if(/Retry/i.test(b.textContent||'')){b.style.display='';b.disabled=false;b.onclick=()=>restartLevel();}});
+  };
+  window.finalBestTeamTimeUpgrade=function(){
+    if(!(state.multiplayer&&state.mode==='coop')) return state.multiplayer?finalGetOnlineUpgradeLevel('time'):(upgrades.patience||0);
+    const mine=finalGetOnlineUpgradeLevel('time');
+    const from=(net.players||[]).map(p=>Math.max(Number(p.timeUpgrade||0),Number((p.upgrades&&p.upgrades.time)||0),Number((p.upgrades&&p.upgrades.patience)||0),Number((p.upgrades&&p.upgrades.wait)||0)));
+    return Math.max(mine,...from,0);
+  };
+  window.finalOnlineTeamBonusLevel=function(){
+    if(!state.multiplayer) return upgrades.team||0;
+    const mine=finalGetOnlineUpgradeLevel('team');
+    if(state.mode!=='coop') return mine;
+    return Math.max(mine,...(net.players||[]).map(p=>Math.max(Number(p.teamBonus||0),Number((p.upgrades&&p.upgrades.team)||0))),0);
+  };
+  window.finalOnlinePrepLevel=function(){
+    if(!state.multiplayer) return upgrades.prep||0;
+    const mine=finalGetOnlineUpgradeLevel('sync');
+    if(state.mode!=='coop') return mine;
+    return Math.max(mine,...(net.players||[]).map(p=>Math.max(Number(p.prepLevel||0),Number((p.upgrades&&p.upgrades.sync)||0))),0);
+  };
+  const oldServe=window.serveTray;
+  window.serveTray=function(){
+    const before=Number(state.served||0);
+    oldServe();
+    setTimeout(()=>{
+      if(Number(state.served||0)>before){
+        if(state.multiplayer&&state.mode==='versus') addLocalLevelSeconds(30,false);
+        else addLocalLevelSeconds(30,true);
+      }
+    },40);
+  };
+  window.addLocalLevelSeconds=function(sec,share){
+    sec=Number(sec||30);
+    if(state.multiplayer&&state.levelEndsAt){state.levelEndsAt+=sec*1000;} else {state.levelClockDur=(state.levelClockDur||baseSecondsForMap(state.mapId))+sec;}
+    if(share&&state.multiplayer) sendNet('addTime',{seconds:sec,versusPersonal:state.mode==='versus'});
+  };
+  window.openNextVote=function(){
+    if(!fixWin()){toast('Beat this stage first');return;}
+    if($('result'))$('result').classList.remove('active');
+    if(!state.multiplayer){continueNextLevel();return;}
+    state._upgradeNext=true; openVoteModal('next');
+  };
+  window.openRetryVote=function(){
+    if($('result'))$('result').classList.remove('active');
+    if(!state.multiplayer){restartLevel();return;}
+    state._upgradeNext=false; openVoteModal('retry');
+  };
+  window.openVoteModal=function(kind){
+    const modal=$('nextVoteModal'); modal.classList.add('active');
+    const btn=modal.querySelector('button.green'); btn.textContent=kind==='retry'?'Vote Retry':'Vote Next'; btn.onclick=kind==='retry'?voteRetry:voteNextLevel;
+    let left=15; const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||'Chef'}`).join(' · ')||'Solo chef in room';
+    $('nextVoteInfo').innerHTML=`Vote ${kind}: 0/${Math.max(1,(net.players||[]).length)} · ${left}s<br>${roster()}`;
+    clearInterval(state.nextVoteTimer); state.nextVoteTimer=setInterval(()=>{left--; $('nextVoteInfo').innerHTML=`Vote ${kind} · ${left}s left<br>${roster()}`; if(left<=0){clearInterval(state.nextVoteTimer); sendNet(kind==='retry'?'retryVoteTimeout':'nextVoteTimeout',{});}},1000);
+  };
+  window.openOnlineUpgrades=function(){
+    $('nextVoteModal').classList.remove('active'); $('onlineUpgradeModal').classList.add('active');
+    const shop=[['time','Customer Time Boost','Co-op shares the highest teammate level. Versus uses only yours.'],['team','Team Bonus Counter','Adds more co-op bonus coins online.'],['vip','VIP Bell','Improves online VIP rewards.'],['sync','Shared Prep Table','Team-focused online prep upgrade.']];
+    $('onlineUpgradeGrid').innerHTML=shop.map(([k,n,d])=>{let lv=finalGetOnlineUpgradeLevel(k),price=75+lv*90;return `<div class="upgradeShopCard"><strong>${n} Lv.${lv}</strong><small>${d}</small><button class="btn small green" onclick="buyOnlineUpgrade('${k}',${price})">Buy ${price}</button></div>`}).join('');
+    let t=30; $('upgradeTimer').textContent=t; clearInterval(state.upgradeBreakTimer); state.upgradeBreakTimer=setInterval(()=>{t--; $('upgradeTimer').textContent=t; if(t<=0){clearInterval(state.upgradeBreakTimer);finishUpgradeBreak();}},1000);
+  };
+  window.finishUpgradeBreak=function(){
+    if(!state.multiplayer){state._upgradeNext?continueNextLevel():restartLevel();return;}
+    sendNet('upgradeReady',{next:!!state._upgradeNext}); toast('Ready — waiting for chefs ✓');
+  };
+  window.omUpgradeReady=window.finishUpgradeBreak;
+  window.bugfixUpgradeReady=window.finishUpgradeBreak;
+  window.voteReturnHome=function(){sendNet('nextVote',{choice:'home'});goHome();};
+  const oldHandle=window.handleNet;
+  window.handleNet=function(msg){
+    if(msg.type==='openUpgradeBreak'){state._upgradeNext=!msg.retry;openOnlineUpgrades();return;}
+    if(msg.type==='startAfterUpgrade'){ $('onlineUpgradeModal').classList.remove('active'); msg.next?continueNextLevel():restartLevel();return;}
+    if(msg.type==='timerSync'){ if(state.multiplayer&&msg.endsAt)state.levelEndsAt=msg.endsAt; return; }
+    oldHandle(msg);
+    if(msg.type==='matchEnd'){
+      const won=!!(msg.win||msg.passed||msg.completed);
+      const r=$('result'); r.classList.toggle('result-win',won); r.classList.toggle('result-lost',!won);
+      [...r.querySelectorAll('button')].forEach(b=>{if(/Next Level|Next/i.test(b.textContent||'')){b.style.display=won?'':'none';b.disabled=!won;b.onclick=()=>openNextVote();} if(/Retry/i.test(b.textContent||'')){b.onclick=()=>openRetryVote();}});
+    }
+  };
+  const oldStartLevel=window.startLevel;
+  window.startLevel=function(level=1,multi=false,mode='solo',mapId=0,opts={}){
+    oldStartLevel(level,multi,mode,mapId,opts);
+    state.menuGroup=null; renderCategories(); renderFoods();
+    setTimeout(()=>{const t=document.querySelector('.ticket'); if(t)t.scrollTop=0;},80);
+  };
+})();
+
 init();
 </script>
 </body>
