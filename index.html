@@ -1263,59 +1263,6 @@ button.connected{
   }
 }
 
-
-/* TEST7 FULL DEBUG FIX — no redesign, only broken systems */
-:root{--ticketH:clamp(195px,26dvh,310px);--foodH:clamp(300px,39dvh,430px)}
-#play{overflow:hidden!important}
-.playMain,.gameArea,.area,.screen.active{-webkit-overflow-scrolling:touch!important}
-.customerCard,.customer,.orderBox,.orderPanel{overflow:visible!important}
-.ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{
-  height:var(--ticketH)!important;max-height:var(--ticketH)!important;min-height:185px!important;
-  overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;
-  padding:14px 14px 82px!important;box-sizing:border-box!important;scroll-padding-bottom:96px!important;overscroll-behavior:contain!important
-}
-.ticket:after,.orderTicket:after,.customerTicket:after,#ticket:after,.ticketBody:after,.orderItems:after{content:"";display:block;height:76px;flex:0 0 76px}
-.ticket *,.orderTicket *,.customerTicket *,#ticket *,.ticketBody *,.orderItems *{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
-.orderLine,.ticketRow,.ticketItem,.orderItem,.orderCard,.orderEntry{
-  display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:6px!important;width:100%!important;max-width:100%!important;
-  min-height:auto!important;line-height:1.16!important;box-sizing:border-box!important;margin-bottom:8px!important;padding:8px!important
-}
-.foodMenu,#foodMenu,.food-panel,#foodPanel,.foodBrowser,#foodBrowser,.food-menu,.foodShelf{
-  position:relative!important;inset:auto!important;transform:none!important;height:var(--foodH)!important;max-height:var(--foodH)!important;min-height:285px!important;
-  overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;
-  padding:14px 14px 105px!important;margin-top:10px!important;box-sizing:border-box!important;z-index:5!important;scroll-padding-bottom:118px!important;overscroll-behavior:contain!important
-}
-.foodMenu:after,#foodMenu:after,.food-panel:after,#foodPanel:after,.foodBrowser:after,#foodBrowser:after,.food-menu:after,.foodShelf:after{content:"";display:block;height:98px;grid-column:1/-1}
-.prodCategoryTabs,.foodTabs,.stationTabs,.tabs,.catTabs{display:flex!important;flex-wrap:wrap!important;gap:8px!important;align-items:center!important;margin:8px 0 12px!important}
-.prodCategoryTabs button,.foodTabs button,.stationTabs button,.tabs button,.catTabs button{flex:1 1 30%!important;min-width:92px!important;min-height:44px!important;border-radius:18px!important}
-.prodNeededStrip{display:none!important}
-.foodGrid,.foods,.foodCards,.itemGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;padding-bottom:100px!important;align-items:start!important}
-.foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{
-  min-height:92px!important;max-height:none!important;padding:8px!important;border-radius:20px!important;box-sizing:border-box!important;
-  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:5px!important
-}
-.foodCard .emoji,.foodBtn .emoji,.foodItem .emoji,.menuItem .emoji,.food-choice .emoji{font-size:28px!important;line-height:1!important}
-.foodCard span,.foodBtn span,.foodItem span,.menuItem span,.food-choice span{white-space:normal!important;line-height:1.08!important}
-.tray,#tray,.trayBox{min-height:84px!important;max-height:112px!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;display:flex!important;align-items:center!important;gap:8px!important}
-.made,.trayItem,.trayFood{min-width:76px!important;width:76px!important;max-width:76px!important;min-height:66px!important;max-height:80px!important;padding:6px!important;font-size:9.5px!important;border-radius:17px!important;box-sizing:border-box!important}
-.made img,.trayItem img,.trayFood img,.made .emoji,.trayItem .emoji,.trayFood .emoji{max-width:26px!important;max-height:26px!important;font-size:22px!important}
-.mapJourney,.themeMap,.worldMapCompact,#levels .panel,#levels .mapJourney{overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;padding-bottom:calc(110px + env(safe-area-inset-bottom))!important;box-sizing:border-box!important}
-.worldMapCompact{background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,.14))!important;border-radius:28px!important;border:4px solid rgba(255,255,255,.82)!important;box-shadow:0 16px 35px rgba(20,80,110,.25)!important}
-.worldHero{border-radius:26px!important;overflow:hidden!important;box-shadow:0 14px 30px rgba(0,80,120,.24)!important}
-.stageCard,.levelCard{border-radius:24px!important;border:4px solid rgba(255,255,255,.9)!important;box-shadow:0 12px 22px rgba(100,75,25,.18)!important}
-.beltTrack{overflow:hidden!important;position:relative!important}
-.beltFood{animation-name:test7BeltRight!important;animation-duration:4.8s!important;animation-timing-function:linear!important;animation-iteration-count:infinite!important}
-@keyframes test7BeltRight{0%{transform:translateX(-65px)}100%{transform:translateX(170px)}}
-#connectBtn.connected,button.connected,.connectedBtn,.statusConnected{background:linear-gradient(#b9ffd1,#62dd83)!important;color:#24462b!important}
-.retryDuplicate{display:none!important}.prodVoteRoster,.voteRoster,.retryVoteRoster,.tutorialWaitNote{background:#fff7d7;border:2px solid #fff;border-radius:14px;padding:8px;margin:8px 0;font-weight:1000}
-.resultLost .nextBtn,.resultLost .nextLevelBtn{display:none!important}
-@media(max-width:430px){
-  :root{--ticketH:clamp(195px,27dvh,295px);--foodH:clamp(300px,40dvh,420px)}
-  .foodGrid,.foods,.foodCards,.itemGrid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
-  .foodCard,.foodBtn,.foodItem,.menuItem,.food-choice{min-height:86px!important;padding:7px!important}
-  .ticket,.orderTicket,.customerTicket,#ticket,.ticketBody,.orderItems{padding-bottom:88px!important}
-}
-
 </style>
 
 <script>
@@ -1705,7 +1652,7 @@ function sfAddCultureFoods(){
   }catch(e){}
 }
 
-function init(){t7Foods();setTimeout(()=>{t7Tabs();t7HideNeeded();t7AudioUI();},600);rvAddThemeFoods();sfAddCultureFoods(); $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
+function init(){rvAddThemeFoods();sfAddCultureFoods(); $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
 function applyWorld(mapId){
   let m=MAPS[mapId];
   document.documentElement.style.setProperty("--mapBg",m.bg);
@@ -1829,8 +1776,6 @@ function showMatchResults(msg){
 
   omPatchResultButtons(msg);
 
-  t7PrepResult(msg);
-
 }
 function continueNextLevel(){
   closeResult();
@@ -1929,8 +1874,6 @@ function finalShowMatchEnd(msg){
   bugfixPrepareResult(msg);
 
   omPatchResultButtons(msg);
-
-  t7PrepResult(msg);
 
 }
 /* After the upgrade break, ask the SERVER to start the next level (authoritative timer). */
@@ -2157,34 +2100,28 @@ function bugfixUpgradeReady(){
   toast("Ready ✓");
 }
 
-
-function t7Goal(mapId){return Math.min(28,4+Math.floor(Number(mapId||0)/5)*2)}
-function t7Time(goal){return Math.min(360,Math.max(100,70+Number(goal||4)*12))}
-function t7TeamServed(){return (!(state.multiplayer&&state.mode==="coop"))?Number(state.served||0):(typeof state.teamServed==="number"?Number(state.teamServed||0):(net.players||[]).reduce((s,p)=>s+Number(p.served||0),0))}
-function t7Win(msg){if(msg&&msg.completed===true)return true;if(msg&&msg.completed===false)return false;if(state.multiplayer&&state.mode==="coop")return t7TeamServed()>=Number(state.goal||4);if(state.multiplayer&&state.mode==="versus")return !!(msg&&msg.reason==="winner");return Number(state.served||0)>=Number(state.goal||4)}
-function t7BestUp(k){let o=0;try{o=Math.max(o,Number((JSON.parse(localStorage.ssss_upgrades||"{}")[k])||0))}catch(e){}try{o=Math.max(o,Number((JSON.parse(localStorage.ssss_online_upgrades||"{}")[k])||0))}catch(e){}if(!(state.multiplayer&&state.mode==="coop"))return o;return Math.max(o,...(net.players||[]).map(p=>Number((p.upgrades&&p.upgrades[k])||p[k]||0)),0)}
-function t7ApplyTeamWait(){if(!(state.multiplayer&&state.mode==="coop"))return;const w=Math.max(t7BestUp("patience"),t7BestUp("wait"));if(typeof state.patience==="number")state.patience=Math.min(170,state.patience+w*5)}
-function t7Clock(v){if(typeof v==="number")state.levelClock=v;const txt=(typeof formatTime==="function")?formatTime(state.levelClock):String(state.levelClock||0);if($("clockVal"))$("clockVal").textContent=txt;if($("levelClock")&&!$("clockVal"))$("levelClock").textContent="⏱ "+txt}
-function t7AddTime(sec){sec=Number(sec||30);if(typeof state.levelClock==="number"){state.levelClock=Math.min(720,state.levelClock+sec);t7Clock(state.levelClock)}}
-function t7Reset(){state.served=0;state.coins=0;state.teamServed=0;state.tray=[];state.sharedTray=[];state.order=null;state.customerName="";state.matchEnded=false;state._winnerComplete=false;state.playerOut=false;savedBuild=null;if($("uiCoins"))$("uiCoins").textContent=0;if($("uiServed"))$("uiServed").textContent=0;if($("uiGoal"))$("uiGoal").textContent=state.goal||4;if(typeof renderTray==="function")renderTray();if(typeof renderBelts==="function")renderBelts()}
-function t7Start(next){const target=next?Math.min(199,(state.mapId||0)+1):(state.mapId||0);if($("onlineUpgradeModal"))$("onlineUpgradeModal").classList.remove("active");t7Reset();state.goal=t7Goal(target);state.levelClock=t7Time(state.goal);if(state.multiplayer)sendNet("nextLevelStart",{mapId:target,mode:state.mode,retry:!next,goal:state.goal,timer:state.levelClock});startLevel(1,state.multiplayer,state.mode,target)}
-function t7PrepResult(msg){const won=t7Win(msg),r=$("result");if(!r)return;r.classList.toggle("resultWon",won);r.classList.toggle("resultLost",!won);const bs=[...r.querySelectorAll("button")];bs.forEach(b=>{const t=(b.textContent||"").trim();if(/Next Level|Next/i.test(t)){b.classList.add("nextLevelBtn","nextBtn");b.style.display=won?"":"none";b.disabled=!won;b.onclick=()=>{if(!won){toast("Beat this stage first");return}setTimeout(()=>openNextVote(),5000)}}if(/Retry/i.test(t)){b.style.display="";b.disabled=false;b.onclick=()=>openRetryVote()}});bs.filter(b=>/Retry/i.test(b.textContent||"")).forEach((b,i)=>{if(i>0){b.style.display="none";b.classList.add("retryDuplicate")}})}
-function t7OpenUpgrade(next){state._upgradeNext=!!next;if($("nextVoteModal"))$("nextVoteModal").classList.remove("active");if($("result"))$("result").classList.remove("active");if($("onlineUpgradeModal"))$("onlineUpgradeModal").classList.add("active");let t=30;if($("upgradeTimer"))$("upgradeTimer").textContent=t;clearInterval(state.upgradeBreakTimer);state.upgradeBreakTimer=setInterval(()=>{t--;if($("upgradeTimer"))$("upgradeTimer").textContent=t;if(t<=0){clearInterval(state.upgradeBreakTimer);t7Start(!!state._upgradeNext)}},1000)}
-function t7UpgradeReady(){sendNet("upgradeReady",{next:!!state._upgradeNext});toast("Ready ✓")}
-function t7Conn(on){const b=$("connectBtn")||document.querySelector("button[onclick*='connect']");if(b){b.classList.toggle("connected",!!on);b.textContent=on?"Connected":"Connect"}const s=document.querySelector(".netStatus,.connectionStatus,#netStatus,#connStatus");if(s){s.classList.toggle("statusConnected",!!on);s.textContent=on?"🟢 Connected":"🔴 Not Connected"}}
-function t7Tabs(){try{const m=document.querySelector(".foodMenu,#foodMenu,.food-panel,#foodPanel,.foodBrowser,#foodBrowser,.food-menu,.foodShelf");if(!m||m.querySelector(".prodCategoryTabs"))return;const tabs=document.createElement("div");tabs.className="prodCategoryTabs";[["🥤 Drinks","Drink"],["🍔 Food","Grill"],["🍿 Snacks","Snack"]].forEach(([lab,cat])=>{const b=document.createElement("button");b.className="btn small";b.textContent=lab;b.onclick=()=>{if(typeof setStation==="function")setStation(cat);else if(typeof showCategory==="function")showCategory(cat);else if(typeof chooseCategory==="function")chooseCategory(cat)};tabs.appendChild(b)});const h=m.querySelector(".header,h3,h2")||m.firstElementChild;if(h&&h.parentElement===m)h.insertAdjacentElement("afterend",tabs);else m.insertBefore(tabs,m.firstChild)}catch(e){}}
-function t7HideNeeded(){[...document.querySelectorAll("*")].forEach(el=>{const txt=(el.textContent||"").trim();if(txt.startsWith("Still needed:"))el.classList.add("prodNeededStrip")})}
-function t7Foods(){try{const fs=[["sushi snack box","🍣","Snack"],["dumpling cup","🥟","Snack"],["arepa pocket","🫓","Grill"],["falafel wrap","🧆","Grill"],["gyro pita","🥙","Grill"],["plantain bites","🍌","Fry"],["jerk veggie slider","🍔","Grill"],["rice bowl","🍚","Fresh"],["matcha smoothie","🍵","Drink"],["horchata cup","🥛","Drink"],["baklava bite","🍯","Dessert"],["mochi cup","🍡","Dessert"],["churro bites","🥨","Dessert"],["tropical tea","🧋","Drink"],["empanada bites","🥟","Snack"],["curry puff","🥟","Snack"],["mezze plate","🫒","Fresh"],["ramen cup","🍜","Fresh"],["taco trio","🌮","Grill"],["bao bun","🥟","Snack"],["island kebab","🍢","Grill"],["kimchi rice cup","🍚","Fresh"],["mango lassi","🥭","Drink"],["coconut curry bowl","🥥","Fresh"]];if(typeof BASE_FOODS!=="undefined"&&!BASE_FOODS.some(x=>x[0]==="sushi snack box"))fs.forEach(x=>BASE_FOODS.push(x));if(typeof FOODS!=="undefined"&&!FOODS.some(f=>f.id==="sushi_snack_box")){const st=FOODS.length;fs.forEach((x,i)=>FOODS.push({id:slug(x[0]),name:x[0],emoji:x[1],station:x[2],unlock:1+Math.floor((st+i)/2.2),fields:fieldsFor(x[2])}))}}catch(e){}}
-function t7AudioUI(){try{let p=document.querySelector("#settings .panel,#menu .panel,.settingsPanel");if(!p||p.querySelector(".prodAudioControls"))return;const w=document.createElement("div");w.className="prodAudioControls card";w.innerHTML=`<b>Audio Controls 🎵</b><label>Music Volume <input id="musicVol" type="range" min="0" max="1" step=".01" value="${localStorage.musicVol||1}"></label><label>Game SFX <input id="sfxVol" type="range" min="0" max="1" step=".01" value="${localStorage.sfxVol||1}"></label>`;p.appendChild(w);$("musicVol").oninput=e=>{localStorage.musicVol=e.target.value;if(window.musicGain)musicGain.gain.value=Number(e.target.value)};$("sfxVol").oninput=e=>{localStorage.sfxVol=e.target.value;if(window.sfxGain)sfxGain.gain.value=Number(e.target.value)}}catch(e){}}
-
 function openRetryVote(){
-  if(!state.multiplayer){if($("result"))$("result").classList.remove("active");t7Start(false);return}
+  if(!state.multiplayer){
+    if($("result"))$("result").classList.remove("active");
+    bugfixStartFreshLevel(false);
+    return;
+  }
   if($("result"))$("result").classList.remove("active");
   if($("nextVoteModal"))$("nextVoteModal").classList.add("active");
-  [...document.querySelectorAll("#nextVoteModal button")].forEach(b=>{if(/Vote Next|Vote Retry/i.test(b.textContent||"")){b.textContent="Vote Retry";b.onclick=voteRetry}});
-  let left=15;const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||"Chef"}`).join(" · ");
+  [...document.querySelectorAll("#nextVoteModal button")].forEach(b=>{if(/Vote Next|Vote Retry/i.test(b.textContent||"")){b.textContent="Vote Retry";b.onclick=voteRetry;}});
+  let left=15;
+  const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||"Chef"}`).join(" · ");
   if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote retry: 0/${(net.players||[]).length||1} · ${left}s<br>${roster()}`;
-  clearInterval(state.nextVoteTimer);state.nextVoteTimer=setInterval(()=>{left--;if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote retry · ${left}s left<br>${roster()}`;if(left<=0){clearInterval(state.nextVoteTimer);sendNet("retryVoteTimeout",{});if(typeof finalGoHomeClean==="function")finalGoHomeClean();else goHome()}},1000)
+  clearInterval(state.nextVoteTimer);
+  state.nextVoteTimer=setInterval(()=>{
+    left--;
+    if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote retry · ${left}s left<br>${roster()}`;
+    if(left<=0){
+      clearInterval(state.nextVoteTimer);
+      sendNet("retryVoteTimeout",{});
+      if(typeof finalGoHomeClean==="function")finalGoHomeClean();else goHome();
+    }
+  },1000);
 }
 function voteRetry(){sendNet("retryVote",{choice:"retry"});toast("Voted retry ✓")}
 function rvOpenUpgradeThenStartRetry(){
@@ -2274,13 +2211,23 @@ function omApplyConnectedStay(){
 }
 
 function openNextVote(){
-  if(!t7Win({completed:true})&&state.multiplayer){toast("Beat this stage first");return}
+  if(!bugfixDidWin({completed:true}) && state.multiplayer){toast("You must beat the level first");return;}
   if($("result"))$("result").classList.remove("active");
-  if(!state.multiplayer){t7Start(true);return}
+  if(!state.multiplayer){bugfixStartFreshLevel(true);return;}
   if($("nextVoteModal"))$("nextVoteModal").classList.add("active");
-  let left=15;const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||"Chef"}`).join(" · ");
+  let left=15;
+  const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||"Chef"}`).join(" · ");
   if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote next level: 0/${(net.players||[]).length||1} · ${left}s<br>${roster()}`;
-  clearInterval(state.nextVoteTimer);state.nextVoteTimer=setInterval(()=>{left--;if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote next level · ${left}s left<br>${roster()}`;if(left<=0){clearInterval(state.nextVoteTimer);sendNet("nextVoteTimeout",{});if(typeof finalGoHomeClean==="function")finalGoHomeClean();else goHome()}},1000)
+  clearInterval(state.nextVoteTimer);
+  state.nextVoteTimer=setInterval(()=>{
+    left--;
+    if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote next level · ${left}s left<br>${roster()}`;
+    if(left<=0){
+      clearInterval(state.nextVoteTimer);
+      sendNet("nextVoteTimeout",{});
+      if(typeof finalGoHomeClean==="function")finalGoHomeClean();else goHome();
+    }
+  },1000);
 }
 function voteNextLevel(){sendNet("nextVote",{choice:"next"});toast("Voted next ✓")}
 function voteReturnHome(){sendNet("nextVote",{choice:"home"});goHome()}
@@ -2406,8 +2353,6 @@ function sfShowMatchEnd(msg){
 
   omPatchResultButtons(msg);
 
-  t7PrepResult(msg);
-
 }
 function sfOpenUpgradeBreak(){
   if($("nextVoteModal")) $("nextVoteModal").classList.remove("active");
@@ -2512,7 +2457,7 @@ function applySharedOrder(order,customerName,custEmoji,vip){
   let stage=document.querySelector(".dual-stage"); if(stage) stage.classList.toggle("vipActive",!!vip);
   state.patience=100; if($("patience"))$("patience").style.width="100%";
   renderTicket();omForceScrollTicketBottomSafe();renderScoreboard();finalUpdateTop();
-  t7ApplyTeamWait();t7ApplyTeamWait();startCustomerTimer();
+  bugfixApplyTeamUpgrades();startCustomerTimer();
 }
 function applySharedTray(tray){if(!Array.isArray(tray))return;state.sharedTray=tray;if(state.multiplayer&&state.mode==="coop")state.tray=tray.map(x=>({...x}));renderTray();renderBelts();renderScoreboard();}
 function showOrderDone(name,score,correct){let b=$("doneBanner");if(b){b.textContent=(correct===false)?`${name||"Chef"} served a wrong order (+${score||0} coins, no point)`:`${name||"Chef"} completed an order! +${score||0}`;b.classList.remove("show");void b.offsetWidth;b.classList.add("show");}}
@@ -2551,7 +2496,7 @@ function newCustomer(){
   $("custEmoji").textContent=cust.face;
   $("custName").innerHTML=(cust.name+"'s Order")+(cust.vip?'<span class="vipTag">VIP</span>':'');
   updateVipUI(cust.vip);
-  renderTicket();t7ApplyTeamWait();t7ApplyTeamWait();startCustomerTimer();sendNet("progress",progressPayload());renderScoreboard();
+  renderTicket();bugfixApplyTeamUpgrades();startCustomerTimer();sendNet("progress",progressPayload());renderScoreboard();
 }
 // Co-op: build one order and hand it to the server; it echoes to BOTH players via sharedOrder.
 function generateSharedOrder(){
@@ -2599,7 +2544,7 @@ function startCustomerTimer(){
     }
   },120);
 }
-function startTimer(){t7ApplyTeamWait();t7ApplyTeamWait();startCustomerTimer();} // back-compat alias
+function startTimer(){bugfixApplyTeamUpgrades();startCustomerTimer();} // back-compat alias
 function stopTimer(){if(state.timer)clearInterval(state.timer);state.timer=null}
 
 /* ===== Level clock: whole-level countdown. Time up -> level fails. ===== */
@@ -2800,7 +2745,7 @@ function confirmLeaveMatch(){
     goHome();
   }
 }
-function resumeGame(){state.paused=false;show("play");if(state.multiplayer){updateLaneLayout();}else if(!state.timer){t7ApplyTeamWait();t7ApplyTeamWait();startCustomerTimer();}}
+function resumeGame(){state.paused=false;show("play");if(state.multiplayer){updateLaneLayout();}else if(!state.timer){bugfixApplyTeamUpgrades();startCustomerTimer();}}
 function setMachine(st){clearMachines();let id=st==="Drink"?"machDrink":(st==="Grill"||st==="Fry"?"machCook":"machPack");$(id).classList.add("active")}function clearMachines(){["machDrink","machCook","machPack"].forEach(id=>$(id).classList.remove("active"))}
 function showTutorialVote(votes={}){
   closeVote(); closeRoom();
@@ -2849,7 +2794,7 @@ function showSpinner(candidates=[],duration=1800){
   setTimeout(()=>clearInterval(iv),duration);
 }
 function closeSpin(){$("spinModal").classList.remove("active");}
-function connectOnline(){if(net.connected)return toast("Already connected");let name=$("playerName").value.trim();if(!name)return toast("Enter your chef name first");let proto=location.protocol==="https:"?"wss":"ws",url=(location.protocol==="file:")?"ws://localhost:3000":`${proto}://${location.host}`;try{let ws=new WebSocket(url);net.ws=ws;ws.onopen=()=>{net.connected=true;t7Conn(true);sfConnectedVisual(true);localStorage.ssss_name=name;$("netDot").classList.add("on");$("netText").textContent="Connected";sendNet("hello",{name});toast("Connected 🎮")};ws.onmessage=e=>handleNet(JSON.parse(e.data));ws.onclose=()=>{net.connected=false;t7Conn(false);sfConnectedVisual(false);$("netDot").classList.remove("on");$("netText").textContent="Not Connected";renderRooms()};ws.onerror=()=>toast("Connection failed. Deploy/run server.")}catch(e){toast("Connection blocked")}}
+function connectOnline(){if(net.connected)return toast("Already connected");let name=$("playerName").value.trim();if(!name)return toast("Enter your chef name first");let proto=location.protocol==="https:"?"wss":"ws",url=(location.protocol==="file:")?"ws://localhost:3000":`${proto}://${location.host}`;try{let ws=new WebSocket(url);net.ws=ws;ws.onopen=()=>{net.connected=true;sfConnectedVisual(true);localStorage.ssss_name=name;$("netDot").classList.add("on");$("netText").textContent="Connected";sendNet("hello",{name});toast("Connected 🎮")};ws.onmessage=e=>handleNet(JSON.parse(e.data));ws.onclose=()=>{net.connected=false;sfConnectedVisual(false);$("netDot").classList.remove("on");$("netText").textContent="Not Connected";renderRooms()};ws.onerror=()=>toast("Connection failed. Deploy/run server.")}catch(e){toast("Connection blocked")}}
 function sendNet(type,data={}){if(net.ws&&net.ws.readyState===1)net.ws.send(JSON.stringify({type,...data}))}
 function handleNet(msg){
   switch(msg.type){
