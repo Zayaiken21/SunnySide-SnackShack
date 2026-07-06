@@ -82,7 +82,7 @@ function startRoomLevel(room, mapId, opts = {}) {
   room.sharedCustEmoji = null;
   room.sharedVip = false;
   room.transitioningOrder = false;
-  room.nextVotes = {}; room.retryVotes={}; room.upgradeReady={};
+  room.nextVotes = {}; room.retryVotes={}; room.upgradeReady={}; room.outPlayers={}; room.timer=0; room.retryVotes={}; room.upgradeReady={};
   for (const p of room.players) {
     p.served = 0; p.order = [];
     if (opts.first) { p.score = 0; p.coopBonus = 0; }
@@ -99,6 +99,8 @@ function startRoomLevel(room, mapId, opts = {}) {
   room.levelTimer = setTimeout(() => onLevelTimeout(room), room.seconds * 1000 + 400);
   // Co-op: after the start settles, ask ONE client to generate the first shared order.
   if (room.mode === "coop") {
+        room.timer = Math.min(720, Number(msg.timer || room.timer || 0) + 30);
+        for (const p of room.players) send(clientSocket(p.id), { type:"timerSync", timer:room.timer });
     const gen = room.players[0];
     if (gen) setTimeout(() => {
       if (rooms.has(room.code) && !room.ended && room.phase === "playing" && !room.sharedOrder)
@@ -348,6 +350,7 @@ wss.on("connection", ws => {
           }, 700);
         }
       } else {
+        if (player) send(clientSocket(player.id), { type:"timerSync", timer:Math.min(720, Number(msg.timer || 0) + 30) });
         for (const p of room.players) send(clientSocket(p.id), { type: "orderDone", name: player ? player.name : "Chef", score: Number(msg.score || 0), correct: wasCorrect });
         broadcastRoom(room);
         if (player && Number(player.served || 0) >= goal) finishRoom(room, player.name || "Chef", true);
@@ -447,6 +450,21 @@ wss.on("connection", ws => {
       if (count >= total) {
         for (const p of room.players) send(clientSocket(p.id), { type:"startAfterUpgrade", next:room.upgradeNext });
         room.upgradeReady = {};
+      }
+    }
+
+
+    if (msg.type === "playerOut") {
+      const room = rooms.get(c.room); if (!room) return;
+      room.outPlayers = room.outPlayers || {}; room.outPlayers[c.id] = true;
+      const player = room.players.find(p=>p.id===c.id);
+      if(player){player.served=Number(msg.served||player.served||0);player.score=Number(msg.total||player.score||0);player.out=true;}
+      broadcastRoom(room);
+      if (room.mode === "versus" && Object.keys(room.outPlayers).length >= room.players.length) {
+        const players=[...room.players].sort((a,b)=>(Number(b.served||0)-Number(a.served||0))||(Number(b.score||0)-Number(a.score||0)));
+        const winner=players[0] ? players[0].name : "Chef";
+        for(const p of room.players) send(clientSocket(p.id),{type:"matchEnd",winner,reason:"timeout",completed:false,teamServed:room.teamServed||0,players});
+        room.ended=true;
       }
     }
 
