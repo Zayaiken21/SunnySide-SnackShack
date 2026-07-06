@@ -1263,8 +1263,213 @@ button.connected{
   }
 }
 
-</style>
+/* ============================================================
+   MASTER FIX LAYER v13 — authoritative styles (loaded last)
+   ============================================================ */
 
+/* ---- Levels screen top bar (issue 1) ---- */
+#levels .topbar{
+  min-height:0!important;
+  padding:8px 10px!important;
+  display:flex!important;
+  gap:8px!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+}
+#levels .topbar .pill{
+  letter-spacing:normal!important;
+  word-spacing:normal!important;
+  font-size:12px!important;
+  padding:8px 12px!important;
+  flex:0 1 auto;
+  text-align:center;
+}
+#levels .topbar .btn.small{
+  min-height:0!important;
+  padding:9px 12px!important;
+  font-size:13px!important;
+  line-height:1.15!important;
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+/* World header card (Sandy Start area top) cleaner */
+.worldPicker{
+  background:linear-gradient(135deg,#7ec8f0,#4a9fd4)!important;
+  border:4px solid #fff!important;
+  border-radius:24px!important;
+  padding:14px!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.14)!important;
+  margin-bottom:12px!important;
+}
+.worldPicker .worldHeader{align-items:center!important}
+.worldPicker .worldHeader strong{font-size:19px!important;color:#fff!important;text-shadow:0 2px 6px rgba(0,0,0,.28)!important;line-height:1.1!important}
+.worldPicker .worldHeader span{font-size:12.5px!important;color:rgba(255,255,255,.94)!important;text-shadow:0 1px 3px rgba(0,0,0,.25)!important}
+.worldPicker .worldIcon{background:#fff;border-radius:20px;padding:4px;box-shadow:0 4px 10px rgba(0,0,0,.15)}
+.worldSelect{
+  width:100%;margin:10px 0 8px;padding:12px 14px;border-radius:16px;
+  border:3px solid #fff;background:#fff;font-weight:1000;font-size:15px;
+  box-shadow:0 4px 10px rgba(0,0,0,.1);color:#2a2a3a;
+}
+.worldMeta{display:flex;gap:8px;flex-wrap:wrap}
+.worldMeta .pill{background:rgba(255,255,255,.95)!important;font-size:12px!important;padding:7px 12px!important;letter-spacing:normal!important;display:flex;align-items:center;gap:5px}
+.worldMeta .pill b{font-weight:1000}
+
+/* Map stage cards cleaner (issue 1/2 top) */
+.mapNode,.mapCard{
+  background:linear-gradient(#fff,#fff4d6)!important;
+  border:4px solid #fff!important;
+  border-radius:24px!important;
+  box-shadow:0 6px 16px rgba(0,0,0,.1)!important;
+  padding:14px!important;
+  margin:0 0 12px!important;
+  width:100%!important;
+  text-align:left!important;
+  display:block!important;
+}
+.mapNode b,.mapCard b{font-size:34px!important;height:auto!important;background:none!important;display:inline-block!important}
+.mapNode strong,.mapCard strong{font-size:17px!important;display:block!important;margin:4px 0 2px!important}
+.mapNode span,.mapCard span{font-size:12px!important;font-weight:900!important;opacity:.8}
+.mapNode small{display:inline-flex;gap:4px;margin-top:6px;background:#eef6ff;border-radius:99px;padding:5px 10px;font-size:14px}
+.mapNode.locked{opacity:.55;filter:grayscale(.4)}
+
+/* ---- Ticket: scrollable, shows all orders + customer emoji (issue 2) ---- */
+#dualStage.solo, .dual-stage{
+  display:block!important;
+}
+.dual-stage .lane{
+  display:grid!important;
+  grid-template-columns:52px 1fr!important;
+  gap:8px!important;
+  align-items:start!important;
+  width:100%!important;
+}
+.dual-stage .lane .cust{
+  font-size:38px!important;
+  display:flex!important;
+  align-items:center;
+  justify-content:center;
+  align-self:center;
+  width:52px;height:52px;
+}
+.dual-stage .ticket{
+  max-height:168px!important;
+  overflow-y:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+  min-width:0;
+}
+.dual-stage .ticket h3{font-size:15px!important;margin:2px 0 6px!important;position:sticky;top:0;background:inherit}
+#ticketItems{display:flex;flex-direction:column;gap:6px}
+
+/* ---- Food menu: category tabs + scroll list, no bleed (issue 3) ---- */
+.station-box{
+  background:rgba(255,250,240,.94)!important;
+  border:3px solid rgba(255,255,255,.85)!important;
+  border-radius:22px!important;
+  padding:10px!important;
+  box-shadow:var(--soft)!important;
+  display:flex!important;
+  flex-direction:column!important;
+  min-height:0!important;
+  max-height:38dvh!important;
+  overflow:hidden!important;
+  flex:1 1 auto!important;
+}
+.menuHeadRow{
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  gap:8px;margin:0 2px 8px;cursor:default!important;flex:0 0 auto;
+}
+.menuTitle{font-size:15px;font-weight:1000}
+.menuCount{background:#fff;border-radius:99px;padding:5px 11px;font-size:11px;font-weight:1000;opacity:.85}
+.category-tabs{
+  display:flex!important;gap:8px!important;flex:0 0 auto!important;
+  overflow-x:auto!important;overflow-y:hidden!important;padding:2px 2px 8px!important;
+  min-height:0!important;-webkit-overflow-scrolling:touch;
+}
+.catTab{
+  flex:1 1 0!important;min-width:72px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:9px 6px;border-radius:16px;background:#fff;border:3px solid #fff0bd;
+  box-shadow:0 3px 8px rgba(0,0,0,.07);font-size:24px;cursor:pointer;
+}
+.catTab span{font-size:11.5px;font-weight:1000;color:#5a4530}
+.catTab.active{background:linear-gradient(#eaffef,#8fe6a6);border-color:#fff;box-shadow:0 3px 10px rgba(76,200,120,.35)}
+.catTab.catNeed:not(.active){border-color:#6ce183;box-shadow:0 0 0 2px rgba(108,225,131,.3)}
+.foods{
+  display:grid!important;grid-template-columns:repeat(3,1fr)!important;gap:8px!important;
+  overflow-y:auto!important;overflow-x:hidden!important;flex:1 1 auto!important;
+  min-height:0!important;max-height:none!important;padding:2px 2px 4px!important;
+  -webkit-overflow-scrolling:touch;
+}
+.foodbtn{
+  min-height:72px!important;border-radius:18px!important;border:3px solid #fff!important;
+  background:linear-gradient(#fffdf4,#ffe6a7)!important;
+  box-shadow:0 5px 0 rgba(139,89,22,.2),0 6px 12px rgba(0,0,0,.07)!important;
+  padding:6px 3px!important;display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;gap:3px!important;
+}
+.foodbtn b{font-size:24px!important;width:38px!important;height:38px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:#fff!important;border-radius:13px!important;box-shadow:inset 0 -3px rgba(0,0,0,.04)!important}
+.foodbtn .foodName{font-size:10px!important;font-weight:1000!important;line-height:1.05!important;text-align:center;color:#5a4530}
+.foodbtn.signature{outline:2px solid #ffcf63}
+.foodbtn.signature b:after{content:"★";position:absolute;margin:-30px 0 0 26px;font-size:11px;color:#ff9a3d}
+.foodbtn.needed{outline:3px solid #6ce183;box-shadow:0 0 0 3px rgba(108,225,131,.35),0 5px 0 rgba(139,89,22,.2)!important}
+@media(max-width:430px){
+  .foods{grid-template-columns:repeat(3,1fr)!important}
+  .station-box{max-height:34dvh!important}
+  .catTab{font-size:21px;min-width:64px}
+  .catTab span{font-size:10.5px}
+}
+
+/* ---- Result modal buttons: retry centered on loss, split on win (issue 4/7) ---- */
+.homeActions{display:grid!important;gap:9px!important}
+.homeActions.win{grid-template-columns:1fr 1fr!important}
+.homeActions.lose{grid-template-columns:1fr!important;max-width:240px;margin:0 auto}
+.homeActions.lose .nextBtnResult{display:none!important}
+
+/* Conveyor belts steadier (issue 7) */
+.beltTrack{overflow:hidden!important}
+.beltFood{will-change:transform}
+
+/* ---- Conveyor belt: stable, moves RIGHT, no glitch (issue 7) ---- */
+.beltTrack:before{
+  animation:beltSlideRight .9s linear infinite!important;
+}
+@keyframes beltSlideRight{from{transform:translateX(-40px)}to{transform:translateX(0)}}
+.beltFood{
+  left:0!important;
+  animation:beltFoodRight 3.2s linear infinite!important;
+  will-change:transform;
+}
+@keyframes beltFoodRight{
+  from{transform:translateX(-32px)}
+  to{transform:translateX(calc(100% + 40px))}
+}
+/* Belt container needs relative width reference for the % travel */
+.machine{position:relative!important}
+
+/* ---- Detailed tutorial overlay (issue 7) ---- */
+.howToPanel{max-width:420px!important;text-align:center}
+.howToIcon{font-size:60px;margin:6px 0 4px;line-height:1}
+.howToTitle{font-size:21px!important;margin:6px 0 10px!important;color:#4a3520}
+.howToText{font-size:15px!important;line-height:1.5!important;color:#5a4838;margin:0 auto 6px;max-width:340px}
+.howToText b{color:#c9761a}
+.howToNav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px}
+.howToNav .btn{flex:0 0 auto;min-width:110px}
+.howToDots{display:flex;gap:6px;flex:1;justify-content:center}
+.howToDot{width:8px;height:8px;border-radius:50%;background:#e2d5b8;transition:all .2s}
+.howToDot.on{background:#f5a623;width:22px;border-radius:99px}
+
+/* ---- Volume sliders spacing ---- */
+.musicCard{background:#fff;border:3px solid #fff0bd;border-radius:16px;padding:10px 12px;margin:8px 0;box-shadow:var(--soft)}
+.musicCard label{display:block;margin-bottom:6px;font-weight:1000}
+.musicCard input[type=range]{width:100%}
+
+/* ---- Pause menu join box ---- */
+.pauseJoin{background:#fff;border:3px solid #cfe6ff;border-radius:16px;padding:10px 12px;margin:6px 0;box-shadow:var(--soft)}
+.pauseJoin label{display:block;margin-bottom:6px;font-weight:1000}
+.pauseJoin .split{display:grid;grid-template-columns:1fr auto;gap:8px}
+.pauseJoin input{padding:10px;border-radius:12px;border:2px solid #cfe6ff;font-weight:1000;text-transform:uppercase;min-width:0}
+
+</style>
 <script>
 window.addEventListener("error", function(e){
   try{
@@ -1280,7 +1485,6 @@ window.addEventListener("error", function(e){
 });
 </script>
 
-<link rel="stylesheet" href="sunny-fixes.css">
 </head>
 <body>
 <main class="game" id="game">
@@ -1293,8 +1497,9 @@ window.addEventListener("error", function(e){
     <p class="sub">Theme Map Pro: real multiplayer names, map voting, animated real-food conveyor belts, combo orders, events, music volume, and 200 themed stages across 20 worlds.</p>
     <button class="btn green" onclick="show('levels')">🌍 Theme Map Journey</button>
     <button class="btn purple" onclick="show('multi')">🎮 Real Multiplayer</button><button class="btn blue" onclick="openUpgrades()">🛠 Snack Shack Upgrades</button>
-    <button class="btn pink" onclick="toggleMute()">🎵 Music/SFX: <span id="soundLabel">On</span></button>
-    <div class="musicCard"><label class="tiny">Music Volume</label><input type="range" min="0" max="100" id="vol" oninput="setVolume(this.value)"></div>
+    <button class="btn pink" onclick="toggleMute()">🔊 Sound: <span id="soundLabel">On</span></button>
+    <div class="musicCard"><label class="tiny">🎵 Music Volume</label><input type="range" min="0" max="100" id="vol" oninput="setMusicVolume(this.value)"></div>
+    <div class="musicCard"><label class="tiny">🔔 Game Sound Effects</label><input type="range" min="0" max="100" id="sfxVol" oninput="setSfxVolume(this.value)"></div>
   </div>
 </section>
 
@@ -1310,8 +1515,8 @@ window.addEventListener("error", function(e){
     <label class="tiny">Chef name required</label><input id="playerName" maxlength="14" placeholder="Chef Sunny"><div class="nameHelp">This name shows in rooms, scoreboards, and versus orders.</div>
     <div class="split"><button class="btn green" onclick="createRoom('coop')">Create Co‑op</button><button class="btn pink" onclick="createRoom('versus')">Create Versus</button></div>
     <label class="tiny">Join by game code</label><div class="split"><input id="joinCode" maxlength="6" placeholder="ABC123"><button class="btn blue" onclick="joinByCode()">Join</button></div>
-    <p class="tiny">No bots. Only real connected players show. Max 4 chefs per game. Max 4 chefs per game.</p>
-    <h3>Available Real Games</h3><div id="roomList"></div>
+    <p class="tiny">No bots — only real connected players. Max 4 chefs per game. Games are private; share your code to play together.</p>
+    <h3>🔒 Private Games</h3><div id="roomList"></div>
   </div>
 </section>
 
@@ -1337,22 +1542,27 @@ window.addEventListener("error", function(e){
     </div>
     <div class="tray" id="tray"><span class="tray-title">Your Tray ➜</span></div>
     <div class="service"><button class="orderbtn" onclick="viewOrder()">📋 View Order</button><button class="servebtn" onclick="serveTray()">🔔 Serve Tray</button></div>
-    <div class="station-box" id="stationBox"><div class="section-title menuHeadRow" onclick="toggleFoodMenu()"><span>🍽 Food Menu <span id="stationHint" class="tiny">Pick a category</span></span></div><div class="needBar" id="needBar"></div><div class="category-tabs" id="categoryTabs"></div><div class="foods" id="foods"></div></div>
+    <div class="station-box" id="stationBox">
+      <div class="menuHeadRow"><span class="menuTitle">🍽 Menu</span><span id="stationHint" class="menuCount">Pick a category</span></div>
+      <div class="category-tabs" id="categoryTabs"></div>
+      <div class="foods" id="foods"></div>
+    </div>
   </div>
 </section>
 
-<section class="screen" id="pause"><div class="card menu-card"><h1 id="pauseHeading">Paused ☀️</h1><p class="sub" id="pauseNote"></p><button class="btn green" onclick="resumeGame()">▶ Resume</button><button class="btn blue" id="pauseRestartBtn" onclick="restartLevel()">🔄 Restart Level</button><button class="btn pink" onclick="confirmLeaveMatch()">🚪 Leave Match</button></div></section>
+<section class="screen" id="pause"><div class="card menu-card"><h1 id="pauseHeading">Paused ☀️</h1><p class="sub" id="pauseNote"></p><button class="btn green" onclick="resumeGame()">▶ Resume</button><button class="btn blue" id="pauseRestartBtn" onclick="restartLevel()">🔄 Restart Level</button><div class="pauseJoin" id="pauseJoinBox"><label class="tiny">🎮 Join a friend's game by code</label><div class="split"><input id="pauseJoinCode" maxlength="6" placeholder="ABC123"><button class="btn blue" onclick="joinFromPause()">Join</button></div></div><button class="btn pink" onclick="confirmLeaveMatch()">🚪 Leave Match</button></div></section>
 
 <div class="modal" id="voteModal"><div class="panel"><h2>Vote For A Map 🌍</h2><p class="sub">Pick a theme together. When everyone is ready, the match starts at Level 1.</p><div class="voteGrid" id="voteMaps"></div><div class="voteActions"><button class="btn blue" onclick="backToRoom()">← Back Room</button><button class="btn green" onclick="readyVote()">Ready ✓</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
 <div class="modal" id="upgradeModal"><div class="panel"><h2>Snack Shack Upgrades 🛠</h2><p class="sub">Account Coins: 🪙 <span id="accountCoins">0</span></p><div class="upgradePanel" id="upgradePanel"></div><button class="btn pink" onclick="$('upgradeModal').classList.remove('active')">Close</button></div></div>
 <div class="modal" id="tutorialModal"><div class="panel"><h2>Quick Tutorial 👨‍🍳</h2><p class="sub">Vote to start the tutorial or skip it. Match starts only after all players vote.</p><div class="tutorialVotePanel" id="tutorialVotes">Waiting for players...</div><div class="voteActions"><button class="btn blue" onclick="tutorialVote(false)">Skip</button><button class="btn green" onclick="tutorialVote(true)">Show Tutorial</button></div></div></div>
+<div class="modal" id="howToModal"><div class="panel howToPanel"><div id="howToBody"></div><div class="howToNav"><button class="btn blue" id="howToPrev" onclick="howToPrev()">← Back</button><span class="howToDots" id="howToDots"></span><button class="btn green" id="howToNext" onclick="howToNext()">Next →</button></div><div id="howToWaitNote" class="tiny" style="margin-top:8px;display:none">Waiting for teammates to finish the tutorial…</div></div></div>
 <div class="modal" id="spinModal"><div class="panel"><h2>Choosing Map 🎡</h2><p class="sub">The spinner randomly chooses between the voted maps.</p><div class="spinnerBox"><div class="spinnerWheel" id="spinnerWheel">🌍</div><div id="spinnerText" class="sub">Spinning...</div></div></div></div>
 <div class="modal" id="builder"><div class="panel"><h2 id="builderTitle">Build Food</h2><div class="preview" id="preview">🍽️</div><div id="builderBody"></div><div class="build-actions"><button class="btn blue" onclick="viewOrder()">📋 View Order</button><button class="btn pink" onclick="saveBuildAndClose()">Save & Back</button></div><button class="btn green" onclick="addBuilt()">Add to Tray</button><button class="btn pink" onclick="discardBuild()">Discard Build</button></div></div>
 <div class="modal" id="orderModal"><div class="panel"><h2>Customer Ticket 📋</h2><div id="orderFull"></div><button class="btn blue" onclick="closeOrder()">Back to Cooking</button></div></div>
 <div class="modal" id="roomModal"><div class="panel"><h2 id="roomTitle">Room Created</h2><div class="code" id="roomCode">ABC123</div><p id="roomInfo" class="sub"></p><div id="roomPlayers"></div><div class="roomActions"><button class="btn blue" onclick="show('multi');closeRoom()">← Match Center</button><button class="btn green" onclick="openVoting()">Vote Map</button></div><button class="btn pink" onclick="leaveRoom()">Leave Room</button></div></div>
-<div class="modal" id="nextVoteModal"><div class="panel"><h2>Vote Next Level ➡️</h2><p class="sub">All online players must vote within 15 seconds. If you choose Home, you leave the room.</p><div class="levelVoteInfo" id="nextVoteInfo">Waiting...</div><button class="btn green" onclick="voteNextLevel()">Vote Next</button><button class="btn pink" onclick="voteReturnHome()">Go Home</button></div></div>
-<div class="modal" id="onlineUpgradeModal"><div class="panel"><h2>30 Second Upgrade Break 🛠</h2><p class="sub">Team time upgrades help everyone in co-op. Versus upgrades only help the player who owns them.</p><div class="upgradeTimer" id="upgradeTimer">30</div><div class="upgradeShopGrid" id="onlineUpgradeGrid"></div><button class="btn green" onclick="omUpgradeReady()">Back to Game</button></div></div>
-<div class="modal" id="result"><div class="panel"><h2 id="resultTitle">Round Complete!</h2><p id="resultText"></p><div class="progressNote" id="unlockText">Progress saved.</div><div class="homeActions"><button class="btn green" onclick="openNextVote()">Next Level</button><button class="btn blue" onclick="restartLevel()">Retry</button></div><button class="btn pink" onclick="goHome()">🏠 Back Home</button></div></div>
+<div class="modal" id="nextVoteModal"><div class="panel"><h2>Level Complete! ➡️</h2><p class="sub">Heading to the next level with your team. Tap Home only if you want to leave.</p><div class="levelVoteInfo" id="nextVoteInfo">Getting ready…</div><button class="btn green" onclick="voteNextLevel()">Continue ✓</button><button class="btn pink" onclick="voteReturnHome()">🏠 Leave to Home</button></div></div>
+<div class="modal" id="onlineUpgradeModal"><div class="panel"><h2>30 Second Upgrade Break 🛠</h2><p class="sub">Team upgrades help everyone in co-op. Versus upgrades only help you.</p><div class="upgradeTimer" id="upgradeTimer">30</div><div class="upgradeShopGrid" id="onlineUpgradeGrid"></div><button class="btn green" onclick="omUpgradeReady()">✓ Ready — Next Level</button><div id="upgradeReadyNote" class="tiny" style="display:none;margin-top:8px">Waiting for teammates…</div></div></div>
+<div class="modal" id="result"><div class="panel"><h2 id="resultTitle">Round Complete!</h2><p id="resultText"></p><div class="progressNote" id="unlockText">Progress saved.</div><div class="homeActions" id="resultActions"><button class="btn green nextBtnResult" id="nextBtnResult" onclick="openNextVote()">Next Level</button><button class="btn blue retryBtnResult" id="retryBtnResult" onclick="restartLevel()">Retry</button></div><button class="btn pink" onclick="goHome()">🏠 Back Home</button></div></div>
 <div class="orderDoneBanner" id="doneBanner">Order completed!</div><div class="toast" id="toast">Nice!</div>
 </main>
 
@@ -1585,14 +1795,16 @@ let completedLevels=Number(localStorage.ssss_completed_levels||0);
 let unlockedThemeCount=Math.min(200,10+Math.floor(completedLevels/4)*10);
 let muted=localStorage.ssss_muted==="1"?true:false, volume=Number(localStorage.ssss_volume||100)/100;
 let accountCoins=Number(localStorage.ssss_account_coins||0);let upgrades=JSON.parse(localStorage.ssss_upgrades||"{\"prep\":0,\"patience\":0,\"tips\":0,\"team\":0}");let state={level:1,mapId:0,mode:"solo",multiplayer:false,coins:0,served:0,goal:4,tray:[],order:null,patience:100,timer:null,category:"Drink",coopBonus:0,paused:false,sharedTray:[]};
-let builder={type:null,selections:{}}, savedBuild=null, net={ws:null,id:null,room:null,connected:false,rooms:[],players:[],votes:{}}, audio={ctx:null,beat:null,master:null};
+let builder={type:null,selections:{}}, savedBuild=null, net={ws:null,id:null,room:null,connected:false,rooms:[],players:[],votes:{}}, audio={ctx:null,beat:null,master:null,musicGain:null,sfxGain:null,bass:null};
+let musicVol=Number(localStorage.ssss_music_vol!=null?localStorage.ssss_music_vol:100)/100;
+let sfxVol=Number(localStorage.ssss_sfx_vol!=null?localStorage.ssss_sfx_vol:100)/100;
 const $=id=>document.getElementById(id), slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"");
 const FOODS=BASE_FOODS.map((x,i)=>({id:slug(x[0]),name:x[0],emoji:x[1],station:x[2],unlock:1+Math.floor(i/2.2),fields:fieldsFor(x[2])}));
 function fieldsFor(st){if(st==="Drink")return [["size",["small","medium","large"]],["ice",["no ice","light ice","extra ice"]],["sweetness",["low sweet","medium sweet","super sweet"]]];if(st==="Grill")return [["toast",["soft","toasty","extra toasty"]],["main",["single","double","veggie"]],["topping",["plain","cheese","lettuce","tomato","sauce"]]];if(st==="Fry")return [["size",["small","medium","large"]],["crisp",["soft","crispy","extra crispy"]],["season",["no salt","light salt","sunny spice"]]];if(st==="Dessert")return [["pack",["single","two-pack","party pack"]],["style",["plain","sprinkles","chocolate drizzle"]]];if(st==="Fresh")return [["size",["snack cup","regular cup","big bowl"]],["chill",["room temp","cool","icy fresh"]],["extra",["plain","honey","lemon squeeze"]]];return [["size",["mini","regular","jumbo"]],["style",["plain","cheesy","rainbow"]],["side",["napkin","dip cup","fruit side"]]]}
 /* ===== Difficulty ramp — must match server.js copies ===== */
 function goalForMap(mapId,mode){const base=Math.min(15,6+Math.floor((mapId||0)/20));return mode==="versus"?Math.max(4,Math.round(base*0.7)):base;}
 function comboForMap(mapId){return Math.min(6,2+Math.floor((mapId||0)/30));}
-function baseSecondsForMap(mapId){const world=Math.floor((mapId||0)/STAGES_PER_WORLD);const g=Math.min(15,6+Math.floor((mapId||0)/20));return Math.max(55,72+g*6-world*2);}
+function baseSecondsForMap(mapId){const g=goalForMap(mapId,state&&state.mode==="versus"?"versus":"coop");return Math.max(60,g*28);}
 function worldFoodsFor(mapId){
   const m=MAPS[mapId||0];
   const inCats=FOODS.filter(f=>m.cats.includes(f.station));
@@ -1653,7 +1865,12 @@ function sfAddCultureFoods(){
   }catch(e){}
 }
 
-function init(){rvAddThemeFoods();sfAddCultureFoods(); $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(volume*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);startMusic();}
+function init(){rvAddThemeFoods();sfAddCultureFoods(); $("menuFoods").innerHTML=FOODS.slice(0,24).map(f=>`<span class="chip">${f.emoji}</span>`).join("");$("soundLabel").textContent=muted?"Off":"On";if($("vol"))$("vol").value=Math.round(musicVol*100);if($("sfxVol"))$("sfxVol").value=Math.round(sfxVol*100);$("playerName").value=localStorage.ssss_name||"";renderMapJourney();renderRooms();applyWorld(0);
+  // Autoplay music at the first user gesture (browsers block autoplay before interaction)
+  const kickAudio=()=>{ try{ ensureAudioCtx(); if(audio.ctx&&audio.ctx.state==="suspended") audio.ctx.resume(); if(!muted) startMusic(); }catch(e){} window.removeEventListener("pointerdown",kickAudio,true); window.removeEventListener("keydown",kickAudio,true); window.removeEventListener("touchstart",kickAudio,true); };
+  window.addEventListener("pointerdown",kickAudio,true); window.addEventListener("keydown",kickAudio,true); window.addEventListener("touchstart",kickAudio,true);
+  startMusic();
+}
 function applyWorld(mapId){
   let m=MAPS[mapId];
   document.documentElement.style.setProperty("--mapBg",m.bg);
@@ -1794,8 +2011,8 @@ function finalSetOnlineUpgradeLevel(k,v){
   localStorage.ssss_online_upgrades=JSON.stringify(u);
 }
 function finalOwnTimeUpgrade(){
-  // Offline waiting-room upgrades affect solo only. Online time upgrade affects online.
-  return state.multiplayer ? finalGetOnlineUpgradeLevel("time") : (state.multiplayer&&state.mode==="coop"?rvBestTeamUpgrade("patience"):(upgrades.patience||0));
+  // Multiplayer uses the online "time" upgrade; solo uses the offline "patience" upgrade.
+  return state.multiplayer ? finalGetOnlineUpgradeLevel("time") : (upgrades.patience||0);
 }
 function finalBestTeamTimeUpgrade(){
   if(!(state.multiplayer&&state.mode==="coop")) return finalOwnTimeUpgrade();
@@ -2186,8 +2403,16 @@ function omStartFreshAfterUpgrade(next){
   startLevel(1,state.multiplayer,state.mode,targetMap);
 }
 function omUpgradeReady(){
-  sendNet("upgradeReady",{next:!!state._upgradeNext});
-  toast("Ready ✓");
+  if(state.multiplayer){
+    // Signal ready and WAIT for the server's authoritative "start" for the whole room.
+    state._upgradeWaiting=true;
+    sendNet("upgradeReady",{next:state._upgradeNext!==false});
+    if($("upgradeTimer")) $("upgradeTimer").textContent="✓";
+    let note=$("upgradeReadyNote"); if(note){ note.style.display="block"; }
+    toast("Ready — waiting for teammates ✓");
+  } else {
+    omStartFreshAfterUpgrade(state._upgradeNext!==false);
+  }
 }
 function omPatchResultButtons(msg){
   const won = (typeof bugfixDidWin==="function") ? bugfixDidWin(msg) : (!!(msg&&msg.completed));
@@ -2216,17 +2441,18 @@ function openNextVote(){
   if($("result"))$("result").classList.remove("active");
   if(!state.multiplayer){bugfixStartFreshLevel(true);return;}
   if($("nextVoteModal"))$("nextVoteModal").classList.add("active");
+  // Auto-vote next so nobody has to tap; players may still choose Home to leave.
+  sendNet("nextVote",{choice:"next"});
   let left=15;
   const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||"Chef"}`).join(" · ");
-  if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote next level: 0/${(net.players||[]).length||1} · ${left}s<br>${roster()}`;
+  if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Getting ready for the next level… ${left}s<br>${roster()}`;
   clearInterval(state.nextVoteTimer);
   state.nextVoteTimer=setInterval(()=>{
     left--;
-    if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Vote next level · ${left}s left<br>${roster()}`;
+    if($("nextVoteInfo"))$("nextVoteInfo").innerHTML=`Getting ready for the next level… ${left}s<br>${roster()}`;
     if(left<=0){
       clearInterval(state.nextVoteTimer);
-      sendNet("nextVoteTimeout",{});
-      if(typeof finalGoHomeClean==="function")finalGoHomeClean();else goHome();
+      // Do NOT go home on timeout — the server advances the room when everyone is ready.
     }
   },1000);
 }
@@ -2263,7 +2489,11 @@ function buyOnlineUpgrade(k,price){
   openOnlineUpgrades();
 }
 function finishUpgradeBreak(){
-  omStartFreshAfterUpgrade(!!state._upgradeNext);
+  if(state.multiplayer){
+    if(!state._upgradeWaiting) omUpgradeReady(); // signal ready; server starts the level
+  } else {
+    omStartFreshAfterUpgrade(state._upgradeNext!==false);
+  }
 }
 
 
@@ -2337,23 +2567,22 @@ function sfPlacement(players){
 }
 function sfShowMatchEnd(msg){
   stopTimer&&stopTimer();
+  stopLevelClock&&stopLevelClock();
   state.matchEnded=true;
   const completed=sfHasWinner(msg);
-  if($("resultTitle")) $("resultTitle").textContent = completed ? (state.mode==="coop"?"Team Complete! 🤝":"Versus Results! 🏆") : "Time's Up — Retry";
+  if($("resultTitle")) $("resultTitle").textContent = completed ? (state.mode==="coop"?"Team Complete! 🎉":"Versus Results! 🏆") : "⏱ Time's Up — Retry";
   if($("resultText")){
     $("resultText").innerHTML = completed
-      ? (state.mode==="coop" ? `Team completed ${msg.teamServed||sfTeamServed()}/${state.goal} orders.` : `${msg.winner||"Winner"} finished first.<br>${sfPlacement(msg.players)}`)
-      : (state.mode==="coop" ? `Time ran out at ${msg.teamServed||sfTeamServed()}/${state.goal} orders. Retry this stage together.` : `Time ran out. Nobody reached ${state.goal} orders.<br>${sfPlacement(msg.players)}`);
+      ? (state.mode==="coop" ? `Your team completed <b>${msg.teamServed||sfTeamServed()}/${state.goal}</b> orders!` : `${msg.winner||"Winner"} finished first.<br>${sfPlacement(msg.players)}`)
+      : (state.mode==="coop" ? `Time ran out at <b>${msg.teamServed||sfTeamServed()}/${state.goal}</b> orders. Retry this stage together.` : `Time ran out. Nobody reached ${state.goal} orders.<br>${sfPlacement(msg.players)}`);
   }
-  if($("unlockText")) $("unlockText").textContent = completed ? "Choose Next Level, Retry, or Back Home." : "Only correct completed orders count — retry to advance.";
+  if($("unlockText")) $("unlockText").textContent = completed ? "Vote Next Level to continue together, or Retry." : "Only correct orders count — retry to advance together.";
+  setupResultButtons(completed);
+  // Wire Next to the vote flow, Retry to retry vote (multiplayer coordination)
+  let nb=$("nextBtnResult"), rb=$("retryBtnResult");
+  if(nb) nb.onclick=function(){ if(!completed){toast("Beat the level first");return;} openNextVote(); };
+  if(rb) rb.onclick=function(){ openRetryVote(); };
   if($("result")) $("result").classList.add("active");
-  sfFixResultButtons(completed);rvPrepareEndMenu(msg);
-  rvPrepareEndMenu(msg);
-
-  bugfixPrepareResult(msg);
-
-  omPatchResultButtons(msg);
-
 }
 function sfOpenUpgradeBreak(){
   if($("nextVoteModal")) $("nextVoteModal").classList.remove("active");
@@ -2381,11 +2610,7 @@ function renderScoreboard(){
   finalUpdateTop();
 }
 function shortOrder(order){return order.map(item=>food(item.id).emoji+" "+cap(food(item.id).name)).join(" · ")}
-function toggleFoodMenu(){
-  let box=$("stationBox"); if(!box) return;
-  box.classList.toggle("collapsed");
-  let lbl=$("menuToggleLabel"); if(lbl) lbl.textContent=box.classList.contains("collapsed")?"Show":"Hide";
-}
+function toggleFoodMenu(){ /* menu is always open now; kept for back-compat */ }
 function orderNeeds(){
   if(!state.order) return [];
   let need={};
@@ -2393,17 +2618,28 @@ function orderNeeds(){
   (state.tray||[]).forEach(t=>{ if(need[t.id]) need[t.id]--; });
   return Object.keys(need).filter(id=>need[id]>0);
 }
-function renderNeedBar(){
-  let bar=$("needBar"); if(!bar) return;
-  let needs=orderNeeds();
-  if(!needs.length){ bar.style.display="none"; return; }
-  bar.style.display="flex";
-  bar.innerHTML=`<span class="needLbl">Still needed:</span>`+needs.map(id=>{let f=food(id);return `<button class="needChip" onclick="jumpToFood('${id}')">${f.emoji} ${cap(f.name)}</button>`;}).join("");
-}
+function renderNeedBar(){ /* removed by design — needs are shown via ticket + food highlight */ }
 function jumpToFood(id){let f=food(id); if(!f) return; if(state.category!==f.station){ pickCategory(f.station); } startBuild(id);}
-function renderCategories(){let c=cfg(state.level,state.mapId),cats=[...new Set(c.foods.map(f=>f.station))];$("categoryTabs").innerHTML=cats.map(cat=>`<button class="tab ${state.category===cat?"active":""}" onclick="pickCategory('${cat}')">${CAT_ICON[cat]} ${cat}</button>`).join("");renderNeedBar();}
-function pickCategory(cat){state.category=cat;renderCategories();renderFoods()}
-function renderFoods(){let c=cfg(state.level,state.mapId);let foods=c.foods.filter(f=>f.station===state.category);let sig=c.signatureHints||[];let needs=orderNeeds();$("stationHint").textContent=`${foods.length} ${state.category}`;$("foods").innerHTML=foods.map(f=>`<button class="foodbtn ${sig.includes(f.id)?'signature':''} ${needs.includes(f.id)?'needed':''}" onclick="startBuild('${f.id}')"><b>${f.emoji}</b>${cap(f.name)}</button>`).join("")}
+// Friendly display names for stations
+const STATION_LABEL={Drink:"Drinks",Grill:"Grill",Fry:"Fried",Dessert:"Sweets",Fresh:"Fresh",Snack:"Snacks"};
+function renderCategories(){
+  let c=cfg(state.level,state.mapId);
+  let cats=[...new Set(c.foods.map(f=>f.station))];
+  if(!cats.includes(state.category)) state.category=cats[0];
+  $("categoryTabs").innerHTML=cats.map(cat=>{
+    let need=orderNeeds().some(id=>{let f=food(id);return f&&f.station===cat;});
+    return `<button class="catTab ${state.category===cat?"active":""} ${need?"catNeed":""}" onclick="pickCategory('${cat}')">${CAT_ICON[cat]}<span>${STATION_LABEL[cat]||cat}</span></button>`;
+  }).join("");
+}
+function pickCategory(cat){state.category=cat;renderCategories();renderFoods();let f=$("foods");if(f)f.scrollTop=0;}
+function renderFoods(){
+  let c=cfg(state.level,state.mapId);
+  let foods=c.foods.filter(f=>f.station===state.category);
+  let sig=c.signatureHints||[];
+  let needs=orderNeeds();
+  if($("stationHint")) $("stationHint").textContent=`${foods.length} ${STATION_LABEL[state.category]||state.category}`;
+  $("foods").innerHTML=foods.map(f=>`<button class="foodbtn ${sig.includes(f.id)?'signature':''} ${needs.includes(f.id)?'needed':''}" onclick="startBuild('${f.id}')"><b>${f.emoji}</b><span class="foodName">${cap(f.name)}</span></button>`).join("");
+}
 
 function _countOrderItems(list){
   let out={};
@@ -2581,6 +2817,20 @@ function startLevelClock(){
   state.levelClockTimer=setInterval(tick,250);
 }
 function stopLevelClock(){if(state.levelClockTimer)clearInterval(state.levelClockTimer);state.levelClockTimer=null;}
+// Add bonus seconds to the current level timer (every correct order = +30s)
+function addLevelTime(sec){
+  if(state.multiplayer && state.mode==="coop" && state.levelEndsAt){
+    // Co-op shares one clock; server broadcasts clockSync to the whole team.
+    sendNet("addTime",{seconds:sec});
+  } else if(state.multiplayer && state.mode==="versus"){
+    // Versus: only YOUR clock grows when YOU serve (independent competition).
+    if(state.levelEndsAt) state.levelEndsAt += sec*1000;
+    else state.levelClockDur=(state.levelClockDur||0)+sec;
+  } else {
+    // Solo
+    state.levelClockDur=(state.levelClockDur||0)+sec;
+  }
+}
 function onLevelTimeUp(){
   stopTimer();
   if(state.multiplayer){
@@ -2593,12 +2843,22 @@ function onLevelTimeUp(){
   // Solo: fail unless goal met (goal met already routes to levelDone before this fires)
   showTimeUp();
 }
+// Central result-button controller: win => Next+Retry side by side; lose => Retry centered only
+function setupResultButtons(won){
+  let box=$("resultActions");
+  let nextBtn=$("nextBtnResult");
+  let retryBtn=$("retryBtnResult");
+  if(box){ box.classList.toggle("win",!!won); box.classList.toggle("lose",!won); }
+  if(nextBtn) nextBtn.style.display=won?"":"none";
+  if(retryBtn) retryBtn.style.display="";
+}
 function showTimeUp(){
   stopTimer();stopLevelClock();
-  $("resultTitle").textContent="⏱ Time's Up!";
-  $("resultText").innerHTML=`You served <b>${state.served}/${state.goal}</b> orders on ${MAPS[state.mapId].emoji} ${MAPS[state.mapId].name}.<br>Try again to beat the clock!`;
-  if($("unlockText")) $("unlockText").textContent="Tip: serve correct orders quickly — only correct orders count toward the goal.";
-  // In solo, offer retry/next-map via the standard result modal
+  let won=(state.served>=state.goal);
+  $("resultTitle").textContent=won?"Level Complete! 🎉":"⏱ Time's Up!";
+  $("resultText").innerHTML=`You served <b>${state.served}/${state.goal}</b> orders on ${MAPS[state.mapId].emoji} ${MAPS[state.mapId].name}.<br>${won?"Great job!":"Complete all orders to unlock the next stage."}`;
+  if($("unlockText")) $("unlockText").textContent=won?"Choose Next Level, Retry, or Back Home.":"Tip: serve correct orders quickly — you must finish all orders to advance.";
+  setupResultButtons(won);
   let modal=$("result"); modal.classList.add("active","timeUpModal");
   confetti();
 }
@@ -2647,16 +2907,19 @@ function renderBelts(){
   ["beltDrink","beltCook","beltPack"].forEach(id=>{ if($(id)) $(id).innerHTML=""; });
   let items=[...state.tray];
   if(savedBuild)items.push({id:savedBuild.type});
-  items.forEach((it,i)=>{
-    let f=food(it.id);
+  // group by target belt so multiple items on the same belt stagger evenly
+  let perBelt={beltDrink:0,beltCook:0,beltPack:0};
+  items.forEach((it)=>{
+    let f=food(it.id); if(!f) return;
     let target=f.station==="Drink"?"beltDrink":((f.station==="Grill"||f.station==="Fry")?"beltCook":"beltPack");
     if(!$(target))return;
+    let idx=perBelt[target]++;
     let e=document.createElement("span");
     e.className="beltFood";
     e.textContent=f.emoji;
     e.title=f.name;
-    e.style.animationDelay=-(i*.42)+"s";
-    e.style.left=(i*22)+"px";
+    // Stagger start times so items are spaced along the belt (no overlap, no jump)
+    e.style.animationDelay=(-(idx*0.8))+"s";
     $(target).appendChild(e);
   });
 }
@@ -2687,7 +2950,8 @@ function serveTray(){
   if(isCorrect){
     state.served++;                       // only correct orders advance the goal
     updateServedUI();
-    burst((vip?"⭐ VIP served! ":(acc>=95?"Perfect! ":"Correct! "))+"+"+coins+" 🪙");
+    addLevelTime(30);                     // every correct order adds 30 seconds
+    burst((vip?"⭐ VIP served! ":(acc>=95?"Perfect! ":"Correct! "))+"+"+coins+" 🪙  +30s ⏱");
   } else {
     flashWrong();
     burst("Wrong order — coins only, no point. +"+coins+" 🪙");
@@ -2723,9 +2987,10 @@ function levelDone(){
   stopTimer();stopLevelClock();
   if($("vipBanner"))$("vipBanner").classList.remove("show");
   let unlockedNew=markLevelComplete();
-  $("resultTitle").textContent="Kitchen Complete! 🤝";
+  $("resultTitle").textContent="Kitchen Complete! 🎉";
   $("resultText").innerHTML=`${MAPS[state.mapId].emoji} ${MAPS[state.mapId].fullName}<br>Served <b>${state.served}/${state.goal}</b> · Coins: <b>${state.coins}</b> 🪙`;
   $("unlockText").textContent=unlockedNew?`New world unlocked! You now have ${unlockedThemeCount}/200 stages.`:`Completed levels: ${completedLevels}. Unlock 10 more stages every 4 completions.`;
+  setupResultButtons(true);
   $("result").classList.add("active");
   renderMapJourney();
   confetti();
@@ -2737,6 +3002,8 @@ function pauseGame(){
   if($("pauseHeading")) $("pauseHeading").textContent=state.multiplayer?"Menu ⏸":"Paused ☀️";
   if($("pauseNote")) $("pauseNote").textContent=state.multiplayer?"Your online match keeps running — resume quickly!":"";
   let rb=$("pauseRestartBtn"); if(rb) rb.style.display=state.multiplayer?"none":"";
+  // Join-by-code only makes sense when NOT already in an online match
+  let jb=$("pauseJoinBox"); if(jb) jb.style.display=state.multiplayer?"none":"";
   show("pause");
 }
 function confirmLeaveMatch(){
@@ -2759,31 +3026,41 @@ function tutorialVote(show){
   sendNet("tutorialVote",{show});
   $("tutorialVotes").innerHTML="Vote saved. Waiting for other chefs...";
 }
+const HOWTO_PAGES=[
+  {icon:"👋",title:"Welcome to Sunny Side Snack Shack!",body:"You run a snack stand. Customers arrive with orders — make each item exactly right and serve them before time runs out. Let's learn how!"},
+  {icon:"📋",title:"Read the Order Ticket",body:"Each customer's ticket lists the foods they want and the exact options — like <b>size</b>, <b>ice</b>, and <b>sweetness</b>. Match every detail to score high."},
+  {icon:"🍽",title:"Pick from the Menu",body:"Tap a category (Drinks, Grill, Sweets…) then tap a food to start building it. Foods marked with a ★ are that world's signature dishes."},
+  {icon:"🎛",title:"Build It Right",body:"After tapping a food, choose each option the customer asked for, then add it to your tray. The item slides onto the conveyor belt."},
+  {icon:"🔔",title:"Serve the Tray",body:"When your tray matches the order, tap <b>Serve Tray</b>. Correct orders count toward your goal and earn coins. Wrong orders still cost you the customer!"},
+  {icon:"⏱",title:"Beat the Clock",body:"Each level has a timer and a goal (like 6 orders). Serve enough correct orders before time runs out to complete the stage and unlock the next."},
+  {icon:"🤝",title:"Co-op & Versus",body:"In <b>Co-op</b> you and your teammates share one order and one goal — work together! In <b>Versus</b>, everyone races to their own goal. Highest team upgrades help the whole co-op team."},
+  {icon:"🎉",title:"You're Ready, Chef!",body:"That's it! Serve fast, serve accurately, and climb through all 200 stages across 20 worlds. Good luck!"}
+];
+let howToStep=0, howToIsMP=false;
 function runTutorial(show){
   $("tutorialModal").classList.remove("active");
-  if(!show)return;
-  let step=0;
-  const tips=[
-    ["topbar","Watch the map, coins, and goal here."],
-    ["ticketItems","Read the full combo order before cooking."],
-    ["foods","Pick foods from the theme menu."],
-    ["tray","Your finished foods appear here and on the real conveyor."],
-    ["scoreboard","Track every chef’s score here."]
-  ];
-  function next(){
-    document.querySelectorAll(".tutorialTip").forEach(e=>e.remove());
-    if(step>=tips.length){return;}
-    let [id,text]=tips[step++], el=$(id)||document.querySelector("."+id);
-    let r=el?el.getBoundingClientRect():{left:20,top:120,width:200,height:50};
-    let tip=document.createElement("div");
-    tip.className="tutorialTip";
-    tip.style.left=Math.min(innerWidth-260,Math.max(12,r.left))+"px";
-    tip.style.top=Math.min(innerHeight-160,Math.max(76,r.top-72))+"px";
-    tip.innerHTML=`${text}<div class="tutorialActions"><button class="btn small blue" onclick="this.closest('.tutorialTip').remove()">Close</button><button class="btn small green" id="nextTipBtn">Next</button></div>`;
-    document.body.appendChild(tip);
-    tip.querySelector("#nextTipBtn").onclick=next;
-  }
-  setTimeout(next,600);
+  if(!show){ return; }
+  howToStep=0;
+  howToIsMP=!!state.multiplayer;
+  $("howToModal").classList.add("active");
+  renderHowTo();
+}
+function renderHowTo(){
+  let p=HOWTO_PAGES[howToStep];
+  let body=$("howToBody");
+  if(body) body.innerHTML=`<div class="howToIcon">${p.icon}</div><h2 class="howToTitle">${p.title}</h2><p class="howToText">${p.body}</p>`;
+  let dots=$("howToDots");
+  if(dots) dots.innerHTML=HOWTO_PAGES.map((_,i)=>`<span class="howToDot ${i===howToStep?'on':''}"></span>`).join("");
+  let prev=$("howToPrev"), next=$("howToNext");
+  if(prev) prev.style.visibility=howToStep===0?"hidden":"visible";
+  if(next) next.textContent=howToStep===HOWTO_PAGES.length-1?"Start Cooking! 🍳":"Next →";
+}
+function howToPrev(){ if(howToStep>0){ howToStep--; renderHowTo(); } }
+function howToNext(){
+  if(howToStep<HOWTO_PAGES.length-1){ howToStep++; renderHowTo(); return; }
+  // Last page: close. In multiplayer the server starts the level on its own timer.
+  $("howToModal").classList.remove("active");
+  document.querySelectorAll(".tutorialTip").forEach(e=>e.remove());
 }
 function showSpinner(candidates=[],duration=1800){
   $("spinModal").classList.add("active");
@@ -2809,10 +3086,13 @@ function handleNet(msg){
     case "spin": showSpinner(msg.candidates||[],msg.duration||1800); break;
     case "start":
       clearTimeout(state._startFallback);
+      clearInterval(state.upgradeBreakTimer);
+      state._upgradeWaiting=false;
       setTimeout(()=>{
         closeSpin();closeRoom();closeVote();
         $("nextVoteModal").classList.remove("active");
         $("onlineUpgradeModal").classList.remove("active");
+        let note=$("upgradeReadyNote"); if(note) note.style.display="none";
         closeResult();
         startLevel(1,true,msg.mode||"coop",msg.mapId||0,{endsAt:msg.endsAt,goal:msg.goal});
       }, msg.delay||0);
@@ -2832,6 +3112,10 @@ function handleNet(msg){
       if(msg.goal) state.goal=msg.goal;
       finalUpdateTop(); renderScoreboard();
       break;
+    case "clockSync":
+      // Server extended the shared level clock (e.g. +30s per served order)
+      if(msg.endsAt){ state.levelEndsAt=msg.endsAt; }
+      break;
     case "customerLeft":
       toast("Customer left for the team — next order coming.");
       state.order=null; state._orderSig=""; state.tray=[]; renderTray(); renderBelts(); if($("ticketItems"))$("ticketItems").innerHTML='<div class="ticket-item">Next order coming…</div>';
@@ -2848,6 +3132,12 @@ function handleNet(msg){
       if($("nextVoteInfo")) $("nextVoteInfo").textContent=`Chefs ready: ${msg.count}/${msg.total} · vote within 15s`;
       break;
     case "openUpgradeBreak": openOnlineUpgrades(); break;
+    case "upgradeReadyState":
+      { let note=$("upgradeReadyNote"); if(note){ note.style.display="block"; note.textContent=`Ready: ${msg.count}/${msg.total} — waiting for teammates…`; } }
+      break;
+    case "startAfterUpgrade":
+      // Back-compat: server may signal this; the authoritative "start" follows. No-op to avoid double start.
+      break;
     case "playerLeft":
       toast((msg.name||"A chef")+" left the game");
       net.players=(net.players||[]).filter(p=>p.id!==msg.id);
@@ -2876,7 +3166,35 @@ function progressPayload(){
 function requireName(){let name=$("playerName").value.trim();if(!name){toast("Enter your chef name first");return null}localStorage.ssss_name=name;return name}
 function createRoom(mode){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first for real multiplayer");sendNet("createRoom",{mode,name})}
 function joinByCode(){let name=requireName();if(!name)return;if(!net.connected)return toast("Connect first");let code=$("joinCode").value.trim().toUpperCase();if(!code)return toast("Enter code");sendNet("joinRoom",{code,name})}
-function renderRooms(){let rooms=net.connected?net.rooms:[];$("roomList").innerHTML=rooms.length?rooms.map(r=>`<div class="room"><strong>${r.mode==="versus"?"⚔️ Versus":"🤝 Co-op"} · ${r.code}</strong><small>${r.players}/4 players · Host ${r.hostName||"Chef"} · starts Level 1</small><button class="btn small green" style="float:right" onclick="joinListed('${r.code}')">Join</button></div>`).join(""):'<p class="tiny">No real rooms available yet.</p>'}
+function joinFromPause(){
+  let code=($("pauseJoinCode").value||"").trim().toUpperCase();
+  if(!code) return toast("Enter a game code");
+  let name=localStorage.ssss_name||("Chef"+Math.floor(Math.random()*900+100));
+  localStorage.ssss_name=name;
+  // leave current solo/level, go to match center, connect, then join
+  stopTimer&&stopTimer(); stopLevelClock&&stopLevelClock();
+  state.multiplayer=false; state.mode="solo";
+  show("multi");
+  if($("playerName")) $("playerName").value=name;
+  if(!net.connected){
+    connectOnline();
+    // wait for connection then join
+    let tries=0;
+    let iv=setInterval(()=>{
+      tries++;
+      if(net.connected){ clearInterval(iv); sendNet("joinRoom",{code,name}); toast("Joining game "+code+"…"); }
+      else if(tries>20){ clearInterval(iv); toast("Could not connect. Try again."); }
+    },150);
+  } else {
+    sendNet("joinRoom",{code,name});
+    toast("Joining game "+code+"…");
+  }
+}
+function renderRooms(){
+  // Private games only: rooms are not publicly listed. Players join with a shared code.
+  let el=$("roomList");
+  if(el) el.innerHTML='<p class="tiny" style="text-align:center">🔒 Games are private. Share your game code with friends so they can join, or ask for theirs.</p>';
+}
 function joinListed(code){$("joinCode").value=code;joinByCode()}
 function showRoom(room){$("roomModal").classList.add("active");$("roomTitle").textContent=room.mode==="versus"?"Versus Room":"Co-op Room";$("roomCode").textContent=room.code;$("roomInfo").textContent="Each player uses their chef name. Vote a map when ready.";renderRoomPlayers()}
 function renderRoomPlayers(){let ps=(net.room&&net.room.players)||net.players||[];$("roomPlayers").innerHTML=ps.map(p=>`<div class="room"><strong>${p.face||"🧑‍🍳"} ${p.name||"Chef"}</strong><small>Score ${p.score||0} · Served ${p.served||0} ${p.order&&p.order.length? "· Order: "+shortOrder(p.order):""}</small></div>`).join("")}
@@ -2934,163 +3252,98 @@ function renderOtherOrder(){
 }
 
 /* peaceful music override */
-function startMusic(){
-  if(muted||audio.ctx)return;
+function ensureAudioCtx(){
+  if(audio.ctx) return true;
   try{
     let C=window.AudioContext||window.webkitAudioContext;
     audio.ctx=new C();
-    audio.master=audio.ctx.createGain();
-    audio.master.gain.value=volume*.055;
-    audio.master.connect(audio.ctx.destination);
-    let scales=[
-      [392,440,494,587,659,587,494,440],
-      [349,392,440,523,587,523,440,392],
-      [330,392,494,523,659,523,494,392],
-      [294,349,392,440,523,440,392,349]
-    ];
-    let i=0;
-    audio.beat=setInterval(()=>{
-      if(muted||!audio.ctx)return;
-      let notes=scales[state.mapId%scales.length];
-      let o=audio.ctx.createOscillator(),g=audio.ctx.createGain();
-      o.type="sine";
-      o.frequency.value=notes[i++%notes.length];
-      g.gain.setValueAtTime(.16,audio.ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(.001,audio.ctx.currentTime+.62);
-      o.connect(g);g.connect(audio.master);o.start();o.stop(audio.ctx.currentTime+.65);
-    },720);
+    audio.master=audio.ctx.createGain(); audio.master.gain.value=1; audio.master.connect(audio.ctx.destination);
+    audio.musicGain=audio.ctx.createGain(); audio.musicGain.gain.value=(muted?0:musicVol)*0.5; audio.musicGain.connect(audio.master);
+    audio.sfxGain=audio.ctx.createGain(); audio.sfxGain.gain.value=(muted?0:sfxVol)*0.6; audio.sfxGain.connect(audio.master);
+    return true;
+  }catch(e){ return false; }
+}
+// Warm, non-robotic melody: triangle lead + soft sine sub-bass, gentle envelopes.
+function startMusic(){
+  if(muted) return;
+  if(!ensureAudioCtx()) return;
+  if(audio.ctx.state==="suspended"){ try{audio.ctx.resume();}catch(e){} }
+  if(audio.beat) return; // already playing
+  // Per-world friendly scales (major/pentatonic feels), indexed by world
+  let scales=[
+    [523,587,659,784,880,784,659,587],   // beach - bright major
+    [587,659,740,880,988,880,740,659],   // tokyo
+    [523,622,698,784,932,784,698,622],   // italy
+    [523,587,659,698,880,698,659,587],   // mexico
+    [554,622,698,830,932,830,698,622],   // india
+    [523,587,698,784,880,784,698,587],   // paris
+    [494,587,659,740,880,740,659,587],   // arctic
+    [523,659,698,784,988,784,698,659],   // jungle
+    [587,659,740,830,988,830,740,659],   // city
+    [523,659,784,880,1046,880,784,659]   // space-ish
+  ];
+  let step=0;
+  const noteDur=0.52, interval=440;
+  const playStep=()=>{
+    if(muted||!audio.ctx) return;
+    let world=Math.floor((state.mapId||0)/10)%scales.length;
+    let notes=scales[world];
+    let t=audio.ctx.currentTime;
+    let freq=notes[step%notes.length];
+    // Lead: triangle with soft attack/decay (warmer than raw sine)
+    let o=audio.ctx.createOscillator(), g=audio.ctx.createGain();
+    o.type="triangle"; o.frequency.value=freq;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.linearRampToValueAtTime(0.16,t+0.04);      // soft attack
+    g.gain.exponentialRampToValueAtTime(0.0001,t+noteDur);
+    // subtle detuned second osc for chorus warmth
+    let o2=audio.ctx.createOscillator(); o2.type="sine"; o2.frequency.value=freq*1.005;
+    let g2=audio.ctx.createGain(); g2.gain.setValueAtTime(0.0001,t); g2.gain.linearRampToValueAtTime(0.06,t+0.05); g2.gain.exponentialRampToValueAtTime(0.0001,t+noteDur);
+    o.connect(g); o2.connect(g2); g.connect(audio.musicGain); g2.connect(audio.musicGain);
+    o.start(t); o.stop(t+noteDur+0.02); o2.start(t); o2.stop(t+noteDur+0.02);
+    // Bass note every 2 steps (root/fifth), soft sine
+    if(step%2===0){
+      let b=audio.ctx.createOscillator(), bg=audio.ctx.createGain();
+      b.type="sine"; b.frequency.value=freq/2;
+      bg.gain.setValueAtTime(0.0001,t); bg.gain.linearRampToValueAtTime(0.12,t+0.05); bg.gain.exponentialRampToValueAtTime(0.0001,t+0.9);
+      b.connect(bg); bg.connect(audio.musicGain); b.start(t); b.stop(t+0.95);
+    }
+    step++;
+  };
+  playStep();
+  audio.beat=setInterval(playStep,interval);
+}
+function stopMusic(){ if(audio.beat){clearInterval(audio.beat);audio.beat=null;} }
+function applyAudioGains(){
+  if(audio.musicGain) audio.musicGain.gain.value=(muted?0:musicVol)*0.5;
+  if(audio.sfxGain) audio.sfxGain.gain.value=(muted?0:sfxVol)*0.6;
+}
+function toggleMute(){
+  muted=!muted; localStorage.ssss_muted=muted?"1":"0";
+  if($("soundLabel")) $("soundLabel").textContent=muted?"Off":"On";
+  applyAudioGains();
+  if(muted) stopMusic(); else startMusic();
+}
+// Music volume (0-100)
+function setMusicVolume(v){ musicVol=Number(v)/100; localStorage.ssss_music_vol=String(v); applyAudioGains(); if(!muted && musicVol>0) startMusic(); }
+// SFX volume (0-100)
+function setSfxVolume(v){ sfxVol=Number(v)/100; localStorage.ssss_sfx_vol=String(v); applyAudioGains(); }
+// Back-compat: old single volume control maps to music
+function setVolume(v){ setMusicVolume(v); }
+function beep(freq=520,dur=.06){
+  if(muted||sfxVol<=0) return;
+  if(!ensureAudioCtx()) return;
+  try{
+    let c=audio.ctx,o=c.createOscillator(),g=c.createGain();
+    o.type="triangle"; o.frequency.value=freq;
+    g.gain.setValueAtTime(0.0001,c.currentTime);
+    g.gain.linearRampToValueAtTime(0.5,c.currentTime+0.01);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur);
+    o.connect(g); g.connect(audio.sfxGain);
+    o.start(); o.stop(c.currentTime+dur+0.02);
   }catch(e){}
 }
-
-function stopMusic(){if(audio.beat)clearInterval(audio.beat);audio.beat=null;if(audio.ctx){audio.ctx.close();audio.ctx=null}}function toggleMute(){muted=!muted;localStorage.ssss_muted=muted?"1":"0";$("soundLabel").textContent=muted?"Off":"On";if(muted)stopMusic();else startMusic()}
-function setVolume(v){volume=Number(v)/100;localStorage.ssss_volume=String(v);if(audio.master)audio.master.gain.value=volume*.08}
-function beep(freq=520,dur=.05){if(muted)return;try{if(!audio.ctx)startMusic();let c=audio.ctx,o=c.createOscillator(),g=c.createGain();o.frequency.value=freq;g.gain.setValueAtTime(volume*.08,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur)}catch(e){}}
 function toast(m){let t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),1300)}function burst(m){toast(m);beep(800,.08);for(let i=0;i<8;i++)spawn(70+Math.random()*520,190+Math.random()*90)}function confetti(){for(let i=0;i<36;i++)setTimeout(()=>spawn(Math.random()*innerWidth,430+Math.random()*160),i*22)}function spawn(x,y){let e=document.createElement("div");e.className="confetti";e.textContent=["✨","🍋","⭐","💛","🌸"][Math.floor(Math.random()*5)];e.style.left=x+"px";e.style.top=y+"px";$("game").appendChild(e);setTimeout(()=>e.remove(),1000)}
-
-/* ===== FINAL USER TEST7 PATCH: targeted behavior fixes ===== */
-(function(){
-  const GROUPS={Drink:['Drink'],Food:['Grill','Fry','Fresh'],Snack:['Snack','Dessert']};
-  const GROUP_ICON={Drink:'🥤',Food:'🍔',Snack:'🍿'};
-  window.fixCompleted=()=>Number(localStorage.ssss_completed_levels||0);
-  window.fixWin=()=>Number(state.served||0)>=Number(state.goal||4) || (state.multiplayer&&state.mode==='coop'&&teamServedCount()>=Number(state.goal||4));
-  window.renderNeedBar=function(){const b=$('needBar'); if(b){b.style.display='none'; b.innerHTML='';}};
-  window.renderCategories=function(){
-    const c=cfg(state.level,state.mapId); const available=new Set(c.foods.map(f=>f.station));
-    const groups=Object.keys(GROUPS).filter(g=>GROUPS[g].some(s=>available.has(s)));
-    if(!groups.includes(state.menuGroup)) state.menuGroup=groups[0]||'Drink';
-    state.category=state.menuGroup;
-    $('categoryTabs').innerHTML=groups.map(g=>`<button class="tab ${state.menuGroup===g?'active':''}" onclick="pickCategory('${g}')">${GROUP_ICON[g]} ${g}</button>`).join('');
-    renderNeedBar();
-  };
-  window.pickCategory=function(g){state.menuGroup=g;state.category=g;renderCategories();renderFoods();};
-  window.renderFoods=function(){
-    const c=cfg(state.level,state.mapId); const group=state.menuGroup||state.category||'Drink'; const stations=GROUPS[group]||[group];
-    const foods=c.foods.filter(f=>stations.includes(f.station)); const sig=c.signatureHints||[];
-    $('stationHint').textContent=`${foods.length} ${group}`;
-    $('foods').innerHTML=foods.map(f=>`<button class="foodbtn ${sig.includes(f.id)?'signature':''}" onclick="startBuild('${f.id}')"><b>${f.emoji}</b>${cap(f.name)}</button>`).join('');
-  };
-  window.jumpToFood=function(id){let f=food(id); if(!f)return; let group=Object.keys(GROUPS).find(g=>GROUPS[g].includes(f.station))||f.station; if(state.menuGroup!==group)pickCategory(group); startBuild(id);};
-  const oldItemRow=window.itemRowHTML;
-  if(oldItemRow){window.itemRowHTML=function(i,idx){return oldItemRow(i,idx).replace('<div class="ticket-item">','<div class="ticket-item" tabindex="0">');};}
-  window.showTimeUp=function(){
-    stopTimer();stopLevelClock();
-    $('resultTitle').textContent='⏱ Time\'s Up!';
-    $('resultText').innerHTML=`You served <b>${state.served}/${state.goal}</b> orders on ${MAPS[state.mapId].emoji} ${MAPS[state.mapId].name}.<br>Try again to beat the clock!`;
-    if($('unlockText')) $('unlockText').textContent='Tip: serve correct orders quickly — only correct orders count toward the goal.';
-    const r=$('result'); r.classList.add('active','timeUpModal','result-lost'); r.classList.remove('result-win');
-    [...r.querySelectorAll('button')].forEach(b=>{if(/Next Level|Next/i.test(b.textContent||'')){b.style.display='none';b.disabled=true;} if(/Retry/i.test(b.textContent||'')){b.style.display='';b.disabled=false;b.onclick=()=>restartLevel();}});
-  };
-  const oldLevelDone=window.levelDone;
-  window.levelDone=function(){
-    oldLevelDone();
-    const r=$('result'); r.classList.add('result-win'); r.classList.remove('result-lost','timeUpModal');
-    [...r.querySelectorAll('button')].forEach(b=>{if(/Next Level|Next/i.test(b.textContent||'')){b.style.display='';b.disabled=false;b.onclick=()=>openNextVote();} if(/Retry/i.test(b.textContent||'')){b.style.display='';b.disabled=false;b.onclick=()=>restartLevel();}});
-  };
-  window.finalBestTeamTimeUpgrade=function(){
-    if(!(state.multiplayer&&state.mode==='coop')) return state.multiplayer?finalGetOnlineUpgradeLevel('time'):(upgrades.patience||0);
-    const mine=finalGetOnlineUpgradeLevel('time');
-    const from=(net.players||[]).map(p=>Math.max(Number(p.timeUpgrade||0),Number((p.upgrades&&p.upgrades.time)||0),Number((p.upgrades&&p.upgrades.patience)||0),Number((p.upgrades&&p.upgrades.wait)||0)));
-    return Math.max(mine,...from,0);
-  };
-  window.finalOnlineTeamBonusLevel=function(){
-    if(!state.multiplayer) return upgrades.team||0;
-    const mine=finalGetOnlineUpgradeLevel('team');
-    if(state.mode!=='coop') return mine;
-    return Math.max(mine,...(net.players||[]).map(p=>Math.max(Number(p.teamBonus||0),Number((p.upgrades&&p.upgrades.team)||0))),0);
-  };
-  window.finalOnlinePrepLevel=function(){
-    if(!state.multiplayer) return upgrades.prep||0;
-    const mine=finalGetOnlineUpgradeLevel('sync');
-    if(state.mode!=='coop') return mine;
-    return Math.max(mine,...(net.players||[]).map(p=>Math.max(Number(p.prepLevel||0),Number((p.upgrades&&p.upgrades.sync)||0))),0);
-  };
-  const oldServe=window.serveTray;
-  window.serveTray=function(){
-    const before=Number(state.served||0);
-    oldServe();
-    setTimeout(()=>{
-      if(Number(state.served||0)>before){
-        if(state.multiplayer&&state.mode==='versus') addLocalLevelSeconds(30,false);
-        else addLocalLevelSeconds(30,true);
-      }
-    },40);
-  };
-  window.addLocalLevelSeconds=function(sec,share){
-    sec=Number(sec||30);
-    if(state.multiplayer&&state.levelEndsAt){state.levelEndsAt+=sec*1000;} else {state.levelClockDur=(state.levelClockDur||baseSecondsForMap(state.mapId))+sec;}
-    if(share&&state.multiplayer) sendNet('addTime',{seconds:sec,versusPersonal:state.mode==='versus'});
-  };
-  window.openNextVote=function(){
-    if(!fixWin()){toast('Beat this stage first');return;}
-    if($('result'))$('result').classList.remove('active');
-    if(!state.multiplayer){continueNextLevel();return;}
-    state._upgradeNext=true; openVoteModal('next');
-  };
-  window.openRetryVote=function(){
-    if($('result'))$('result').classList.remove('active');
-    if(!state.multiplayer){restartLevel();return;}
-    state._upgradeNext=false; openVoteModal('retry');
-  };
-  window.openVoteModal=function(kind){
-    const modal=$('nextVoteModal'); modal.classList.add('active');
-    const btn=modal.querySelector('button.green'); btn.textContent=kind==='retry'?'Vote Retry':'Vote Next'; btn.onclick=kind==='retry'?voteRetry:voteNextLevel;
-    let left=15; const roster=()=> (net.players||[]).map(p=>`👨‍🍳 ${p.name||'Chef'}`).join(' · ')||'Solo chef in room';
-    $('nextVoteInfo').innerHTML=`Vote ${kind}: 0/${Math.max(1,(net.players||[]).length)} · ${left}s<br>${roster()}`;
-    clearInterval(state.nextVoteTimer); state.nextVoteTimer=setInterval(()=>{left--; $('nextVoteInfo').innerHTML=`Vote ${kind} · ${left}s left<br>${roster()}`; if(left<=0){clearInterval(state.nextVoteTimer); sendNet(kind==='retry'?'retryVoteTimeout':'nextVoteTimeout',{});}},1000);
-  };
-  window.openOnlineUpgrades=function(){
-    $('nextVoteModal').classList.remove('active'); $('onlineUpgradeModal').classList.add('active');
-    const shop=[['time','Customer Time Boost','Co-op shares the highest teammate level. Versus uses only yours.'],['team','Team Bonus Counter','Adds more co-op bonus coins online.'],['vip','VIP Bell','Improves online VIP rewards.'],['sync','Shared Prep Table','Team-focused online prep upgrade.']];
-    $('onlineUpgradeGrid').innerHTML=shop.map(([k,n,d])=>{let lv=finalGetOnlineUpgradeLevel(k),price=75+lv*90;return `<div class="upgradeShopCard"><strong>${n} Lv.${lv}</strong><small>${d}</small><button class="btn small green" onclick="buyOnlineUpgrade('${k}',${price})">Buy ${price}</button></div>`}).join('');
-    let t=30; $('upgradeTimer').textContent=t; clearInterval(state.upgradeBreakTimer); state.upgradeBreakTimer=setInterval(()=>{t--; $('upgradeTimer').textContent=t; if(t<=0){clearInterval(state.upgradeBreakTimer);finishUpgradeBreak();}},1000);
-  };
-  window.finishUpgradeBreak=function(){
-    if(!state.multiplayer){state._upgradeNext?continueNextLevel():restartLevel();return;}
-    sendNet('upgradeReady',{next:!!state._upgradeNext}); toast('Ready — waiting for chefs ✓');
-  };
-  window.omUpgradeReady=window.finishUpgradeBreak;
-  window.bugfixUpgradeReady=window.finishUpgradeBreak;
-  window.voteReturnHome=function(){sendNet('nextVote',{choice:'home'});goHome();};
-  const oldHandle=window.handleNet;
-  window.handleNet=function(msg){
-    if(msg.type==='openUpgradeBreak'){state._upgradeNext=!msg.retry;openOnlineUpgrades();return;}
-    if(msg.type==='startAfterUpgrade'){ $('onlineUpgradeModal').classList.remove('active'); msg.next?continueNextLevel():restartLevel();return;}
-    if(msg.type==='timerSync'){ if(state.multiplayer&&msg.endsAt)state.levelEndsAt=msg.endsAt; return; }
-    oldHandle(msg);
-    if(msg.type==='matchEnd'){
-      const won=!!(msg.win||msg.passed||msg.completed);
-      const r=$('result'); r.classList.toggle('result-win',won); r.classList.toggle('result-lost',!won);
-      [...r.querySelectorAll('button')].forEach(b=>{if(/Next Level|Next/i.test(b.textContent||'')){b.style.display=won?'':'none';b.disabled=!won;b.onclick=()=>openNextVote();} if(/Retry/i.test(b.textContent||'')){b.onclick=()=>openRetryVote();}});
-    }
-  };
-  const oldStartLevel=window.startLevel;
-  window.startLevel=function(level=1,multi=false,mode='solo',mapId=0,opts={}){
-    oldStartLevel(level,multi,mode,mapId,opts);
-    state.menuGroup=null; renderCategories(); renderFoods();
-    setTimeout(()=>{const t=document.querySelector('.ticket'); if(t)t.scrollTop=0;},80);
-  };
-})();
-
 init();
 </script>
 </body>

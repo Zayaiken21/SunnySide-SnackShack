@@ -20,11 +20,10 @@ function goalForMap(mapId, mode) {
   const base = Math.min(15, 6 + Math.floor((mapId || 0) / 20));
   return mode === "versus" ? Math.max(4, Math.round(base * 0.7)) : base;
 }
-function baseSecondsForMap(mapId) {
-  if (FAST) return 12;
-  const world = Math.floor((mapId || 0) / 10);
-  const g = Math.min(15, 6 + Math.floor((mapId || 0) / 20));
-  return Math.max(55, 72 + g * 6 - world * 2);
+function baseSecondsForMap(mapId, mode) {
+  if (FAST) return 15;
+  const g = goalForMap(mapId, mode === "versus" ? "versus" : "coop");
+  return Math.max(60, g * 28);
 }
 
 function makeCode() {
@@ -73,7 +72,7 @@ function startRoomLevel(room, mapId, opts = {}) {
   room.phase = "playing";
   room.mapId = Math.max(0, Math.min(TOTAL_MAPS - 1, Number(mapId) || 0));
   room.goal = goalForMap(room.mapId, room.mode);
-  room.seconds = baseSecondsForMap(room.mapId);
+  room.seconds = baseSecondsForMap(room.mapId, room.mode);
   room.levelEndsAt = Date.now() + room.seconds * 1000;
   room.teamServed = 0;
   room.sharedOrder = null;
@@ -203,7 +202,7 @@ wss.on("connection", ws => {
         level: 1, mapId: 0, started: false, ended: false, phase: "lobby",
         votes: {}, ready: {}, tutorialVotes: {}, nextVotes: {},
         sharedOrder: null, sharedTray: [], sharedCustomerName: null, sharedCustEmoji: null, sharedVip: false,
-        goal: goalForMap(0, "coop"), seconds: baseSecondsForMap(0), levelEndsAt: 0,
+        goal: goalForMap(0, "coop"), seconds: baseSecondsForMap(0, "coop"), levelEndsAt: 0,
         teamServed: 0, levelTimer: null, players: []
       };
       rooms.set(code, room);
@@ -236,7 +235,7 @@ wss.on("connection", ws => {
     if (msg.type === "ready") {
       const room = rooms.get(c.room); if (!room) return;
       room.ready[c.id] = true;
-      if (room.players.length >= 2 && room.players.every(p => room.ready[p.id])) {
+      if (room.players.length >= 1 && room.players.every(p => room.ready[p.id])) {
         const payload = { type: "tutorialVote", votes: room.tutorialVotes || {} };
         for (const p of room.players) send(clientSocket(p.id), payload);
       } else broadcastVotes(room);
@@ -247,7 +246,7 @@ wss.on("connection", ws => {
       room.tutorialVotes[c.id] = msg.show !== false;
       const payload = { type: "tutorialVote", votes: room.tutorialVotes };
       for (const p of room.players) send(clientSocket(p.id), payload);
-      if (room.players.length >= 2 && room.players.every(p => Object.prototype.hasOwnProperty.call(room.tutorialVotes, p.id))) {
+      if (room.players.length >= 1 && room.players.every(p => Object.prototype.hasOwnProperty.call(room.tutorialVotes, p.id))) {
         const show = Object.values(room.tutorialVotes).some(Boolean);
         for (const p of room.players) send(clientSocket(p.id), { type: "tutorialStart", show });
         const voteVals = Object.values(room.votes || {});
@@ -312,6 +311,23 @@ wss.on("connection", ws => {
       for (const p of room.players) send(clientSocket(p.id), { type: "sharedTray", tray: room.sharedTray });
     }
 
+    // Every correct order adds bonus time. In co-op the whole team's shared clock
+    // is extended; in versus only the serving player's own clock (tracked client-side).
+    if (msg.type === "addTime") {
+      const room = rooms.get(c.room);
+      if (!room || room.ended || room.phase !== "playing") return;
+      const sec = Math.max(0, Math.min(120, Number(msg.seconds) || 0));
+      if (room.mode === "coop" && room.levelEndsAt) {
+        room.levelEndsAt += sec * 1000;
+        // reschedule the room timeout and sync everyone's clock
+        if (room.levelTimer) clearTimeout(room.levelTimer);
+        const remaining = Math.max(0, room.levelEndsAt - Date.now());
+        room.levelTimer = setTimeout(() => onLevelTimeout(room), remaining);
+        for (const p of room.players) send(clientSocket(p.id), { type: "clockSync", endsAt: room.levelEndsAt });
+      }
+      // versus: no shared change; the serving client extends its own clock locally.
+    }
+
     if (msg.type === "orderComplete") {
       const room = rooms.get(c.room);
       if (!room || room.ended || room.phase !== "playing") return;
@@ -364,7 +380,7 @@ wss.on("connection", ws => {
       const count = Object.keys(room.retryVotes).length;
       const total = room.players.length;
       for (const p of room.players) send(clientSocket(p.id), { type:"nextVoteState", count, total, mode:"retry" });
-      if (count >= Math.min(2,total)) {
+      if (count >= 2) {
         for (const p of room.players) send(clientSocket(p.id), { type:"openUpgradeBreak", retry:true });
       }
     }
@@ -372,7 +388,7 @@ wss.on("connection", ws => {
       const room = rooms.get(c.room);
       if (!room) return;
       const count = Object.keys(room.retryVotes||{}).length;
-      if (count < Math.min(2, room.players.length)) {
+      if (count < 2) {
         for (const p of room.players) send(clientSocket(p.id), { type:"forceHome" });
         broadcastRooms();
       }
@@ -392,19 +408,14 @@ wss.on("connection", ws => {
       const total = room.players.length;
       for (const p of room.players) send(clientSocket(p.id), { type: "nextVoteState", count, total });
       if (count >= total && total > 0) {
-        for (const p of room.players) send(clientSocket(p.id), { type: "openUpgradeBreak", retry:false });
+        for (const p of room.players) send(clientSocket(p.id), { type: "openUpgradeBreak" });
       }
     }
     if (msg.type === "nextVoteTimeout") {
       const room = rooms.get(c.room);
       if (!room) return;
-      const count = Object.keys(room.nextVotes||{}).length;
-      if (count >= room.players.length && room.players.length > 0) {
-        for (const p of room.players) send(clientSocket(p.id), { type: "openUpgradeBreak", retry:false });
-      } else {
-        leave(ws);
-        send(ws, { type: "forceHome" });
-      }
+      leave(ws);
+      send(ws, { type: "forceHome" });
     }
 
     /* ===== Team upgrade purchase during the 30s break (co-op shares levels) ===== */
@@ -446,24 +457,17 @@ wss.on("connection", ws => {
       if (!room) return;
       room.upgradeReady = room.upgradeReady || {};
       room.upgradeReady[c.id] = true;
-      room.upgradeNext = !!msg.next;
+      room.upgradeNext = msg.next !== false; // default advance
       const count = Object.keys(room.upgradeReady).length;
       const total = room.players.length;
-      if (count >= total) {
-        for (const p of room.players) send(clientSocket(p.id), { type:"startAfterUpgrade", next:room.upgradeNext });
+      // Tell everyone how many are ready
+      for (const p of room.players) send(clientSocket(p.id), { type: "upgradeReadyState", count, total });
+      if (count >= total && total > 0) {
         room.upgradeReady = {};
-      }
-    }
-
-
-    if (msg.type === "addTime") {
-      const room = rooms.get(c.room); if (!room) return;
-      const seconds = Math.max(0, Math.min(60, Number(msg.seconds||30)));
-      if (room.mode === "coop") {
-        room.levelEndsAt = (room.levelEndsAt||Date.now()) + seconds*1000;
-        roomSend(room, { type:"timerSync", endsAt:room.levelEndsAt });
-      } else {
-        send(ws, { type:"timerSync", endsAt:(Date.now()+seconds*1000) });
+        // Authoritatively start the next (or retry) level for the whole room
+        const next = Math.min(TOTAL_MAPS - 1, (room.mapId || 0) + (room.upgradeNext ? 1 : 0));
+        room.phase = "results"; // allow startRoomLevel
+        startRoomLevel(room, next, { delay: 300 });
       }
     }
 
